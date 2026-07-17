@@ -1,5 +1,7 @@
 # Athena — Web Builder
 
+![Athena control bridge](media/athena-preview.jpeg)
+
 Athena is an agent-driven **website production pipeline** with a retro-terminal
 control bridge. It finds leads, scaffolds a real multi-page site from a template,
 builds and (optionally) deploys it, and reports the result — all from one UI.
