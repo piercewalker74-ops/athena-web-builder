@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>stepper</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:6px}
+ .eyebrow{margin-bottom:10px}
+ .step{display:flex;gap:16px;align-items:flex-start;padding:12px 0;position:relative}
+ .step:before{content:'';position:absolute;left:19px;top:40px;bottom:-12px;width:2px;background:var(--line)}
+ .step:last-child:before{display:none}
+ .dot{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;
+   font-family:var(--mono);font-size:14px;color:var(--ice);transition:all .4s;background:var(--deep)}
+ .step.on .dot{border-color:var(--cyan);color:#04121e;background:var(--cyan);box-shadow:var(--glow)}
+ .tx b{font-size:15px;transition:color .3s}.step.on .tx b{color:var(--frost)}
+ .tx p{font-size:12px;color:var(--ice);opacity:.65;margin-top:3px}
+</style></head>
+<body class="demo"><div class="demo-name">m · stepper</div>
+<div class="stage">
+  <div class="eyebrow">PROCESS STEPS</div>
+  <div id="s"></div>
+</div>
+<script>
+const S=[['Book','Pick a slot online in under a minute.'],['Prep','We decontaminate and mask every edge.'],
+ ['Install','Computer-cut film applied in a dust-free bay.'],['Cure','Final inspection and lifetime warranty logged.']];
+const wrap=document.getElementById('s');
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='step';
+ d.innerHTML=`<div class="dot">${i+1}</div><div class="tx"><b>${s[0]}</b><p>${s[1]}</p></div>`;wrap.appendChild(d);});
+const steps=[...wrap.children];let c=-1;
+function run(){c=(c+1)%(steps.length+1);steps.forEach((s,i)=>s.classList.toggle('on',i<=c-1));}
+setInterval(run,900);run();
+</script></body></html>

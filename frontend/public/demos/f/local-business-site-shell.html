@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>local-business-site-shell</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;justify-content:center}
+ .win{width:100%;max-width:520px;height:400px;border-radius:14px;border:1px solid var(--line2);overflow:hidden;position:relative;box-shadow:var(--glow);background:var(--deep2)}
+ .hdr{position:absolute;top:0;left:0;right:0;height:38px;z-index:9;display:flex;align-items:center;justify-content:space-between;
+   padding:0 14px;background:rgba(4,18,30,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+ .brand{font-weight:700;font-size:13px}.brand span{color:var(--cyan)}
+ .burger{display:flex;flex-direction:column;gap:3px}.burger i{width:16px;height:2px;background:var(--ice);border-radius:2px}
+ .doc{position:absolute;inset:38px 0 0;overflow:hidden}
+ .flow{padding:12px;display:flex;flex-direction:column;gap:12px}
+ .filler{width:100%}
+ .sec{opacity:0;transform:translateY(20px);filter:blur(5px);transition:all .7s cubic-bezier(.2,.8,.2,1)}
+ .sec.in{opacity:1;transform:none;filter:none}
+ .strip{display:flex;gap:8px;justify-content:space-around;padding:10px;font-family:var(--mono);font-size:9px;color:var(--ice);letter-spacing:.1em}
+ .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+ .cta{text-align:center;padding:16px;border-radius:10px;background:linear-gradient(120deg,rgba(47,224,255,.12),rgba(57,211,201,.12))}
+ .h{height:14px;width:70%;border-radius:5px;background:linear-gradient(90deg,var(--ice),transparent)}
+ .callbar{position:absolute;left:0;right:0;bottom:0;z-index:9;padding:9px;text-align:center;background:rgba(4,18,30,.9);border-top:1px solid var(--line2);font-size:12px;color:var(--cyan);font-family:var(--mono)}
+</style></head>
+<body class="demo"><div class="demo-name">f · local-business-site-shell</div>
+<div class="stage">
+  <div class="win">
+    <div class="hdr"><div class="brand">Turf<span>Pro</span></div><div class="burger"><i></i><i></i><i></i></div></div>
+    <div class="doc"><div class="flow" id="flow">
+      <div class="sec"><div class="h glow"></div></div>
+      <div class="sec"><div class="filler" style="height:110px"><span class="tag">HERO</span></div></div>
+      <div class="sec"><div class="frost strip"><span>★ 4.9</span><span>LICENSED</span><span>15 YRS</span><span>INSURED</span></div></div>
+      <div class="sec"><div class="g3"><div class="filler" style="height:60px"><span class="tag">01</span></div><div class="filler" style="height:60px"><span class="tag">02</span></div><div class="filler" style="height:60px"><span class="tag">03</span></div></div></div>
+      <div class="sec"><div class="frost" style="padding:12px;font-size:11px;font-style:italic;color:var(--ice)">&ldquo;Best crew in town — spotless install.&rdquo;</div></div>
+      <div class="sec"><div class="cta"><div class="eyebrow">READY?</div><div style="font-weight:700;margin-top:4px">Get a free quote today</div></div></div>
+      <div class="sec"><div class="strip" style="opacity:.6">SERVICE AREA · RIVERSIDE · CORONA · ONTARIO</div></div>
+      <div style="height:30px"></div>
+    </div></div>
+    <div class="callbar">📞 Tap to call · (555) 240-7788</div>
+  </div>
+</div>
+<script>
+const flow=document.getElementById('flow'),secs=[...flow.querySelectorAll('.sec')];
+let t=0,dir=1;
+function reveal(){secs.forEach((s,i)=>setTimeout(()=>s.classList.add('in'),150+i*160));}
+reveal();
+function loop(){t+=dir*0.55;const max=flow.scrollHeight-360;
+ if(t>max){t=max;dir=-1;}if(t<0){t=0;dir=1;}
+ flow.parentElement.scrollTop=t;requestAnimationFrame(loop);}
+loop();
+</script></body></html>

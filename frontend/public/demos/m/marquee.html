@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>marquee</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px}
+ .track{display:flex;gap:20px;white-space:nowrap;width:max-content;animation:m 18s linear infinite}
+ .track.rev{animation-direction:reverse;animation-duration:24s}
+ @keyframes m{to{transform:translateX(-50%)}}
+ .pill{font-family:var(--mono);font-size:15px;letter-spacing:.06em;color:var(--ice2);border:1px solid var(--line);
+   border-radius:999px;padding:10px 20px;display:inline-flex;align-items:center;gap:8px;background:var(--glass)}
+ .pill .d{width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+ .mrow{overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+ .big{font-size:34px}.big .track{gap:36px}
+</style></head>
+<body class="demo"><div class="demo-name">m · marquee</div>
+<div class="stage">
+  <div class="eyebrow">SCROLLING BAND</div>
+  <div class="mrow big"><div class="track" id="t1"></div></div>
+  <div class="mrow"><div class="track rev" id="t2"></div></div>
+</div>
+<script>
+const A=['CERAMIC TINT','PPF','DETAILING','MOBILE SERVICE','LIFETIME WARRANTY','TESLA CERTIFIED'];
+const B=['★ 4.9 GOOGLE','1,200+ JOBS','LICENSED','INSURED','14 YRS','SAME-DAY'];
+function fill(el,arr,big){const items=[...arr,...arr,...arr,...arr].map(x=>big?`<span class="glow">${x} · </span>`:`<span class="pill"><span class="d"></span>${x}</span>`).join('');el.innerHTML=items;}
+fill(document.getElementById('t1'),A,true);fill(document.getElementById('t2'),B,false);
+</script></body></html>

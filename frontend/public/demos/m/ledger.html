@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ledger</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:22px}
+ .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+ .row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:baseline;padding:14px 4px;
+   border-bottom:1px dashed var(--line);opacity:0;transform:translateX(-14px);transition:all .5s}
+ .row.in{opacity:1;transform:none}
+ .row .nm{font-size:16px;font-weight:600}
+ .row .ds{font-size:11px;color:var(--ice);opacity:.6}
+ .row .pr{font-family:var(--mono);font-size:15px;color:var(--cyan)}
+ .dots{border-bottom:1px dotted var(--line);align-self:end;height:1px}
+</style></head>
+<body class="demo"><div class="demo-name">m · ledger</div>
+<div class="stage frost">
+  <div class="head"><h2 class="big" style="font-size:22px">SERVICES</h2><span class="chip">◇ price list</span></div>
+  <div id="rows"></div>
+</div>
+<script>
+const data=[['Full Vehicle','ceramic tint · lifetime',349],['Windshield','ceramic strip',129],['Tesla Package','all glass',499],['Home Windows','per pane',45]];
+const R=document.getElementById('rows');
+data.forEach(d=>{const r=document.createElement('div');r.className='row';
+ r.innerHTML=`<div class="nm">${d[0]}</div><div class="ds">${d[1]}</div><div class="pr">$${d[2]}</div>`;R.appendChild(r);});
+const rows=[...R.children];
+function run(){rows.forEach(r=>r.classList.remove('in'));rows.forEach((r,i)=>setTimeout(()=>r.classList.add('in'),200+i*160));}
+run();setInterval(run,4600);
+</script></body></html>

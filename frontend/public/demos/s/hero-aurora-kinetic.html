@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hero Schematic · Aurora Kinetic</title>
+<!-- Composed section schematic: layers 4 techniques in ONE hero —
+     (1) WebGL fragment-shader aurora background (raw WebGL, no lib)
+     (2) GSAP intro timeline: per-character mask-rise headline + staggered reveal
+     (3) magnetic CTA (pointer-reactive transform)
+     (4) film-grain + vignette post overlay.  Reduced-motion → static. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  :root{ --ink:#eef2f6; --muted:#aeb8c4; --accent:#7bdcff; }
+  *{ box-sizing:border-box; margin:0; }
+  html,body{ height:100%; background:#05070d; color:var(--ink);
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif; overflow:hidden; }
+  .hero{ position:relative; height:100vh; width:100%; display:grid; place-items:center; isolation:isolate; }
+  canvas#gl{ position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+  .grain{ position:absolute; inset:0; z-index:2; pointer-events:none; opacity:.06; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .vignette{ position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(3,5,10,.72) 100%); }
+  .wrap{ position:relative; z-index:3; text-align:center; padding:0 6vw; max-width:1100px; }
+  .eyebrow{ font-size:12px; letter-spacing:.42em; text-transform:uppercase; color:var(--accent);
+    opacity:0; }
+  h1{ font-size:clamp(40px,8vw,104px); line-height:.98; font-weight:800; letter-spacing:-.02em; margin:18px 0; }
+  h1 .word{ display:inline-block; overflow:hidden; vertical-align:top; padding:0 .06em; }
+  h1 .ch{ display:inline-block; transform:translateY(115%); }
+  .sub{ font-size:clamp(15px,2vw,20px); color:var(--muted); max-width:56ch; margin:0 auto 34px; opacity:0; }
+  .cta{ position:relative; display:inline-flex; align-items:center; gap:12px; padding:16px 30px; border-radius:999px;
+    background:linear-gradient(120deg,#7bdcff,#9a7bff); color:#06131a; font-weight:700; font-size:15px;
+    text-decoration:none; will-change:transform; opacity:0; box-shadow:0 10px 40px rgba(123,220,255,.28); }
+  .cta span{ display:inline-block; will-change:transform; }
+  .hint{ position:absolute; bottom:28px; left:50%; transform:translateX(-50%); z-index:3; color:var(--muted);
+    font-size:11px; letter-spacing:.3em; text-transform:uppercase; opacity:0; }
+  .hint::after{ content:''; display:block; width:1px; height:26px; margin:10px auto 0; background:linear-gradient(var(--accent),transparent);
+    animation:drop 1.8s ease-in-out infinite; }
+  @keyframes drop{ 0%{transform:scaleY(.2);transform-origin:top;opacity:.2} 50%{transform:scaleY(1);opacity:1} 100%{transform:scaleY(.2);transform-origin:bottom;opacity:.2} }
+  @media(prefers-reduced-motion:reduce){ h1 .ch{transform:none} .eyebrow,.sub,.cta,.hint{opacity:1} }
+</style>
+</head>
+<body>
+<section class="hero">
+  <canvas id="gl"></canvas>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+  <div class="wrap">
+    <div class="eyebrow">Composed Section Schematic</div>
+    <h1 id="h1">Motion that feels expensive.</h1>
+    <p class="sub">A single hero layering a live WebGL aurora, a per-character GSAP reveal, a magnetic call-to-action, and film-grain post — the way award-winning studios build one section.</p>
+    <a class="cta" id="cta" href="#"><span>Start building</span> <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="hint">scroll</div>
+</section>
+
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── (1) WebGL aurora: domain-warped flow field in a fragment shader ── */
+(function(){
+  const cv = document.getElementById('gl');
+  const gl = cv.getContext('webgl');
+  if(!gl){ cv.style.background='linear-gradient(120deg,#0a1830,#1a1140,#04263a)'; return; }
+  const vs = `attribute vec2 p; void main(){ gl_Position = vec4(p,0.,1.); }`;
+  const fs = `precision highp float; uniform vec2 r; uniform float t;
+    float h(vec2 p){ return fract(sin(dot(p,vec2(41.3,289.1)))*43758.5); }
+    float n(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.-2.*f);
+      return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y); }
+    float fbm(vec2 p){ float v=0.,a=.5; for(int i=0;i<5;i++){ v+=a*n(p); p*=2.03; a*=.5; } return v; }
+    void main(){ vec2 uv=gl_FragCoord.xy/r.xy; vec2 q=uv; q.x*=r.x/r.y;
+      float tt=t*.06;
+      vec2 warp=vec2(fbm(q*2.+tt), fbm(q*2.-tt+7.));
+      float f=fbm(q*3.+warp*2.+vec2(0,tt*2.));
+      vec3 c1=vec3(.05,.09,.20), c2=vec3(.10,.55,.95), c3=vec3(.60,.45,1.), c4=vec3(.02,.75,.72);
+      vec3 col=mix(c1,c2,smoothstep(.2,.7,f));
+      col=mix(col,c3,smoothstep(.45,.9,fbm(q*1.5-warp+3.)));
+      col=mix(col,c4,pow(smoothstep(.6,1.,f),2.)*.5);
+      col+=(h(uv+t)*.04); col*=smoothstep(1.25,.15,length(uv-.5));
+      gl_FragColor=vec4(col,1.); }`;
+  function sh(t,s){ const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o); return o; }
+  const pr=gl.createProgram(); gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs)); gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(pr); gl.useProgram(pr);
+  const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const loc=gl.getAttribLocation(pr,'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  const uR=gl.getUniformLocation(pr,'r'), uT=gl.getUniformLocation(pr,'t');
+  function size(){ const d=Math.min(devicePixelRatio||1,1.6); cv.width=innerWidth*d; cv.height=innerHeight*d; gl.viewport(0,0,cv.width,cv.height); }
+  addEventListener('resize',size); size();
+  let start=performance.now();
+  (function loop(now){ gl.uniform2f(uR,cv.width,cv.height); gl.uniform1f(uT,reduce?2.:(now-start)/1000); gl.drawArrays(gl.TRIANGLES,0,3); if(!reduce) requestAnimationFrame(loop); else gl.drawArrays(gl.TRIANGLES,0,3); })(start);
+  if(reduce){ gl.uniform2f(uR,cv.width,cv.height); gl.uniform1f(uT,2.); gl.drawArrays(gl.TRIANGLES,0,3); }
+})();
+
+/* ── (2) split headline into words+chars for the mask-rise reveal ── */
+const h1 = document.getElementById('h1');
+h1.innerHTML = h1.textContent.split(' ').map(w =>
+  `<span class="word">${[...w].map(c=>`<span class="ch">${c}</span>`).join('')}</span>`
+).join(' ');
+
+/* ── (2) GSAP intro timeline ── */
+if(!reduce){
+  const tl = gsap.timeline({ defaults:{ ease:'power3.out' } });
+  tl.to('.eyebrow',{ opacity:1, y:0, duration:.6, startAt:{y:12} })
+    .to('.ch',{ y:'0%', duration:1, stagger:0.022 }, '-=0.2')
+    .to('.sub',{ opacity:1, y:0, duration:.7, startAt:{y:16} }, '-=0.55')
+    .to('.cta',{ opacity:1, y:0, duration:.6, startAt:{y:16} }, '-=0.4')
+    .to('.hint',{ opacity:.75, duration:.6 }, '-=0.2');
+}
+
+/* ── (3) magnetic CTA ── */
+const cta = document.getElementById('cta');
+if(!reduce){
+  const strength = 0.35;
+  cta.addEventListener('pointermove', e=>{
+    const b = cta.getBoundingClientRect();
+    const x = (e.clientX - (b.left+b.width/2)) * strength;
+    const y = (e.clientY - (b.top+b.height/2)) * strength;
+    gsap.to(cta,{ x, y, duration:.4, ease:'power3.out' });
+    gsap.to(cta.querySelectorAll('span'),{ x:x*0.3, y:y*0.3, duration:.4 });
+  });
+  cta.addEventListener('pointerleave', ()=>{
+    gsap.to(cta,{ x:0, y:0, duration:.6, ease:'elastic.out(1,0.4)' });
+    gsap.to(cta.querySelectorAll('span'),{ x:0, y:0, duration:.6, ease:'elastic.out(1,0.4)' });
+  });
+}
+</script>
+</body>
+</html>

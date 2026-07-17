@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>streaming-ai-chat-widget</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:380px;position:relative;min-height:360px}
+ .win{border-radius:16px;overflow:hidden;display:flex;flex-direction:column;height:340px;
+   transform-origin:bottom right;transition:.4s cubic-bezier(.2,.9,.3,1)}
+ .win.closed{transform:scale(.2) translateY(40px);opacity:0;pointer-events:none}
+ .bar{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:12px}
+ .bar .av{width:26px;height:26px;border-radius:50%;background:linear-gradient(120deg,var(--cyan),var(--ice))}
+ .bar .on{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--teal)}
+ .body{flex:1;padding:14px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;scrollbar-width:none}
+ .body::-webkit-scrollbar{display:none}
+ .msg{max-width:80%;padding:9px 13px;border-radius:14px;font-size:12.5px;line-height:1.4}
+ .bot{align-self:flex-start;background:var(--glass);border:1px solid var(--line);border-bottom-left-radius:4px}
+ .me{align-self:flex-end;background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;border-bottom-right-radius:4px}
+ .chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 12px}
+ .qchip{font-family:var(--mono);font-size:10px;color:var(--ice2);border:1px solid var(--line2);border-radius:999px;padding:6px 11px;cursor:pointer;background:var(--glass)}
+ .qchip:hover{background:var(--glass2)}
+ .car{display:inline-block;width:7px;height:14px;background:var(--cyan);margin-left:2px;vertical-align:-2px;animation:bl .8s steps(1) infinite}
+ @keyframes bl{50%{opacity:0}}
+ .launch{position:absolute;bottom:0;right:0;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+   background:linear-gradient(120deg,var(--cyan),var(--ice));box-shadow:var(--glow);font-size:22px;color:#04121e;
+   display:flex;align-items:center;justify-content:center}
+</style></head>
+<body class="demo"><div class="demo-name">f · streaming-ai-chat-widget</div>
+<div class="stage">
+  <div class="win frost" id="win">
+    <div class="bar"><div class="av"></div><b>Turf Assistant</b><span class="on">● streaming</span></div>
+    <div class="body" id="body"></div>
+    <div class="chips" id="chips"></div>
+  </div>
+  <button class="launch" id="launch">💬</button>
+</div>
+<script>
+const body=document.getElementById('body'),chips=document.getElementById('chips'),win=document.getElementById('win');
+const QA={
+ 'How much per sq ft?':'Great question! Installed turf runs about $8–$14 / sq ft depending on grade and prep. Want a firm quote for your yard?',
+ 'Is it pet-safe?':'Yes — our Emerald 45 is lead-free, antimicrobial, and drains at 30 in/hr, so no odor and easy cleanup.',
+ 'How long to install?':'Most residential lawns under 1,000 sq ft are done in a single day by our crew.'
+};
+const chipList=Object.keys(QA);
+chips.innerHTML=chipList.map(q=>`<div class="qchip">${q}</div>`).join('');
+function addBot(text){ // stream tokens over "SSE"
+  const m=document.createElement('div');m.className='msg bot';m.innerHTML='<span class="car"></span>';body.appendChild(m);
+  const words=text.split(' ');let i=0;
+  const iv=setInterval(()=>{if(i>=words.length){clearInterval(iv);m.innerHTML=text;return;}
+    m.innerHTML=words.slice(0,++i).join(' ')+'<span class="car"></span>';body.scrollTop=body.scrollHeight;},70);
+}
+function ask(q){const me=document.createElement('div');me.className='msg me';me.textContent=q;body.appendChild(me);body.scrollTop=body.scrollHeight;
+  setTimeout(()=>addBot(QA[q]||'Let me connect you — call us at (951) 555-0182.'),500);}
+[...chips.children].forEach((c,i)=>c.onclick=()=>ask(chipList[i]));
+document.getElementById('launch').onclick=()=>win.classList.toggle('closed');
+addBot('Hi! I can help with turf pricing, install and pet-safety. Ask away 🌱');
+// auto-demo loop
+let n=0;setInterval(()=>{if(win.classList.contains('closed'))return;n++;if(n%3===0){body.innerHTML='';addBot('Hi! Ask me anything about our turf 🌱');}else{ask(chipList[n%chipList.length]);}},4200);
+</script></body></html>

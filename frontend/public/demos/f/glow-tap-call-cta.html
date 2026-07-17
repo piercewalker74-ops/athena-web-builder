@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>glow-tap-call-cta</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:560px}
+ .band{position:relative;border-radius:20px;overflow:hidden;padding:44px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+ .band .filler{position:absolute;inset:0;border-radius:0;opacity:.28}
+ .band .veil{position:absolute;inset:0;background:radial-gradient(60% 90% at 50% 55%,rgba(47,224,255,.28),transparent 70%),rgba(4,18,30,.55)}
+ .band>*{position:relative}
+ .call{display:inline-flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:#04121e;cursor:pointer;
+   background:linear-gradient(120deg,var(--cyan),var(--ice));border:none;border-radius:999px;padding:18px 34px;
+   box-shadow:0 0 0 0 rgba(47,224,255,.7);animation:pulse 2.2s ease-out infinite}
+ @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,224,255,.55)}70%{box-shadow:0 0 0 26px rgba(47,224,255,0)}100%{box-shadow:0 0 0 0 rgba(47,224,255,0)}}
+ .rem{display:flex;gap:22px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ice2);opacity:.85;flex-wrap:wrap;justify-content:center}
+</style></head>
+<body class="demo"><div class="demo-name">f · glow-tap-call-cta</div>
+<div class="stage">
+  <div class="band frost">
+    <div class="filler"></div><div class="veil"></div>
+    <div class="eyebrow">READY WHEN YOU ARE</div>
+    <h1 class="big glow">Cooler cabin, same day.</h1>
+    <button class="call">📞 (909) 555-0142</button>
+    <div class="rem"><span>◷ Mon–Sat · 8a–6p</span><span>◈ 1420 Frost Ave, Ontario CA</span><span>★ 4.9 · 312 reviews</span></div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scroll.horizontal_track</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .head{display:flex;justify-content:space-between;align-items:baseline}
+ .win{position:relative;height:210px;border-radius:14px;overflow:hidden}
+ .track{position:absolute;top:0;left:0;height:100%;display:flex;gap:14px;padding:16px;will-change:transform}
+ .panel{width:200px;flex:none;border-radius:12px;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;position:relative;overflow:hidden}
+ .panel .filler{position:absolute;inset:0;border-radius:12px}
+ .panel .n{position:relative;font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.16em}
+ .panel h3{position:relative;font-size:18px;margin-top:4px}
+ .panel p{position:relative;font-size:11px;color:var(--ice);opacity:.75;margin-top:2px}
+ .vbar{position:relative;height:6px;border-radius:999px;background:var(--glass);overflow:hidden}
+ .vfill{position:absolute;left:0;top:0;bottom:0;width:20%;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--teal))}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">f · scroll.horizontal_track</div>
+<div class="stage">
+  <div class="head"><div class="eyebrow">SCROLL ↓ DRIVES ↔ TRACK</div><div class="hint" id="pct">0%</div></div>
+  <div class="win frost" id="win"><div class="track" id="track"></div></div>
+  <div class="vbar"><div class="vfill" id="vfill"></div></div>
+  <div class="hint">vertical scroll input pans the horizontal track</div>
+</div>
+<script>
+const track=document.getElementById('track'),win=document.getElementById('win'),vfill=document.getElementById('vfill'),pct=document.getElementById('pct');
+const data=[['01','Approach','the first draft'],['02','Material','frost & glass'],['03','Motion','how it breathes'],['04','Detail','the last 5%'],['05','Ship','into the wild']];
+data.forEach(d=>{const p=document.createElement('div');p.className='panel';
+ p.innerHTML=`<div class="filler eel"></div><div class="n">${d[0]}</div><h3>${d[1]}</h3><p>${d[2]}</p>`;track.appendChild(p);});
+let prog=0,dir=1;
+function frame(){
+  prog+=0.0032*dir;
+  if(prog>=1){prog=1;dir=-1;}if(prog<=0){prog=0;dir=1;}
+  const max=track.scrollWidth-win.clientWidth;
+  track.style.transform=`translateX(${-prog*max}px)`;
+  const p=Math.round(prog*100);
+  vfill.style.width=(18+prog*82)+'%';pct.textContent=p+'%';
+  requestAnimationFrame(frame);
+}
+frame();
+// hover speeds it forward
+let hov=false;win.addEventListener('mouseenter',()=>hov=true);win.addEventListener('mouseleave',()=>hov=false);
+setInterval(()=>{if(hov)dir=1;},80);
+</script></body></html>

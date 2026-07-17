@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>feedback.copy_confirm</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .card{padding:22px;display:flex;flex-direction:column;gap:14px}
+ .code{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:10px;
+   border:1px dashed var(--line2);background:rgba(4,18,30,.55);font-family:var(--mono)}
+ .code .k{font-size:16px;letter-spacing:.14em;color:var(--ice2)}
+ .cbtn{position:relative;overflow:hidden;min-width:104px;justify-content:center}
+ .cbtn .lbl{display:inline-flex;align-items:center;gap:7px;transition:transform .3s,opacity .3s}
+ .cbtn .a{position:absolute;inset:0;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+   transform:translateY(120%);opacity:0;transition:transform .3s,opacity .3s;color:#04121e}
+ .cbtn.done .lbl{transform:translateY(-120%);opacity:0}
+ .cbtn.done .a{transform:none;opacity:1}
+ .cbtn.done{background:linear-gradient(120deg,var(--teal),var(--cyan))}
+ .hint{font-size:11px;color:var(--ice);opacity:.6;text-align:center}
+</style></head>
+<body class="demo"><div class="demo-name">f · feedback.copy_confirm</div>
+<div class="stage">
+  <div class="eyebrow">COPY CONFIRMATION · flips to Copied</div>
+  <div class="card frost">
+    <div class="code">
+      <span class="k" id="key">FROST-25</span>
+      <button class="btn cbtn" id="cbtn"><span class="lbl">⧉ Copy</span><span class="a">✓ Copied</span></button>
+    </div>
+    <div class="hint">Apply at checkout for 25% off the Glacier Series.</div>
+  </div>
+</div>
+<script>
+const btn=document.getElementById('cbtn'),key=document.getElementById('key');
+let t;
+function copy(){
+ const txt=key.textContent;
+ if(navigator.clipboard)navigator.clipboard.writeText(txt).catch(()=>{});
+ btn.classList.add('done');
+ clearTimeout(t);t=setTimeout(()=>btn.classList.remove('done'),1600);
+}
+btn.addEventListener('click',copy);
+// auto-demo the flip on a loop
+setInterval(copy,3000);
+</script></body></html>

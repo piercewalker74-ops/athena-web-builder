@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pricing.calculator</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:stretch}
+ @media(max-width:460px){.stage{grid-template-columns:1fr}}
+ .panel{padding:20px}
+ .ctl{margin:16px 0}
+ .ctl label{display:flex;justify-content:space-between;font-size:12px;color:var(--ice2);margin-bottom:8px}
+ .ctl label b{font-family:var(--mono);color:var(--cyan)}
+ input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:4px;background:var(--line2);outline:none}
+ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--cyan);box-shadow:var(--glow);cursor:pointer}
+ .result{padding:22px 18px;display:flex;flex-direction:column;justify-content:center;text-align:center;gap:6px}
+ .rlbl{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ice);opacity:.7;text-transform:uppercase}
+ .rnum{font-size:clamp(34px,8vw,52px);font-weight:800;letter-spacing:-.02em;line-height:1}
+ .save{font-size:12px;color:var(--teal);margin-top:4px}
+ .sub{font-size:11px}
+</style></head>
+<body class="demo"><div class="demo-name">f · pricing.calculator</div>
+<div class="stage">
+  <div class="panel frost">
+    <div class="eyebrow">ROI CALCULATOR</div>
+    <div class="ctl"><label>Lawn area <b id="av">600 sqft</b></label><input id="area" type="range" min="200" max="2500" value="600" step="50"></div>
+    <div class="ctl"><label>Water bill / mo <b id="wv">$140</b></label><input id="water" type="range" min="40" max="400" value="140" step="10"></div>
+    <div class="ctl"><label>Years owned <b id="yv">10 yr</b></label><input id="years" type="range" min="3" max="25" value="10" step="1"></div>
+    <div class="sub">Turf pays for itself in <b id="pb" style="color:var(--cyan)">—</b> months.</div>
+  </div>
+  <div class="result frost">
+    <div class="rlbl">Lifetime savings</div>
+    <div class="rnum glow">$<span id="total">0</span></div>
+    <div class="save" id="save">vs. sod + water + mowing</div>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const area=$('area'),water=$('water'),years=$('years'),total=$('total');
+let cur=0,target=0;
+function ease(){cur+=(target-cur)*0.12;total.textContent=Math.round(cur).toLocaleString();
+ if(Math.abs(target-cur)>1)requestAnimationFrame(ease);else total.textContent=target.toLocaleString();}
+function calc(){
+ const a=+area.value,w=+water.value,y=+years.value;
+ $('av').textContent=a+' sqft';$('wv').textContent='$'+w;$('yv').textContent=y+' yr';
+ const water12=w*12*y, mow=a*0.35*y, savings=Math.round(water12+mow - a*2);
+ const install=a*9, pay=Math.max(1,Math.round(install/((water12+mow)/y/12)));
+ $('pb').textContent=pay;
+ target=Math.max(0,savings);requestAnimationFrame(ease);
+}
+[area,water,years].forEach(s=>s.addEventListener('input',calc));
+calc();
+// gentle auto-demo so it looks alive
+let t=0,auto=setInterval(()=>{t+=.5;area.value=Math.round(1200+Math.sin(t)*900);calc();},1400);
+[area,water,years].forEach(s=>s.addEventListener('pointerdown',()=>clearInterval(auto)));
+</script></body></html>

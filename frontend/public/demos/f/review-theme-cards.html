@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>review-theme-cards</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .rv{opacity:0;transform:translateY(22px);filter:blur(5px);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none;filter:none}
+ .hero{padding:20px}
+ .stars{color:var(--cyan);letter-spacing:3px;font-size:15px;text-shadow:var(--glow)}
+ .quote{font-size:clamp(17px,3vw,24px);line-height:1.35;margin:10px 0;font-weight:550}
+ .meta{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--ice);opacity:.7}
+ .themes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+ .tc{padding:13px}
+ .tc .ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--glass2);border:1px solid var(--line);margin-bottom:8px}
+ .tc .ic svg{width:15px;height:15px;stroke:var(--teal);fill:none;stroke-width:1.8}
+ .tc b{font-size:12px}.tc p{font-size:10px;color:var(--ice);opacity:.7;margin-top:2px}
+ .src{align-self:flex-start}
+</style></head>
+<body class="demo"><div class="demo-name">f · review-theme-cards</div>
+<div class="stage">
+  <div class="eyebrow rv" data-d="0">VERIFIED FEEDBACK</div>
+  <div class="hero frost rv" data-d="1">
+    <div class="stars">★★★★★</div>
+    <div class="quote glow">"Crew showed up early, laid the whole yard in a day, and it still looks new two summers later."</div>
+    <div class="meta">— DANA R. · VERIFIED GOOGLE REVIEW</div>
+  </div>
+  <div class="themes">
+    <div class="tc frost rv" data-d="2"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v20M4 8l8 4 8-4"/></svg></div><b>On time</b><p>mentioned in 41 reviews</p></div>
+    <div class="tc frost rv" data-d="3"><div class="ic"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></div><b>Clean finish</b><p>mentioned in 33 reviews</p></div>
+    <div class="tc frost rv" data-d="4"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-4 8-8 9-4-1-8-4-8-9V7z"/></svg></div><b>Held up</b><p>mentioned in 28 reviews</p></div>
+  </div>
+  <a class="chip src rv" data-d="5" href="#" onclick="return false">Read all on Google ↗</a>
+</div>
+<script>
+const els=[...document.querySelectorAll('.rv')];
+function run(){els.forEach(e=>e.classList.remove('in'));els.forEach(e=>setTimeout(()=>e.classList.add('in'),180+(+e.dataset.d)*180));}
+run();setInterval(run,5000);
+</script></body></html>

@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>dark-mode-map-embed</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px}
+ .map{position:relative;height:280px;border-radius:16px;overflow:hidden}
+ .surface{position:absolute;inset:0;transition:filter .6s}
+ .surface.dark{filter:invert(1) hue-rotate(180deg) contrast(.9) brightness(.9)}
+ /* a faux "light" google map painted with CSS so the invert trick is visible */
+ .surface{background:#e8eaed}
+ .road{position:absolute;background:#fff}
+ .r1{left:0;right:0;top:44%;height:14px}.r2{top:0;bottom:0;left:40%;width:12px}.r3{left:0;right:0;top:72%;height:8px;transform:rotate(-4deg)}
+ .park{position:absolute;left:8%;top:10%;width:26%;height:26%;background:#cde6c5;border-radius:8px}
+ .water{position:absolute;right:6%;bottom:8%;width:34%;height:34%;background:#a6cbe6;border-radius:14px}
+ .pin{position:absolute;left:52%;top:40%;transform:translate(-50%,-100%);font-size:26px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+ .toggle{display:flex;align-items:center;gap:10px;justify-content:center}
+ .sw{width:44px;height:22px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;transition:background .3s}
+ .sw.on{background:var(--cyan)}.sw i{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--frost);transition:left .3s}.sw.on i{left:24px}
+ .toggle span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--ice)}
+</style></head>
+<body class="demo"><div class="demo-name">f · dark-mode-map-embed</div>
+<div class="stage">
+  <div class="eyebrow">CSS-ONLY DARK MAP · invert + hue-rotate</div>
+  <div class="map frost"><div class="surface dark" id="surf">
+    <div class="park"></div><div class="water"></div>
+    <div class="road r1"></div><div class="road r2"></div><div class="road r3"></div>
+    <div class="pin">📍</div>
+  </div></div>
+  <div class="toggle"><span>light embed</span><div class="sw on" id="sw"><i></i></div><span>dark theme</span></div>
+</div>
+<script>
+const surf=document.getElementById('surf'),sw=document.getElementById('sw');
+function set(on){surf.classList.toggle('dark',on);sw.classList.toggle('on',on);}
+sw.onclick=()=>set(!surf.classList.contains('dark'));
+let on=true;setInterval(()=>{on=!on;set(on);},2400);
+</script></body></html>

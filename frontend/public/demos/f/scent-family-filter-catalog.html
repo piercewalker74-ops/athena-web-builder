@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scent-family-filter-catalog</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px}
+ .bar{display:flex;flex-wrap:wrap;gap:7px}
+ .tab{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ice);padding:8px 14px;border-radius:999px;cursor:pointer;border:1px solid var(--line2);background:var(--glass);transition:all .25s}
+ .tab.on{color:#04121e;background:linear-gradient(120deg,var(--cyan),var(--ice));border-color:transparent;box-shadow:var(--glow)}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+ .prod{padding:0;overflow:hidden;display:flex;flex-direction:column;animation:pop .4s}
+ @keyframes pop{from{opacity:0;transform:scale(.94)}}
+ .prod .filler{height:80px;border-radius:0}
+ .prod .info{padding:10px}
+ .prod .nm{font-size:12px;font-weight:600}.prod .fam{font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--cyan);text-transform:uppercase;margin-top:2px}
+ .badge{position:absolute;top:6px;left:6px;font-family:var(--mono);font-size:8px;letter-spacing:.08em;padding:2px 7px;border-radius:5px;z-index:2}
+ .b-in{background:rgba(91,255,157,.2);color:#5bff9d;border:1px solid rgba(91,255,157,.5)}
+ .b-out{background:rgba(255,91,122,.2);color:#ff7a92;border:1px solid rgba(255,91,122,.5)}
+ .b-low{background:rgba(255,207,91,.2);color:#ffcf5b;border:1px solid rgba(255,207,91,.5)}
+ .notify{font-family:var(--mono);font-size:9px;color:var(--cyan);cursor:pointer;margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
+ .waitlist{padding:14px;text-align:center}
+ .waitlist .row{display:flex;gap:8px;margin-top:10px;max-width:340px;margin-left:auto;margin-right:auto}
+ .waitlist input{flex:1;background:var(--glass);border:1px solid var(--line);border-radius:8px;padding:9px 11px;color:var(--frost);font-size:12px;outline:none}
+ @media(max-width:440px){.grid{grid-template-columns:1fr 1fr}}
+</style></head>
+<body class="demo"><div class="demo-name">f · scent-family-filter-catalog</div>
+<div class="stage">
+  <div><div class="eyebrow">SHOP BY SCENT FAMILY</div></div>
+  <div class="bar" id="bar"></div>
+  <div class="grid" id="grid"></div>
+  <div class="waitlist frost"><div class="eyebrow">WHICH SCENT NEXT?</div><div class="row"><input placeholder="you@email.com"><button class="btn" style="font-size:12px;padding:9px 16px">Join</button></div></div>
+</div>
+<script>
+const FAMS=['All','Woody','Citrus','Floral','Fresh'];
+const P=[
+ ['Cedar Smoke','Woody','in'],['Amber Oud','Woody','low'],['Bergamot','Citrus','in'],
+ ['Blood Orange','Citrus','out'],['Wild Peony','Floral','in'],['White Lily','Floral','out'],
+ ['Sea Salt','Fresh','in'],['Cool Mint','Fresh','low'],['Sandalwood','Woody','in']];
+const bar=document.getElementById('bar'),grid=document.getElementById('grid');let cur='All';
+FAMS.forEach(f=>{const t=document.createElement('div');t.className='tab'+(f==='All'?' on':'');t.textContent=f;t.onclick=()=>sel(f);bar.appendChild(t);});
+const badge={in:['b-in','In Stock'],out:['b-out','Sold Out'],low:['b-low','Selling Out']};
+function sel(f){cur=f;[...bar.children].forEach(t=>t.classList.toggle('on',t.textContent===f));
+ const list=P.filter(p=>f==='All'||p[1]===f);
+ grid.innerHTML=list.map(([nm,fam,st])=>{const[bc,bt]=badge[st];
+  return `<div class="prod frost" style="position:relative"><span class="badge ${bc}">${bt}</span><div class="filler"><span class="tag">SCENT</span></div>
+   <div class="info"><div class="nm">${nm}</div><div class="fam">${fam}</div>${st==='out'?'<div class="notify">✎ Notify me →</div>':''}</div></div>`;}).join('');
+ grid.querySelectorAll('.notify').forEach(n=>n.onclick=()=>{n.textContent='✓ We\'ll email you';n.style.color='#5bff9d';});}
+sel('All');
+let idx=0;const iv=setInterval(()=>{if(document.hidden)return;idx=(idx+1)%FAMS.length;sel(FAMS[idx]);},2800);
+bar.addEventListener('click',()=>clearInterval(iv));
+</script></body></html>

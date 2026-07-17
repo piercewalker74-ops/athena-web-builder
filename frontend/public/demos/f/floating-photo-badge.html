@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>floating-photo-badge</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px;align-items:center}
+ .eyebrow{align-self:flex-start}
+ .frame{position:relative;width:100%;max-width:320px;aspect-ratio:4/5}
+ .photo{position:absolute;inset:0;border-radius:16px}
+ .photo .tag{top:auto;bottom:8px;right:8px}
+ .badge{position:absolute;right:-14px;bottom:-14px;min-width:118px;padding:14px 16px;border-radius:16px;text-align:center;
+   background:linear-gradient(135deg,var(--cyan),var(--ice));color:#04121e;box-shadow:0 12px 30px rgba(47,224,255,.45);
+   transform:translateY(0) scale(.6);opacity:0;transition:transform .7s cubic-bezier(.2,1.5,.3,1),opacity .5s}
+ .badge.in{transform:translateY(0) scale(1);opacity:1}
+ .badge .num{font-size:30px;font-weight:750;line-height:1;font-family:var(--sans)}
+ .badge .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-top:4px;opacity:.85}
+ .badge .stars{font-size:11px;margin-top:5px;letter-spacing:2px}
+ .cap{align-self:flex-start;max-width:320px}
+ .cap b{font-size:15px}.cap p{font-size:12px;color:var(--ice);opacity:.75;margin-top:2px}
+ @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+ .badge.in{animation:pop .7s cubic-bezier(.2,1.5,.3,1) forwards, float 4s ease-in-out 1s infinite}
+ @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+</style></head>
+<body class="demo"><div class="demo-name">f · floating-photo-badge</div>
+<div class="stage">
+  <div class="eyebrow">CREW · PROOF ON THE PHOTO</div>
+  <div class="frame">
+    <div class="filler photo eel"><span class="tag">SUBJECT</span></div>
+    <div class="badge" id="b"><div class="num" id="n">0</div><div class="lbl">5-Star Reviews</div><div class="stars">★★★★★</div></div>
+  </div>
+  <div class="cap"><b>Marcus Field</b><p>Lead installer — 11 seasons on the crew.</p></div>
+</div>
+<script>
+const b=document.getElementById('b'),n=document.getElementById('n');
+const target=332;
+function count(){let t=0;const st=performance.now();
+ (function f(now){const e=Math.min(1,(now-st)/1100);const k=1-Math.pow(1-e,3);
+   n.textContent=Math.round(k*target);if(e<1)requestAnimationFrame(f);})(st);}
+function run(){b.classList.remove('in');void b.offsetWidth;b.classList.add('in');setTimeout(count,180);}
+run();setInterval(run,5200);
+</script></body></html>

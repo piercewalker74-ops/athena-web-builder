@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>editorial-collage-bento</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:520px}
+ .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+ .top h2{font-size:18px}
+ .rule{height:2px;background:var(--line);position:relative;overflow:hidden;margin-bottom:14px;border-radius:2px}
+ .rule .glint{position:absolute;top:0;left:-40%;width:40%;height:100%;background:linear-gradient(90deg,transparent,var(--teal),transparent);box-shadow:0 0 12px var(--teal)}
+ .grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:74px;gap:12px}
+ .t{position:relative;border-radius:14px;overflow:hidden;opacity:0;transform:translateY(20px)}
+ .t.in{opacity:1;transform:none;transition:all .7s cubic-bezier(.2,.85,.25,1)}
+ .t .filler{position:absolute;inset:0;border-radius:0}
+ .feat{grid-column:span 2;grid-row:span 2}
+ .w2{grid-column:span 2}
+ .name{position:absolute;left:8px;bottom:8px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+   color:var(--frost);background:rgba(4,18,30,.7);border:1px solid var(--line2);border-radius:6px;padding:3px 8px;
+   transform:scale(.4);opacity:0}
+ .t.in .name{animation:stamp .5s cubic-bezier(.2,1.5,.4,1) forwards;animation-delay:.35s}
+ @keyframes stamp{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1}}
+</style></head>
+<body class="demo"><div class="demo-name">f · editorial-collage-bento</div>
+<div class="stage">
+ <div class="top"><div class="eyebrow">THE 2025 COLLECTION</div><h2 class="glow">Field notes</h2></div>
+ <div class="rule"><div class="glint" id="glint"></div></div>
+ <div class="grid" id="grid">
+  <div class="t feat"><div class="filler eel"></div><span class="name">Emerald Ridge · backyard</span></div>
+  <div class="t w2"><div class="filler"></div><span class="name">K9 ProFlow</span></div>
+  <div class="t w2"><div class="filler eel"></div><span class="name">Rooftop deck</span></div>
+  <div class="t"><div class="filler"></div><span class="name">Putt Pro</span></div>
+  <div class="t"><div class="filler eel"></div><span class="name">Meadow</span></div>
+  <div class="t w2"><div class="filler"></div><span class="name">Poolside install</span></div>
+ </div>
+</div>
+<script>
+const tiles=[...document.querySelectorAll('.t')],glint=document.getElementById('glint');
+function run(){tiles.forEach(t=>t.classList.remove('in'));glint.style.transition='none';glint.style.left='-40%';
+ tiles.forEach((t,i)=>setTimeout(()=>t.classList.add('in'),140+i*120));
+ setTimeout(()=>{glint.style.transition='left 1.1s ease-in-out';glint.style.left='110%';},tiles.length*120+300);}
+run();setInterval(run,5200);
+</script></body></html>

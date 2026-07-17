@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>sticky-filter-tab-catalog</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:0}
+ .barwrap{position:sticky;top:0;z-index:5;padding:10px 4px;background:rgba(4,18,30,.6);backdrop-filter:blur(6px);border-radius:12px 12px 0 0}
+ .bar{display:flex;gap:6px;overflow-x:auto;position:relative;scrollbar-width:none}
+ .bar::-webkit-scrollbar{display:none}
+ .tab{flex:0 0 auto;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ice);opacity:.6;
+   padding:8px 14px;cursor:pointer;position:relative;white-space:nowrap;transition:opacity .2s,color .2s}
+ .tab.on{opacity:1;color:var(--cyan)}
+ .ink{position:absolute;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--cyan),var(--ice));transition:all .35s cubic-bezier(.3,.8,.3,1);box-shadow:var(--glow)}
+ .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:14px 4px 4px}
+ .card{border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--glass);animation:fi .45s}
+ @keyframes fi{from{opacity:0;transform:translateY(10px)}}
+ .card .filler{height:74px;border-radius:0}
+ .card .cn{padding:8px 9px;font-size:11px}
+ .card .cn small{display:block;color:var(--ice);opacity:.6;font-family:var(--mono);font-size:9px;margin-top:2px}
+ @media(max-width:520px){.grid{grid-template-columns:1fr 1fr}}
+</style></head>
+<body class="demo"><div class="demo-name">f · sticky-filter-tab-catalog</div>
+<div class="stage frost">
+  <div class="barwrap"><div class="bar" id="bar"><div class="ink" id="ink"></div></div></div>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const CAT={
+ 'All':[],
+ 'Lawn':['ProTurf 40','Meadow 32','EverGreen'],
+ 'Putting':['TourRoll','PuttPerfect','GreenSpeed'],
+ 'Pet':['PetShield','K9 Clean','PawGrass'],
+ 'Play':['SoftFall','KidTurf','PlaySafe']};
+Object.keys(CAT).forEach(k=>{if(k!=='All')CAT['All'].push(...CAT[k].map(n=>[n,k]));});
+const bar=document.getElementById('bar'),ink=document.getElementById('ink'),grid=document.getElementById('grid');
+let cur=0;const keys=Object.keys(CAT);
+keys.forEach((k,i)=>{const t=document.createElement('div');t.className='tab';t.textContent=k;t.onclick=()=>sel(i);bar.appendChild(t);});
+const tabs=[...bar.querySelectorAll('.tab')];
+function sel(i){cur=i;const k=keys[i];tabs.forEach((t,j)=>t.classList.toggle('on',j===i));
+ const r=tabs[i];ink.style.left=r.offsetLeft+'px';ink.style.width=r.offsetWidth+'px';
+ const items=k==='All'?CAT.All:CAT[k].map(n=>[n,k]);
+ grid.innerHTML=items.map(it=>`<div class="card"><div class="filler"><span class="tag">${(it[1]||'').slice(0,3).toUpperCase()}</span></div><div class="cn glow">${it[0]}<small>${it[1]} series</small></div></div>`).join('');}
+sel(0);setInterval(()=>sel((cur+1)%keys.length),2800);
+</script></body></html>

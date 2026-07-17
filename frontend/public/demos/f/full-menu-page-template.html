@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>full-menu-page-template</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:0;border-radius:16px;overflow:hidden}
+ .phead{text-align:center;padding:22px 20px 18px;background:linear-gradient(160deg,#0c2f45,#0a2236)}
+ .phead .big{font-size:clamp(22px,4.4vw,30px)}
+ .phead .sub{margin-top:6px}
+ .body{padding:18px 22px}
+ .sh{display:flex;align-items:baseline;gap:10px;margin:16px 0 6px}
+ .sh h2{font-size:13px;font-family:var(--mono);letter-spacing:.2em;color:var(--cyan);text-transform:uppercase}
+ .sh .ln{flex:1;height:1px;background:var(--line2)}
+ .row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:7px 2px;border-bottom:1px dashed var(--line);
+   opacity:0;transform:translateX(-10px);transition:all .5s}
+ .row.in{opacity:1;transform:none}
+ .nm{font-size:14px;font-weight:600}.ds{grid-column:1;font-size:10px;color:var(--ice);opacity:.6}
+ .pr{font-family:var(--mono);font-size:13px;color:var(--cyan)}
+ .allergy{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--ice);opacity:.6;margin-top:14px;text-align:center}
+ .cta{text-align:center;padding:18px;background:linear-gradient(120deg,rgba(47,224,255,.12),rgba(57,211,201,.12));border-top:1px solid var(--line)}
+</style></head>
+<body class="demo"><div class="demo-name">f · full-menu-page-template</div>
+<div class="stage frost">
+  <div class="phead">
+    <div class="eyebrow">GLACIER KITCHEN</div>
+    <h1 class="big glow" style="margin-top:6px">The Full Menu</h1>
+    <p class="sub">Seasonal · sourced within 50 miles · updated weekly.</p>
+  </div>
+  <div class="body" id="body"></div>
+  <div class="cta"><div class="eyebrow">READY TO DINE?</div>
+    <h2 class="big glow" style="font-size:20px;margin:6px 0 12px">Reserve your table</h2>
+    <button class="btn">Book a table →</button></div>
+</div>
+<script>
+const cats=[
+ ['Starters',[['Frost Oyster Trio','sea ice, yuzu',18],['Charred Leek','cyan crème',14]]],
+ ['Mains',[['Glacier Cod','saffron broth',31],['Dry-Aged Ribeye','marrow butter',46]]],
+ ['Dessert',[['Sea-Ice Sorbet','yuzu, elderflower',9],['Frost Cheesecake','glacier berry',11]]]
+];
+const body=document.getElementById('body');const rows=[];
+cats.forEach(c=>{const h=document.createElement('div');h.className='sh';h.innerHTML=`<h2>${c[0]}</h2><div class="ln"></div>`;body.appendChild(h);
+ c[1].forEach(it=>{const r=document.createElement('div');r.className='row';
+  r.innerHTML=`<div class="nm">${it[0]}</div><div class="pr">$${it[2]}</div><div class="ds">${it[1]}</div>`;body.appendChild(r);rows.push(r);});});
+const a=document.createElement('div');a.className='allergy';a.textContent='◇ Please tell your server about any allergies — most dishes can be adapted.';body.appendChild(a);
+function run(){rows.forEach(r=>r.classList.remove('in'));rows.forEach((r,i)=>setTimeout(()=>r.classList.add('in'),140+i*95));}
+run();setInterval(run,5400);
+</script></body></html>

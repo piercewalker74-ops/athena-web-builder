@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>reveal.line_by_line</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:6px;justify-content:center;min-height:280px}
+ .eyebrow{margin-bottom:14px}
+ .line{overflow:hidden;padding:4px 0}
+ .line span{display:inline-block;transform:translateY(110%);transition:transform .8s cubic-bezier(.22,.9,.24,1)}
+ .line.in span{transform:none}
+ .big{font-size:clamp(26px,6.4vw,52px);font-weight:680}
+ .accent{color:var(--cyan)}
+ .foot{overflow:hidden;margin-top:16px}
+ .foot span{display:inline-block;transform:translateY(110%);transition:transform .7s cubic-bezier(.22,.9,.24,1)}
+ .foot.in span{transform:none}
+ .sub{font-size:13px}
+ .rule{height:1px;background:linear-gradient(90deg,var(--line2),transparent);margin-top:8px;transform-origin:left;transform:scaleX(0);transition:transform .9s ease}
+ .rule.in{transform:scaleX(1)}
+</style></head>
+<body class="demo"><div class="demo-name">f · reveal.line_by_line</div>
+<div class="stage">
+  <div class="eyebrow">EDITORIAL LINE REVEAL</div>
+  <div class="line" id="l0"><span class="big glow">We build things</span></div>
+  <div class="line" id="l1"><span class="big">that move the way</span></div>
+  <div class="line" id="l2"><span class="big accent glow">light moves on ice.</span></div>
+  <div class="rule" id="r"></div>
+  <div class="foot" id="f"><span class="sub">Each line sweeps up from behind a mask — staggered, deliberate, premium.</span></div>
+</div>
+<script>
+const lines=[document.getElementById('l0'),document.getElementById('l1'),document.getElementById('l2')];
+const rule=document.getElementById('r'),foot=document.getElementById('f');
+function run(){
+  [...lines,rule,foot].forEach(e=>e.classList.remove('in'));
+  lines.forEach((l,i)=>setTimeout(()=>l.classList.add('in'),260+i*220));
+  setTimeout(()=>rule.classList.add('in'),260+lines.length*220);
+  setTimeout(()=>foot.classList.add('in'),420+lines.length*220);
+}
+run();setInterval(run,4800);
+</script></body></html>

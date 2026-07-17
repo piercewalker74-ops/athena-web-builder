@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scroll-linked-pill-reveal</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;border-radius:18px;overflow:hidden;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:16px;padding:24px}
+ .bgfill{position:absolute;inset:0;opacity:.35}
+ .inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px}
+ .big{font-size:clamp(26px,5vw,44px)}
+ .pills{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;max-width:440px}
+ .pill{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ice2);border:1px solid var(--line2);
+   border-radius:999px;padding:8px 15px;background:var(--glass2);will-change:transform,opacity}
+ .track{position:absolute;right:14px;top:14px;bottom:14px;width:4px;border-radius:4px;background:var(--line);z-index:3}
+ .thumb{position:absolute;left:0;width:4px;border-radius:4px;height:34%;background:linear-gradient(var(--cyan),var(--teal));box-shadow:var(--glow)}
+ .hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.5;letter-spacing:.14em;z-index:3}
+</style></head>
+<body class="demo"><div class="demo-name">f · scroll-linked-pill-reveal</div>
+<div class="stage frost">
+  <div class="filler bgfill"></div>
+  <div class="inner">
+    <div class="eyebrow">SHOP BY SPACE</div>
+    <h1 class="big glow">Turf for every ground.</h1>
+    <div class="pills" id="pills"></div>
+  </div>
+  <div class="track"><div class="thumb" id="thumb"></div></div>
+  <div class="hint">scroll progress drives pill opacity + rise</div>
+</div>
+<script>
+const cats=['Backyards','Putting Greens','Rooftops','Playgrounds','Pet Runs','Poolside','Commercial','Balconies'];
+const wrap=document.getElementById('pills');
+wrap.innerHTML=cats.map(c=>`<span class="pill">${c}</span>`).join('');
+const pills=[...wrap.children],thumb=document.getElementById('thumb');
+let p=0,dir=1;
+function loop(){p+=dir*0.006;if(p>1){p=1;dir=-1;}if(p<0){p=0;dir=1;}
+ thumb.style.top=(p*66)+'%';
+ pills.forEach((el,i)=>{const start=i/pills.length*0.7;const local=Math.max(0,Math.min(1,(p-start)/0.3));
+  el.style.opacity=local;el.style.transform=`translateY(${(1-local)*22}px)`;});
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

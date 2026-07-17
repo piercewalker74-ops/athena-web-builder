@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>cursor</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:320px;border-radius:18px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:none}
+ .spot{position:absolute;width:220px;height:220px;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);
+   background:radial-gradient(circle,rgba(47,224,255,.35),transparent 60%);mix-blend-mode:screen;transition:width .2s,height .2s}
+ .dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--cyan);pointer-events:none;transform:translate(-50%,-50%);box-shadow:var(--glow)}
+ .ring{position:absolute;width:40px;height:40px;border:1px solid var(--line2);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%)}
+ h1{position:relative;pointer-events:none}
+ .word{transition:color .2s}
+</style></head>
+<body class="demo"><div class="demo-name">m · cursor</div>
+<div class="stage frost" id="st">
+  <div class="spot" id="sp"></div>
+  <h1 class="big"><span class="word">Custom</span> <span class="word glow">cursor</span></h1>
+  <div class="ring" id="rg"></div><div class="dot" id="dt"></div>
+</div>
+<script>
+const st=document.getElementById('st'),sp=document.getElementById('sp'),dt=document.getElementById('dt'),rg=document.getElementById('rg');
+let x=160,y=160,rx=160,ry=160;
+st.addEventListener('mousemove',e=>{const r=st.getBoundingClientRect();x=e.clientX-r.left;y=e.clientY-r.top;
+ sp.style.left=x+'px';sp.style.top=y+'px';dt.style.left=x+'px';dt.style.top=y+'px';});
+function loop(){rx+=(x-rx)*.14;ry+=(y-ry)*.14;rg.style.left=rx+'px';rg.style.top=ry+'px';requestAnimationFrame(loop);}loop();
+</script></body></html>

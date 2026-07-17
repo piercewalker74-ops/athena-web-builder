@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEOFORM — MINI TRACKER</title>
+<style>
+  :root{ --amber:#ffb000; --amber-dim:#a86e12; --green:#5ce03a; --holo:#00c8ff; --chrome:#7a8fa8;
+    --mono:'Courier New','Lucida Console',monospace; }
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  /* embed=1 (in the Athena frame): fill container, no own chrome/border.
+     standalone: same fill, transparent — the page itself is the widget. */
+  body{background:transparent;font-family:var(--mono);overflow:hidden}
+  .widget{position:relative;width:100vw;height:100vh;
+    background:radial-gradient(120% 120% at 50% 42%, rgba(30,90,20,.12), rgba(120,70,10,.10) 45%, rgba(5,3,1,.9) 80%)}
+  body.embed .widget{background:radial-gradient(120% 120% at 50% 42%, rgba(30,90,20,.14), rgba(120,70,10,.10) 45%, transparent 82%)}
+  .widget::after{content:'';position:absolute;inset:0;z-index:6;pointer-events:none;
+    background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.22) 2px 4px)}
+  /* bezel corners + header/footer hidden when embedded (the React frame provides them) */
+  .c{position:absolute;width:9px;height:9px;border:1.5px solid var(--amber);z-index:7}
+  .c.tl{top:4px;left:4px;border-right:none;border-bottom:none}
+  .c.tr{top:4px;right:4px;border-left:none;border-bottom:none}
+  .c.bl{bottom:4px;left:4px;border-right:none;border-top:none}
+  .c.br{bottom:4px;right:4px;border-left:none;border-top:none}
+  body.embed .c,body.embed .hdr,body.embed .live,body.embed .foot{display:none}
+  #scene{position:absolute;inset:0;z-index:1}
+  .hdr{position:absolute;top:9px;left:11px;z-index:8;font-size:8px;letter-spacing:.18em;color:var(--amber);
+    display:flex;align-items:center;gap:5px;text-shadow:0 0 5px rgba(255,176,0,.4)}
+  .hdr .d{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+  .live{position:absolute;top:9px;right:11px;z-index:8;font-size:8px;letter-spacing:.14em;color:var(--chrome)}
+  .live.on{color:var(--green);text-shadow:0 0 6px var(--green)}
+  .ctr{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);z-index:8;text-align:center;pointer-events:none;
+    background:radial-gradient(ellipse 62% 56% at 50% 48%,rgba(4,3,0,.8),transparent 74%);padding:10px 16px;border-radius:50%}
+  .ctr .p{font-size:22px;color:var(--amber);text-shadow:0 0 10px rgba(255,176,0,.6);line-height:1}
+  .ctr .pl{font-size:6.5px;letter-spacing:.24em;color:var(--chrome);margin-top:2px}
+  .foot{position:absolute;bottom:9px;left:0;right:0;z-index:8;text-align:center;font-size:8.5px;letter-spacing:.14em;
+    color:var(--green);text-shadow:0 0 6px rgba(92,224,58,.4)}
+  .foot .b{color:var(--chrome)}
+  #lbls{position:absolute;inset:0;z-index:5;pointer-events:none}
+  .nl{position:absolute;transform:translate(-50%,-50%);font-size:6.5px;letter-spacing:.06em;white-space:nowrap;
+    color:rgba(92,224,58,.55);text-shadow:0 0 4px rgba(0,0,0,.9)}
+  .nl.cur{color:var(--holo);text-shadow:0 0 6px var(--holo);font-size:7px}
+</style>
+</head>
+<body>
+<script>if(new URLSearchParams(location.search).get('embed'))document.body.classList.add('embed');</script>
+<div class="widget">
+  <div class="c tl"></div><div class="c tr"></div><div class="c bl"></div><div class="c br"></div>
+  <div id="scene"></div>
+  <div id="lbls"></div>
+  <div class="hdr"><span class="d"></span>NEOFORM</div>
+  <div class="live" id="live">◌ IDLE</div>
+  <div class="ctr"><div class="p" id="pct">—</div><div class="pl">COMPLETE</div></div>
+  <div class="foot" id="foot"><span class="b">STAGE</span> —</div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+const STAGES=['SCOUT','VERIFY','QUALIFY','CALIBRATE','ARCHITECT','BUILD','QA','DEPLOY','REPORT','DELIVER'];
+const STATUS_STAGE={scraped:0,verifying:1,qualified:2,approved:3,building:5,deployed:7,reported:8,delivered:9,dropped:-1};
+const N=STAGES.length;
+const COL={amber:new THREE.Color('#ffb000'),amberDim:new THREE.Color('#6a4708'),
+  green:new THREE.Color('#5ce03a'),greenDim:new THREE.Color('#1e5a14'),holo:new THREE.Color('#00c8ff'),red:new THREE.Color('#ff4d4d')};
+
+const host=document.getElementById('scene');
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05; host.appendChild(renderer.domElement);
+const scene=new THREE.Scene(); scene.fog=new THREE.FogExp2(0x06120a,0.05);
+const camera=new THREE.PerspectiveCamera(44,1,0.1,120); camera.position.set(0,8.2,7.2); camera.lookAt(0,0,0);
+scene.add(new THREE.AmbientLight(0x334433,1.2));
+
+function radialTex(inner){ const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
+  const g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(inner,'rgba(255,255,255,.5)');g.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle=g;x.fillRect(0,0,128,128);const t=new THREE.CanvasTexture(c);return t; }
+const DOT=radialTex(0.35), HAZE=radialTex(0.05);
+
+const R=3.5;
+const orbit=new THREE.Group(); orbit.rotation.x=-0.4; scene.add(orbit);
+function ang(i){ return -Math.PI/2+(i/N)*Math.PI*2; }
+function pt(i){ const a=ang(i);return new THREE.Vector3(Math.cos(a)*R,0,Math.sin(a)*R); }
+
+// atmosphere: green haze + amber core glow, stars
+[[0,0,0,10,0xffa500,0.14],[0,1,0,15,0x2f9e14,0.09],[-4,2,-2,9,0x39ff14,0.06],[4,1,3,9,0x156010,0.08]].forEach(([x,y,z,s,c,o])=>{
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:HAZE,color:c,transparent:true,opacity:o,depthWrite:false,blending:THREE.AdditiveBlending}));
+  sp.position.set(x,y,z);sp.scale.setScalar(s);scene.add(sp); });
+{ const n=380,g=new THREE.BufferGeometry(),p=new Float32Array(n*3),col=new Float32Array(n*3),cA=new THREE.Color(0xffb000),cG=new THREE.Color(0x39ff14);
+  for(let i=0;i<n;i++){ const x=(Math.random()-.5)*20,y=(Math.random()-.5)*10,z=(Math.random()-.5)*20;p[i*3]=x;p[i*3+1]=y;p[i*3+2]=z;
+    const d=Math.min(1,Math.hypot(x,z)/9),c=cA.clone().lerp(cG,d*d);col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b; }
+  g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:0.07,map:DOT,vertexColors:true,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending}))); }
+
+// orbit ring
+function ringPts(r){ const a=[];for(let i=0;i<=120;i++){const t=(i/120)*Math.PI*2;a.push(new THREE.Vector3(Math.cos(t)*r,0,Math.sin(t)*r));}return a; }
+orbit.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(ringPts(R)),new THREE.LineBasicMaterial({color:0x5a3d08,transparent:true,opacity:0.6})));
+
+let progressLine=null;
+function setProgress(idx){ if(progressLine){orbit.remove(progressLine);progressLine.geometry.dispose();progressLine=null;} if(idx<=0)return;
+  const pts=[],end=(idx/N)*Math.PI*2,steps=Math.max(2,idx*10);
+  for(let i=0;i<=steps;i++){const t=-Math.PI/2+(i/steps)*end;pts.push(new THREE.Vector3(Math.cos(t)*R,0,Math.sin(t)*R));}
+  progressLine=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0x5ce03a,transparent:true,opacity:0.95}));orbit.add(progressLine); }
+
+const nodes=STAGES.map((s,i)=>{ const p=pt(i),grp=new THREE.Group();grp.position.copy(p);orbit.add(grp);
+  const dotMat=new THREE.SpriteMaterial({map:DOT,color:COL.greenDim,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending});
+  const dot=new THREE.Sprite(dotMat);dot.scale.setScalar(0.34);grp.add(dot);
+  const glowMat=new THREE.SpriteMaterial({map:HAZE,color:COL.greenDim,transparent:true,opacity:0.18,depthWrite:false,blending:THREE.AdditiveBlending});
+  const glow=new THREE.Sprite(glowMat);glow.scale.setScalar(1.05);grp.add(glow);
+  return {grp,dot:dotMat,glow:glowMat,pos:p}; });
+
+const coreGlow=new THREE.Sprite(new THREE.SpriteMaterial({map:HAZE,color:0xffa500,transparent:true,opacity:0.22,depthWrite:false,blending:THREE.AdditiveBlending}));coreGlow.scale.setScalar(3);orbit.add(coreGlow);
+const core=new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:0xffcf85,transparent:true,opacity:0.7,depthWrite:false,blending:THREE.AdditiveBlending}));core.scale.setScalar(0.7);orbit.add(core);
+const coreRing=new THREE.Mesh(new THREE.TorusGeometry(1.1,0.02,10,60),new THREE.MeshBasicMaterial({color:COL.amber,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending}));coreRing.rotation.x=Math.PI/2;orbit.add(coreRing);
+
+const composer=new EffectComposer(renderer);composer.addPass(new RenderPass(scene,camera));
+const bloom=new UnrealBloomPass(new THREE.Vector2(256,256),0.42,0.55,0.36);composer.addPass(bloom);
+
+const lblBox=document.getElementById('lbls');
+const lblEls=STAGES.map(s=>{const d=document.createElement('div');d.className='nl';d.textContent=s;lblBox.appendChild(d);return d;});
+
+let curIdx=-1;
+function applyState(idx,fail){ curIdx=idx;
+  STAGES.forEach((s,i)=>{ const done=idx>=0&&i<idx,cur=i===idx,c=fail&&cur?COL.red:done?COL.green:cur?COL.holo:COL.greenDim;
+    nodes[i].dot.color.copy(c);nodes[i].dot.opacity=cur?1:done?0.9:0.45;
+    nodes[i].glow.color.copy(c);nodes[i].glow.opacity=cur?0.4:done?0.24:0.12;
+    lblEls[i].className='nl'+(cur?' cur':'');lblEls[i].style.opacity=(done||cur)?1:0.5; });
+  setProgress(idx);
+  document.getElementById('pct').textContent=idx<0?'—':Math.round(idx/(N-1)*100)+'%';
+  document.getElementById('foot').innerHTML='<span class="b">STAGE</span> '+(fail?'DROPPED':(idx>=0?STAGES[idx]:'—')); }
+
+const v=new THREE.Vector3();
+function projectLabels(){ const w=host.clientWidth,h=host.clientHeight;
+  for(let i=0;i<N;i++){ nodes[i].grp.getWorldPosition(v);v.project(camera);
+    lblEls[i].style.left=(v.x*0.5+0.5)*w+'px'; lblEls[i].style.top=(-v.y*0.5+0.5)*h-9+'px'; } }
+
+function resize(){ const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h);composer.setSize(w,h);
+  camera.aspect=w/h;camera.updateProjectionMatrix(); }
+addEventListener('resize',resize); resize();
+
+async function poll(){ try{
+  const arr=await (await fetch('/api/pipeline/leads')).json();const leads=Array.isArray(arr)?arr:(arr.leads||[]);
+  const active=leads.filter(l=>l.status!=='delivered'&&l.status!=='dropped').sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0))[0]||leads.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0))[0];
+  const running=leads.some(l=>['scraped','verifying','qualified','approved','building','deployed','reported'].includes(l.status));
+  const le=document.getElementById('live');le.className='live'+(running?' on':'');le.textContent=running?'▮ LIVE':'◌ IDLE';
+  if(!active){applyState(-1,false);return;}
+  let idx=STATUS_STAGE[active.status]??-1;
+  if(active.status!=='delivered'&&active.status!=='dropped'&&active.buildStage){const fi=STAGES.indexOf(String(active.buildStage).toUpperCase());if(fi>=0)idx=fi;}
+  applyState(idx, active.status==='dropped');
+}catch(e){} }
+
+let tt=0;
+function tick(){ tt+=0.006; coreRing.rotation.z+=0.005; core.material.opacity=0.6+Math.sin(tt*3)*0.12;
+  if(curIdx>=0){ const nd=nodes[curIdx];const s=1+Math.sin(tt*6)*0.14;nd.grp.scale.setScalar(s);nd.glow.opacity=0.34+Math.sin(tt*6)*0.12; }
+  projectLabels(); composer.render(); requestAnimationFrame(tick); }
+applyState(-1,false); poll(); setInterval(poll,4000); tick();
+</script>
+</body>
+</html>

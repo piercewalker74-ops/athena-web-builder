@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mask</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+ .clip{overflow:hidden;padding:2px 0}
+ .clip span{display:inline-block;transform:translateY(110%);transition:transform .8s cubic-bezier(.2,.85,.2,1)}
+ .clip.in span{transform:none}
+ .big{font-size:clamp(30px,7vw,60px)}
+ .wipe{position:relative;width:320px;height:150px;border-radius:14px;overflow:hidden}
+ .wipe .filler{position:absolute;inset:0}
+ .wipe .bar{position:absolute;inset:0;background:linear-gradient(120deg,var(--cyan),var(--teal));transform:translateX(-101%);transition:transform .9s cubic-bezier(.7,0,.2,1)}
+ .wipe.in .bar{transform:translateX(101%)}
+</style></head>
+<body class="demo"><div class="demo-name">m · mask</div>
+<div class="stage">
+  <div class="eyebrow">MASK / CLIP REVEAL</div>
+  <div class="clip" id="c1"><span class="big glow">Clean edge</span></div>
+  <div class="clip" id="c2"><span class="big glow">reveals</span></div>
+  <div class="wipe frost" id="w"><div class="filler"><span class="tag">IMG</span></div><div class="bar"></div></div>
+</div>
+<script>
+const parts=[document.getElementById('c1'),document.getElementById('c2'),document.getElementById('w')];
+function run(){parts.forEach(p=>p.classList.remove('in'));parts.forEach((p,i)=>setTimeout(()=>p.classList.add('in'),300+i*260));}
+run();setInterval(run,4200);
+</script></body></html>

@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Text Roll Swap</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px;align-items:center}
+ .rollbtn{position:relative;overflow:hidden;font-weight:600;font-size:16px;color:#04121e;cursor:pointer;
+   background:linear-gradient(120deg,var(--cyan),var(--ice));border:none;border-radius:999px;padding:14px 30px;box-shadow:0 6px 22px rgba(47,224,255,.4);height:50px}
+ .rollbtn .roller{display:inline-flex;flex-direction:column;transition:transform .32s cubic-bezier(.3,.8,.3,1)}
+ .rollbtn .roller span{height:22px;display:flex;align-items:center;justify-content:center}
+ .rollbtn:hover .roller{transform:translateY(-22px)}
+ .nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+ .nlink{position:relative;overflow:hidden;font-family:var(--mono);font-size:14px;color:var(--ice2);padding:8px 4px;cursor:pointer;height:20px}
+ .nlink .r{display:inline-flex;flex-direction:column;transition:transform .3s cubic-bezier(.3,.8,.3,1)}
+ .nlink .r span{height:20px}
+ .nlink:hover .r{transform:translateY(-20px)}.nlink:hover{color:var(--cyan)}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">f · text roll swap</div>
+<div class="stage">
+  <div class="eyebrow">HOVER TEXT ROLL</div>
+  <button class="rollbtn"><span class="roller"><span>Get a quote</span><span>Let's go →</span></span></button>
+  <div class="nav" id="nav"></div>
+  <div class="hint">hover the button or a link — the label rolls to its twin</div>
+</div>
+<script>
+const items=['SERVICES','GALLERY','ABOUT','BOOK'];const nav=document.getElementById('nav');
+items.forEach(t=>{const a=document.createElement('div');a.className='nlink';a.innerHTML=`<span class="r"><span>${t}</span><span>${t}</span></span>`;nav.appendChild(a);});
+// auto-demo the button roll
+const btn=document.querySelector('.rollbtn');let on=false;
+setInterval(()=>{on=!on;btn.querySelector('.roller').style.transform=on?'translateY(-22px)':'';},1400);
+</script></body></html>

@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ring</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+ .r{position:relative;width:140px;text-align:center}
+ svg{transform:rotate(-90deg)}
+ .track{stroke:var(--line);stroke-width:9;fill:none}
+ .prog{stroke:url(#g);stroke-width:9;fill:none;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(47,224,255,.6))}
+ .val{position:absolute;top:38px;left:0;right:0;font-size:26px;font-weight:700}
+ .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice);opacity:.7;margin-top:8px}
+</style></head>
+<body class="demo"><div class="demo-name">m · ring</div>
+<div class="stage" id="s"></div>
+<svg width="0" height="0"><defs><linearGradient id="g"><stop offset="0" stop-color="#2fe0ff"/><stop offset="1" stop-color="#39d3c9"/></linearGradient></defs></svg>
+<script>
+const data=[['UV BLOCKED',99],['HEAT REJECTED',86],['CLARITY',94]];const S=document.getElementById('s');const R=52,C=2*Math.PI*R;
+data.forEach(d=>{const w=document.createElement('div');w.className='r';
+ w.innerHTML=`<svg width="140" height="140" viewBox="0 0 140 140"><circle class="track" cx="70" cy="70" r="${R}"/><circle class="prog" cx="70" cy="70" r="${R}" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="val glow">0%</div><div class="lbl">${d[0]}</div>`;
+ S.appendChild(w);});
+const rings=[...S.children];
+function ease(t){return 1-Math.pow(1-t,3);}
+function run(){const start=performance.now(),dur=1600;
+ (function step(now){const p=Math.min(1,(now-start)/dur);rings.forEach((r,i)=>{const v=data[i][1]*ease(p);
+  r.querySelector('.prog').style.strokeDashoffset=C*(1-v/100);r.querySelector('.val').textContent=Math.round(v)+'%';});if(p<1)requestAnimationFrame(step);})(start);}
+run();setInterval(run,3800);
+</script></body></html>

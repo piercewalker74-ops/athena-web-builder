@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pin</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;height:320px}
+ .media{position:relative;height:260px;border-radius:16px;overflow:hidden}
+ .media .filler{position:absolute;inset:0;border-radius:0}
+ .badge{position:absolute;left:14px;top:14px}
+ .steps{position:relative;height:260px;overflow:hidden}
+ .st{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:10px;
+   opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .st.on{opacity:1;transform:none}
+ .st .num{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:.2em}
+ .st h2{font-size:26px}.st p{font-size:13px;color:var(--ice);opacity:.75;line-height:1.5}
+ .prog{position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--line)}
+ .prog .fill{position:absolute;left:0;right:0;top:0;background:var(--cyan);box-shadow:var(--glow);transition:height .5s,top .5s}
+</style></head>
+<body class="demo"><div class="demo-name">m · pinned scrolly</div>
+<div class="stage">
+  <div class="media frost"><div class="filler"><span class="tag" id="mt">STEP 01</span></div><span class="chip badge">◇ pinned</span></div>
+  <div class="steps" id="steps">
+    <div class="prog"><div class="fill" id="pf"></div></div>
+  </div>
+</div>
+<script>
+const D=[['01','Decontaminate','Clay and strip the glass so film bonds flawlessly.'],
+ ['02','Computer-cut','Every panel is plotted to the exact vehicle — no blades on paint.'],
+ ['03','Heat-set','Squeegeed and cured for a bubble-free, edge-to-edge finish.']];
+const steps=document.getElementById('steps'),mt=document.getElementById('mt'),pf=document.getElementById('pf');
+D.forEach(d=>{const s=document.createElement('div');s.className='st';
+ s.innerHTML=`<div class="num">STEP ${d[0]}</div><h2 class="glow">${d[1]}</h2><p>${d[2]}</p>`;steps.appendChild(s);});
+const sts=[...steps.querySelectorAll('.st')];let c=0;
+function go(){sts.forEach((s,i)=>s.classList.toggle('on',i===c));mt.textContent='STEP '+D[c][0];
+ pf.style.height=(100/D.length)+'%';pf.style.top=(c*100/D.length)+'%';c=(c+1)%D.length;}
+go();setInterval(go,2200);
+</script></body></html>

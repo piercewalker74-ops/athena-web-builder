@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>webgl-vapor-hero</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;border-radius:18px;position:relative;overflow:hidden;display:grid;place-items:center}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .fallback{position:absolute;inset:0;background:
+   radial-gradient(circle at 35% 40%,rgba(47,224,255,.35),transparent 55%),
+   radial-gradient(circle at 70% 65%,rgba(57,211,201,.3),transparent 55%),#04121e}
+ .cap{position:relative;text-align:center;z-index:2;padding:0 20px}
+ .cap .big{font-size:clamp(28px,6vw,50px)}
+ .hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.16em}
+</style></head>
+<body class="demo"><div class="demo-name">f · webgl-vapor-hero</div>
+<div class="stage frost" id="st">
+  <div class="fallback"></div>
+  <canvas id="c"></canvas>
+  <div class="cap"><div class="eyebrow">GLSL FRAGMENT · FBM VAPOR</div><h1 class="big glow">Drift into<br>the fog.</h1></div>
+  <div class="hint">move cursor · vapor distorts toward you</div>
+</div>
+<script>
+const cv=document.getElementById('c'),st=document.getElementById('st');const gl=cv.getContext('webgl');
+let mx=0.5,my=0.5,tx=0.5,ty=0.5;
+st.addEventListener('mousemove',e=>{const r=st.getBoundingClientRect();tx=(e.clientX-r.left)/r.width;ty=1-(e.clientY-r.top)/r.height;});
+if(gl){
+ const vs=`attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+ const fs=`precision highp float;uniform vec2 r;uniform float t;uniform vec2 m;
+  float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+  float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+   return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+  float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<6;i++){v+=a*n(p);p*=2.02;a*=.5;}return v;}
+  void main(){vec2 uv=gl_FragCoord.xy/r;vec2 q=uv;
+   float d=distance(uv,m);vec2 pull=(m-uv)*exp(-d*3.5)*0.6;
+   q+=pull;
+   float f=fbm(q*3.0+vec2(t*0.08,-t*0.05)+fbm(q*2.0+t*0.04));
+   f=fbm(q*2.5+f*1.6+vec2(0.,t*0.06));
+   vec3 charcoal=vec3(0.015,0.06,0.11);
+   vec3 ice=vec3(0.18,0.86,1.0),teal=vec3(0.22,0.83,0.79);
+   vec3 col=mix(charcoal,mix(teal,ice,f),smoothstep(0.2,0.9,f));
+   float vig=smoothstep(1.1,0.2,distance(uv,vec2(0.5)));
+   col*=0.35+0.65*vig;
+   gl_FragColor=vec4(col,1.);}`;
+ function sh(ty,src){const s=gl.createShader(ty);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+ const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+ const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+ const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+ const uR=gl.getUniformLocation(pr,'r'),uT=gl.getUniformLocation(pr,'t'),uM=gl.getUniformLocation(pr,'m');
+ function size(){cv.width=cv.clientWidth;cv.height=cv.clientHeight;gl.viewport(0,0,cv.width,cv.height);}size();addEventListener('resize',size);
+ let t=0;function loop(){t+=0.016;mx+=(tx-mx)*.06;my+=(ty-my)*.06;
+  gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,t);gl.uniform2f(uM,mx,my);
+  gl.drawArrays(gl.TRIANGLES,0,3);requestAnimationFrame(loop);}loop();
+ document.querySelector('.fallback').style.display='none';
+}
+</script></body></html>

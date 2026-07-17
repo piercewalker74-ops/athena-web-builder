@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mouse-gradient-wash</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;border-radius:20px;position:relative;overflow:hidden;display:flex;flex-direction:column;
+   align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
+ .wash{position:absolute;inset:0;pointer-events:none;transition:background .12s linear;
+   background:
+     radial-gradient(340px 340px at var(--mx,30%) var(--my,40%), rgba(47,224,255,.30), transparent 62%),
+     radial-gradient(300px 300px at 82% 88%, rgba(57,211,201,.18), transparent 60%);
+   mix-blend-mode:screen}
+ .content{position:relative;z-index:2}
+ .big{font-size:clamp(26px,5.5vw,46px)}
+ .hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.5;letter-spacing:.16em}
+</style></head>
+<body class="demo"><div class="demo-name">f · mouse-gradient-wash</div>
+<div class="stage frost" id="st">
+  <div class="wash" id="wash"></div>
+  <div class="content">
+    <div class="eyebrow">POINTER-REACTIVE WASH</div>
+    <h1 class="big glow">A neon glow<br>that follows you.</h1>
+    <p class="sub" style="max-width:340px;margin:10px auto 0">A soft radial light eases toward the cursor behind the content, with a fixed counter-glow anchoring the depth.</p>
+  </div>
+  <div class="hint">move your pointer across the panel</div>
+</div>
+<script>
+const st=document.getElementById('st'),wash=document.getElementById('wash');
+let tx=30,ty=40,cx=30,cy=40,active=false;
+st.addEventListener('pointermove',e=>{const r=st.getBoundingClientRect();
+ tx=(e.clientX-r.left)/r.width*100;ty=(e.clientY-r.top)/r.height*100;active=true;});
+st.addEventListener('pointerleave',()=>active=false);
+function loop(){const k=active?.14:.06;cx+=(tx-cx)*k;cy+=(ty-cy)*k;
+ wash.style.setProperty('--mx',cx.toFixed(2)+'%');wash.style.setProperty('--my',cy.toFixed(2)+'%');
+ requestAnimationFrame(loop);}
+loop();
+// gentle idle drift so it looks alive with no pointer
+let t=0;setInterval(()=>{if(!active){t+=.03;tx=34+Math.cos(t)*22;ty=42+Math.sin(t*1.3)*18;}},40);
+</script></body></html>

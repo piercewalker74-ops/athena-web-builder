@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>proof.results_cards</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ .card{padding:18px 14px;border-radius:14px;opacity:0;transform:translateY(18px);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .card.in{opacity:1;transform:none}
+ .num{font-size:clamp(30px,6vw,50px);font-weight:800;letter-spacing:-.02em;line-height:1}
+ .lbl{font-size:12px;color:var(--frost);margin-top:6px;font-weight:600}
+ .who{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice);opacity:.6;margin-top:10px;text-transform:uppercase}
+</style></head>
+<body class="demo"><div class="demo-name">f · proof.results_cards</div>
+<div class="stage">
+  <div class="eyebrow">CASE STUDY RESULTS</div>
+  <h2 class="big" style="font-size:22px">Numbers that booked the room.</h2>
+  <div class="grid" id="g">
+    <div class="card frost"><div class="num glow" data-t="3" data-s="x">0</div><div class="lbl">More booked jobs</div><div class="who">Rivera Roofing</div></div>
+    <div class="card frost"><div class="num glow" data-t="212" data-s="%">0</div><div class="lbl">Lead-to-quote lift</div><div class="who">Halcyon HVAC</div></div>
+    <div class="card frost"><div class="num glow" data-t="48" data-s="hr">0</div><div class="lbl">Avg. reply time cut</div><div class="who">Brightpath Legal</div></div>
+  </div>
+</div>
+<script>
+const cards=[...document.querySelectorAll('.card')],nums=[...document.querySelectorAll('.num')];
+function ease(t){return 1-Math.pow(1-t,3);}
+function count(){const dur=1500,start=performance.now();
+ function step(now){const p=Math.min(1,(now-start)/dur);
+  nums.forEach(n=>{const v=Math.round(ease(p)*+n.dataset.t);n.textContent=v+n.dataset.s;});
+  if(p<1)requestAnimationFrame(step);}
+ requestAnimationFrame(step);}
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),150+i*160));
+ nums.forEach(n=>n.textContent='0');setTimeout(count,300);}
+run();setInterval(run,4600);
+</script></body></html>

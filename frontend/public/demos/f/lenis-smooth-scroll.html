@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>lenis-smooth-scroll</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:420px;display:flex;gap:14px;align-items:stretch}
+ .frame{flex:1;height:340px;border-radius:18px;overflow:hidden;position:relative;border:1px solid var(--line);background:linear-gradient(160deg,#082238,#04121e)}
+ .vp{position:absolute;inset:0}
+ .track{position:absolute;left:0;right:0;top:0;will-change:transform}
+ .sec{height:170px;display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+ .sec .bg{position:absolute;inset:-40px;will-change:transform}
+ .sec .filler{position:absolute;inset:0}
+ .sec h3{position:relative;font-size:26px;text-align:center;will-change:transform,opacity}
+ .lbl{position:absolute;top:8px;left:10px;font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--ice);opacity:.5}
+ .rail{width:4px;border-radius:999px;background:var(--line);position:relative;overflow:hidden}
+ .rail i{position:absolute;left:0;right:0;top:0;background:linear-gradient(var(--cyan),var(--teal));border-radius:999px;box-shadow:var(--glow)}
+ .side{width:120px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+ .side .eyebrow{margin-bottom:2px}.side h1{font-size:16px}.side p{font-size:10px;color:var(--ice);opacity:.7;line-height:1.5}
+ .tick{font-family:var(--mono);font-size:9px;color:var(--cyan);margin-top:6px}
+</style></head>
+<body class="demo"><div class="demo-name">f · lenis-smooth-scroll</div>
+<div class="stage">
+ <div class="side">
+  <div class="eyebrow">LENIS × GSAP</div>
+  <h1 class="glow">One RAF drives every scrub.</h1>
+  <p>Lenis smooths the wheel; its position feeds GSAP's ticker so parallax, pins and fades share a single timeline.</p>
+  <div class="tick" id="tick">scroll · 0%</div>
+ </div>
+ <div class="frame">
+  <div class="rail" style="position:absolute;right:6px;top:8px;bottom:8px;z-index:4"><i id="fill"></i></div>
+  <div class="vp"><div class="track" id="track"></div></div>
+ </div>
+</div>
+<script>
+const track=document.getElementById('track'),fill=document.getElementById('fill'),tick=document.getElementById('tick');
+const secs=[['Emerald','#0c2f45'],['ProFlow','#0e3a4e'],['Meadow','#0a2236'],['Putt Pro','#0c3348']];
+secs.forEach((s,i)=>{const d=document.createElement('div');d.className='sec';
+ d.innerHTML=`<div class="bg filler" style="background:linear-gradient(140deg,${s[1]},#08202f)"></div><span class="lbl">§ 0${i+1}</span><h3 class="glow">${s[0]}</h3>`;
+ track.appendChild(d);});
+const secH=170,total=secs.length*secH,view=340,max=total-view;
+let target=0,cur=0;
+function raf(){ // single driver — everything reads `cur`
+ target+=0.55;if(target>max+120)target=-30;
+ const t=Math.max(0,Math.min(max,target));cur+=(t-cur)*0.08; // lenis easing
+ track.style.transform=`translateY(${-cur}px)`;
+ const prog=max?cur/max:0;fill.style.height=(6+prog*(340-16))*0+0+'px';
+ fill.style.height=(prog*100)+'%';
+ tick.textContent='scroll · '+Math.round(prog*100)+'%';
+ // gsap-style scrubbed parallax + fade, sharing cur
+ [...track.children].forEach((sec,i)=>{const top=i*secH-cur;const rel=(top+secH/2-view/2)/view;
+  sec.querySelector('.bg').style.transform=`translateY(${rel*40}px)`;
+  const h=sec.querySelector('h3');h.style.transform=`translateY(${rel*-30}px)`;
+  h.style.opacity=Math.max(.15,1-Math.abs(rel)*1.4);});
+ requestAnimationFrame(raf);}
+raf();
+</script></body></html>

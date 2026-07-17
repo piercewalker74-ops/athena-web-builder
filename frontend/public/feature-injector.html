@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEOFORM — FEATURE DIRECTOR</title>
+<style>
+  :root{
+    --amber:#ffb000; --amber-br:#ffce4d; --amber-dim:#a86e12; --ghost:#4a3208;
+    --green:#5ce03a; --holo:#00c8ff; --red:#d84a1e; --chrome:#7a8fa8;
+    --line:rgba(255,176,0,.18); --line-dim:rgba(255,176,0,.08);
+    --mono:'Courier New','Lucida Console',monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{background:#050300;color:var(--amber);font-family:var(--mono);overflow:hidden;display:flex;flex-direction:column}
+  body::after{content:'';position:fixed;inset:0;z-index:40;pointer-events:none;
+    background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.22) 2px 4px)}
+
+  .hdr{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:2px solid var(--amber);
+    background:radial-gradient(120% 200% at 50% 0,#140c00,#070400);letter-spacing:.14em;flex:0 0 auto}
+  .hdr .brand{font-size:12px;color:var(--amber-br);text-shadow:0 0 6px rgba(255,176,0,.4)}
+  .hdr .dot{width:6px;height:6px;border-radius:50%;background:var(--holo);box-shadow:0 0 8px var(--holo);display:inline-block;margin-right:7px}
+  .hdr .proj{font-size:11px;color:var(--green);letter-spacing:.1em;border-left:1px solid var(--line);padding-left:12px}
+  .hdr .sp{flex:1}
+  .hdr label{font-size:9px;color:var(--amber-dim);letter-spacing:.14em;margin-right:5px}
+  .hdr select{background:#0c0800;color:var(--amber-br);border:1px solid var(--line);font-family:var(--mono);font-size:11px;padding:4px 8px}
+  .hdr .btn{border:1px solid var(--amber-dim);color:var(--amber-br);background:rgba(255,176,0,.04);font-family:var(--mono);
+    font-size:10px;letter-spacing:.12em;padding:6px 12px;cursor:pointer;text-decoration:none}
+  .hdr .btn:hover{border-color:var(--amber)}
+  .hdr .btn.go{border-color:var(--green);color:var(--green);text-shadow:0 0 6px rgba(92,224,58,.4)}
+  .hdr .btn.go:hover{background:rgba(92,224,58,.12)}
+  .hdr .btn.exec{border-color:var(--holo);color:#8fe6ff;background:rgba(0,200,255,.08);text-shadow:0 0 8px rgba(0,200,255,.5);font-weight:700}
+  .hdr .btn.exec:hover{background:rgba(0,200,255,.18);box-shadow:0 0 12px rgba(0,200,255,.3)}
+  .hdr .btn.exec.busy{opacity:.55;pointer-events:none}
+
+  .review-banner{display:none;flex:0 0 auto;padding:7px 16px;background:rgba(92,224,58,.1);border-bottom:1px solid var(--green);
+    color:var(--green);font-size:10px;letter-spacing:.1em;text-shadow:0 0 6px rgba(92,224,58,.4);animation:rb 2s ease-in-out infinite}
+  .review-banner.on{display:block}
+  @keyframes rb{0%,100%{opacity:.75}50%{opacity:1}}
+  .btn.go.approve{border-color:var(--green);color:var(--green);animation:rb 1.6s ease-in-out infinite}
+  .stage{flex:1;display:grid;grid-template-columns:minmax(0,1.1fr) 1px minmax(0,1fr);min-height:0}
+  .sep{background:linear-gradient(to bottom,transparent,var(--amber-dim),transparent);opacity:.5}
+
+  .project{overflow-y:auto;padding:13px 15px}
+  .project::-webkit-scrollbar,.folders::-webkit-scrollbar{width:8px}
+  .project::-webkit-scrollbar-thumb,.folders::-webkit-scrollbar-thumb{background:var(--ghost)}
+  .proj-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+  .proj-head .t{font-size:11px;letter-spacing:.18em;color:var(--amber-br)}
+  .proj-head .s{font-size:9px;color:var(--amber-dim);letter-spacing:.1em}
+
+  .sect{border:1px solid var(--line);background:rgba(255,176,0,.02);margin-bottom:8px;position:relative;cursor:pointer;
+    transition:border-color .15s,background .15s}
+  .sect.anchor{border-left:3px solid var(--amber)} .sect.gap{border-left:3px dashed var(--amber-dim)}
+  .sect.sig{border-left:3px solid var(--green)}
+  .sect.focus{border-color:var(--holo);box-shadow:0 0 0 1px var(--holo),inset 0 0 22px rgba(0,200,255,.05)}
+  .sect.drop{border-color:var(--green)!important;background:rgba(92,224,58,.07);box-shadow:inset 0 0 22px rgba(92,224,58,.1)}
+  .sect.reject{border-color:var(--red)!important;background:rgba(216,74,30,.07)}
+  .sect-top{display:flex;align-items:center;gap:8px;padding:7px 10px}
+  .sect .badge{font-size:10px;width:19px;height:19px;display:grid;place-items:center;border:1px solid var(--amber-dim);color:var(--amber-br);flex:0 0 auto}
+  .sect .nm{font-size:11px;letter-spacing:.1em;color:var(--amber-br)}
+  .sect .tag{font-size:8px;letter-spacing:.12em;margin-left:auto;color:var(--amber-dim)}
+  .sect .tag.sig{color:var(--green)}
+  .shot{height:74px;margin:0 10px;border:1px solid var(--line-dim);position:relative;overflow:hidden;background:#0a0600}
+  .shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .shot .fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+  .shot .fallback svg{width:88%;height:44px;opacity:.8}
+  .shot .fallback .lbl{font-size:7px;letter-spacing:.14em;color:var(--ghost)}
+  .sect .desc{font-size:9px;color:var(--chrome);letter-spacing:.03em;padding:6px 10px 2px;line-height:1.5}
+  .live{margin:4px 10px 8px;border:1px solid var(--line-dim)}
+  .live-h{display:flex;align-items:center;gap:6px;padding:4px 8px;font-size:8px;letter-spacing:.14em;color:var(--amber-dim);cursor:pointer}
+  .live-h .cnt{margin-left:auto;color:var(--green)}
+  .live-b{display:none;padding:2px 8px 8px;flex-wrap:wrap;gap:4px}
+  .live.open .live-b{display:flex}
+  .live.open .live-h .chev{transform:rotate(90deg)}
+  .fchip-live{font-size:8px;letter-spacing:.05em;padding:2px 6px;display:flex;align-items:center;gap:5px;border:1px solid}
+  .fchip-live.var{color:var(--holo);border-color:rgba(0,200,255,.4);background:rgba(0,200,255,.06)}
+  .fchip-live.enh{color:var(--green);border-color:rgba(92,224,58,.4);background:rgba(92,224,58,.06)}
+  .fchip-live .src{color:var(--amber-dim)} .fchip-live .x{cursor:pointer;color:var(--red)}
+  .sect .hint{position:absolute;inset:0;display:none;place-items:center;font-size:10px;letter-spacing:.16em;pointer-events:none;text-shadow:0 0 8px #000}
+  .sect.drop .hint{display:grid;color:var(--green)} .sect.reject .hint{display:grid;color:var(--red)}
+  /* editable name/desc + section controls + add-zone + parts */
+  .sect .nm[contenteditable]{outline:none;border-bottom:1px dashed transparent;cursor:text;padding-bottom:1px}
+  .sect .nm[contenteditable]:hover,.sect .nm[contenteditable]:focus{border-bottom-color:var(--amber-dim)}
+  /* VISION box — point Athena at what you're picturing for the section */
+  .vision{margin:6px 0 4px;border:1px solid rgba(0,200,255,.22);background:rgba(0,200,255,.03)}
+  .vision-h{display:flex;align-items:center;gap:6px;padding:3px 8px;font-size:8px;letter-spacing:.14em;color:var(--holo)}
+  .vision-h .lbl{flex:1}
+  .vision-h .vexp{background:rgba(0,200,255,.06);border:1px solid rgba(0,200,255,.3);color:var(--holo);font-family:var(--mono);font-size:8px;letter-spacing:.06em;padding:2px 7px;cursor:pointer}
+  .vision-h .vexp:hover{border-color:var(--holo);background:rgba(0,200,255,.12)} .vision-h .vexp.busy{opacity:.5;pointer-events:none}
+  .sect .desc[contenteditable]{outline:none;cursor:text;font-size:10px;color:var(--chrome);line-height:1.55;padding:4px 8px 7px;min-height:16px}
+  .sect .desc[contenteditable]:hover,.sect .desc[contenteditable]:focus{color:var(--amber-br)}
+  .sect .desc[contenteditable]:empty:before{content:'describe what you’re envisioning — the look, mood, content, motion… Athena builds toward it';color:var(--ghost)}
+  .vbrief{padding:2px 8px 7px;display:flex;flex-direction:column;gap:3px} .vbrief:empty{display:none}
+  .vbrief .vb{display:flex;gap:6px;align-items:flex-start;font-size:9px;color:var(--green);line-height:1.45}
+  .vbrief .vb:before{content:'▸';color:var(--holo);flex:0 0 auto} .vbrief .vb span{outline:none;flex:1}
+  .vbrief.src-local:before{content:'⚠ offline — split locally';font-size:7px;color:var(--amber-dim);letter-spacing:.1em;opacity:.7}
+  /* palette mode toggle — SECTIONS vs FEATURES */
+  .pmode{display:flex;gap:0;margin-bottom:9px;border:1px solid var(--line-dim)}
+  .pmode button{flex:1;background:rgba(255,176,0,.02);border:none;border-right:1px solid var(--line-dim);color:var(--amber-dim);
+    font-family:var(--mono);font-size:9px;letter-spacing:.12em;padding:7px 4px;cursor:pointer}
+  .pmode button:last-child{border-right:none}
+  .pmode button:hover{color:var(--amber)}
+  .pmode button.on{color:var(--holo);background:rgba(0,200,255,.08);box-shadow:inset 0 -2px 0 var(--holo)}
+  .pmode button.on.sec{color:var(--green);background:rgba(92,224,58,.07);box-shadow:inset 0 -2px 0 var(--green)}
+  .pmode .sub{display:block;font-size:7px;color:var(--ghost);letter-spacing:.06em;margin-top:2px}
+  .sect-ctl{display:flex;gap:2px;margin-left:8px}
+  .sect-ctl button{background:none;border:1px solid var(--line-dim);color:var(--amber-dim);font-family:var(--mono);font-size:8px;width:16px;height:16px;line-height:1;cursor:pointer;padding:0}
+  .sect-ctl button:hover{color:var(--amber);border-color:var(--amber-dim)} .sect-ctl button.del:hover{color:var(--red);border-color:var(--red)}
+  .addzone{border:1px dashed var(--amber-dim);background:rgba(255,176,0,.02);color:var(--amber-dim);font-size:10px;letter-spacing:.1em;text-align:center;padding:15px;margin-bottom:8px;cursor:copy;transition:border-color .12s,background .12s,color .12s}
+  .addzone.on{border-color:var(--green);color:var(--green);background:rgba(92,224,58,.09)}
+  .parts{margin:2px 10px 8px;border:1px solid var(--line-dim)}
+  .parts-h{display:flex;align-items:center;gap:6px;padding:4px 8px;font-size:8px;letter-spacing:.14em;color:var(--amber-dim);cursor:pointer}
+  .parts-h .cnt{color:var(--holo)} .parts.open .parts-h .chev{display:inline-block;transform:rotate(90deg)}
+  .parts-pal{margin-left:auto;display:flex;gap:3px;flex-wrap:wrap}
+  .parts-pal button{background:rgba(0,200,255,.05);border:1px solid var(--line-dim);color:var(--holo);font-family:var(--mono);font-size:8px;padding:1px 5px;cursor:pointer}
+  .parts-pal button:hover{border-color:var(--holo)}
+  .parts-b{display:none;padding:2px 8px 8px;flex-direction:column;gap:3px}
+  .parts.open .parts-b{display:flex}
+  .parts-empty{font-size:8px;color:var(--ghost);letter-spacing:.05em;padding:2px}
+  .part{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line-dim);padding:4px 7px;background:rgba(255,176,0,.02)}
+  .part .prow{display:flex;align-items:center;gap:7px}
+  .part .pt{font-size:9px;color:var(--holo);letter-spacing:.06em;min-width:66px;flex:0 0 auto}
+  .part .pn{flex:1;font-size:9px;color:var(--chrome);outline:none;cursor:text;min-height:12px}
+  .part .pn:empty:before{content:attr(data-ph);color:var(--ghost)}
+  .part .interp{flex:0 0 auto;background:rgba(0,200,255,.06);border:1px solid rgba(0,200,255,.3);color:var(--holo);font-family:var(--mono);font-size:8px;letter-spacing:.06em;padding:2px 6px;cursor:pointer}
+  .part .interp:hover{border-color:var(--holo);background:rgba(0,200,255,.12)} .part .interp.busy{opacity:.5;pointer-events:none}
+  .part .pctl{display:flex;gap:2px;flex:0 0 auto}
+  .part .pctl button{background:none;border:1px solid var(--line-dim);color:var(--amber-dim);font-size:8px;width:14px;height:14px;line-height:1;cursor:pointer;padding:0}
+  .part .pctl button:hover{color:var(--amber);border-color:var(--amber-dim)} .part .pctl button.del:hover{color:var(--red);border-color:var(--red)}
+  /* interpreted result */
+  .pres{display:flex;flex-wrap:wrap;gap:4px;padding:2px 0 2px 73px;align-items:flex-start}
+  .pres:empty{display:none}
+  .pres .it{display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--amber-br);border:1px solid var(--line-dim);background:rgba(92,224,58,.05);padding:2px 6px;border-radius:2px}
+  .pres .it .rm{color:var(--ghost);cursor:pointer;font-size:8px} .pres .it .rm:hover{color:var(--red)}
+  .pres .it[contenteditable]{outline:none}
+  .pres .htxt{font-size:12px;color:var(--amber-br);letter-spacing:.02em;line-height:1.4;flex-basis:100%}
+  .pres .alts{display:flex;gap:4px;flex-wrap:wrap;flex-basis:100%}
+  .pres .alt{font-size:8px;color:var(--holo);border:1px solid rgba(0,200,255,.25);padding:1px 5px;cursor:pointer} .pres .alt:hover{background:rgba(0,200,255,.1)}
+  .pres .body{font-size:9.5px;color:var(--chrome);line-height:1.55;flex-basis:100%}
+  .pres .btnpill{font-size:9px;color:var(--green);border:1px solid rgba(92,224,58,.4);padding:2px 8px;border-radius:99px}
+  .pres .spec{font-size:9px;color:var(--chrome);flex-basis:100%;line-height:1.5} .pres .badge{font-size:8px;color:var(--holo);border:1px solid rgba(0,200,255,.25);padding:1px 5px;margin-left:6px}
+  .pres.src-local:before{content:'⚠ offline — local split';font-size:7px;color:var(--amber-dim);flex-basis:100%;letter-spacing:.1em;opacity:.7}
+
+  .right{display:flex;flex-direction:column;min-height:0}
+  .display{flex:0 0 40%;border-bottom:1px solid var(--line);display:flex;flex-direction:column;padding:11px 14px;min-height:0}
+  .display .dh{font-size:10px;letter-spacing:.18em;color:var(--amber-dim);display:flex;justify-content:space-between;margin-bottom:7px}
+  .viz-wrap{flex:1;border:1px solid var(--line-dim);background:radial-gradient(120% 120% at 50% 40%,#0e0900,#060300);position:relative;min-height:0}
+  #viz{position:absolute;inset:0;width:100%;height:100%}
+  #demoFrame{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:#04121e}
+  .expand-btn{position:absolute;top:8px;right:8px;z-index:4;width:26px;height:26px;display:none;place-items:center;cursor:pointer;
+    border:1px solid var(--line);background:rgba(6,14,22,.72);color:var(--holo);font-size:13px;backdrop-filter:blur(4px);transition:border-color .12s,color .12s,transform .12s}
+  .expand-btn:hover{border-color:var(--holo);color:#8fe6ff;transform:scale(1.08)}
+  .viz-wrap:hover .expand-btn.live{display:grid}
+  .viz-empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--amber-dim);font-size:10px;letter-spacing:.14em;text-align:center;padding:18px}
+  /* full-view demo overlay */
+  .dmodal{position:fixed;inset:0;z-index:90;background:rgba(3,8,14,.86);backdrop-filter:blur(6px);display:none;flex-direction:column;padding:26px}
+  .dmodal.show{display:flex}
+  .dmodal .dbar{display:flex;align-items:center;gap:12px;margin-bottom:12px;color:var(--holo);font-size:11px;letter-spacing:.16em}
+  .dmodal .dbar .dm-name{color:#8fe6ff}.dmodal .dbar .dm-tag{color:var(--amber-dim)}
+  .dmodal .dbar .sp{flex:1}
+  .dmodal .dbar button{border:1px solid var(--line);background:rgba(150,225,255,.05);color:#8fe6ff;font-family:var(--mono);
+    font-size:11px;letter-spacing:.1em;padding:8px 15px;cursor:pointer}
+  .dmodal .dbar button:hover{border-color:var(--holo)}
+  .dmodal .dframe-wrap{flex:1;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#04121e;position:relative;min-height:0}
+  .dmodal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .disp-meta{margin-top:8px}
+  .disp-meta .nm{font-size:12px;color:var(--amber-br);letter-spacing:.06em}
+  .disp-meta .nm .scope{font-size:8px;letter-spacing:.1em;padding:1px 5px;margin-left:7px;border:1px solid var(--amber-dim);color:var(--amber-dim)}
+  .disp-meta .ds{font-size:9.5px;color:var(--chrome);line-height:1.5;margin-top:4px}
+  .disp-meta .meta2{font-size:8px;color:var(--amber-dim);letter-spacing:.1em;margin-top:5px;display:flex;gap:14px;flex-wrap:wrap}
+  .disp-meta .meta2 b{color:var(--green)} .disp-meta .meta2 .m{color:var(--holo)}
+
+  .folders{flex:1;overflow-y:auto;padding:11px 14px;min-height:0}
+  .ftabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+  .ftab{font-size:9px;letter-spacing:.08em;color:var(--amber-dim);border:1px solid var(--line-dim);background:rgba(255,176,0,.02);padding:5px 8px;cursor:pointer}
+  .ftab:hover{color:var(--amber)} .ftab .n{color:var(--ghost);margin-left:4px}
+  .ftab.on{color:var(--holo);border-color:var(--holo);box-shadow:0 0 6px rgba(0,200,255,.2);background:rgba(0,200,255,.05)}
+  .ftab.this{color:var(--green);border-color:rgba(92,224,58,.5)} .ftab.this.on{color:var(--green);border-color:var(--green);box-shadow:0 0 6px rgba(92,224,58,.25)}
+  .flist{display:flex;flex-direction:column;gap:5px}
+  .fempty{font-size:9px;color:var(--amber-dim);letter-spacing:.1em;padding:14px 4px;text-align:center}
+  .fchip{border:1px solid var(--line);background:rgba(255,176,0,.025);padding:7px 9px;cursor:grab;display:flex;align-items:center;gap:8px;transition:border-color .12s,background .12s}
+  .fchip:hover{border-color:var(--amber-dim);background:rgba(255,176,0,.05)} .fchip:active{cursor:grabbing}
+  .fchip.sel{border-color:var(--holo);box-shadow:inset 0 0 12px rgba(0,200,255,.08)}
+  .fchip.armed{border-color:var(--green);box-shadow:0 0 0 1px var(--green),inset 0 0 14px rgba(92,224,58,.12);background:rgba(92,224,58,.06)}
+  .fchip.armed .fn:after{content:' ▣ ARMED';color:var(--green);font-size:8px;letter-spacing:.1em}
+  .fchip .ic{width:24px;height:24px;flex:0 0 auto;border:1px solid var(--line-dim);display:grid;place-items:center;color:var(--amber-dim);font-size:11px}
+  .fchip .body{min-width:0;flex:1}
+  .fchip .fn{font-size:10.5px;color:var(--amber-br);letter-spacing:.04em}
+  .fchip .fn .sc{font-size:7px;color:var(--amber-dim);border:1px solid var(--line-dim);padding:0 3px;margin-left:5px;letter-spacing:.08em}
+  .fchip .fn .md{color:var(--holo);font-size:8px;margin-left:5px}
+  .fchip .fd{font-size:8px;color:var(--chrome);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fchip .grip{color:var(--ghost);font-size:11px}
+
+  /* media prompt modal */
+  .modal{position:fixed;inset:0;z-index:70;background:rgba(3,2,0,.75);display:none;place-items:center}
+  .modal.show{display:grid}
+  .mbox{border:1px solid var(--amber);background:#0c0800;padding:18px 20px;width:min(90vw,420px);box-shadow:0 0 40px rgba(255,176,0,.12)}
+  .mbox h4{font-size:12px;letter-spacing:.12em;color:var(--amber-br);margin-bottom:4px}
+  .mbox p{font-size:9.5px;color:var(--chrome);line-height:1.5;margin-bottom:14px}
+  .mbtns{display:flex;gap:8px}
+  .mbtns button{flex:1;border:1px solid var(--amber-dim);background:rgba(255,176,0,.04);color:var(--amber-br);font-family:var(--mono);
+    font-size:10px;letter-spacing:.1em;padding:11px;cursor:pointer}
+  .mbtns button:hover{border-color:var(--amber)} .mbtns button.stock{border-color:var(--green);color:var(--green)}
+  .mbtns button.stock:hover{background:rgba(92,224,58,.1)}
+  .mcancel{margin-top:10px;text-align:center} .mcancel span{font-size:8px;color:var(--amber-dim);cursor:pointer;letter-spacing:.1em}
+
+  .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:80;border:1px solid var(--green);
+    background:rgba(6,12,2,.94);color:var(--green);font-size:10px;letter-spacing:.1em;padding:8px 16px;opacity:0;transition:opacity .3s;pointer-events:none;max-width:70vw}
+  .toast.show{opacity:1} .toast.err{border-color:var(--red);color:var(--red);background:rgba(16,4,0,.94)}
+</style>
+</head>
+<body>
+  <div class="hdr">
+    <span class="brand"><span class="dot"></span>NEOFORM · FEATURE DIRECTOR</span>
+    <span class="proj" id="proj">EDIT · —</span>
+    <span class="sp"></span>
+    <label>SITE</label>
+    <select id="cat"></select>
+    <label>＋ TEMPLATE</label>
+    <select id="tmpl"><option value="">— new from template —</option></select>
+    <a class="btn" id="preview" href="#" target="_blank">↗ PREVIEW SITE</a>
+    <button class="btn go" id="apply">✓ APPLY EDITS</button>
+    <button class="btn exec" id="execute" title="Lock the schematic and start the NEOFORM build">▶ EXECUTE BUILD</button>
+  </div>
+
+  <div class="review-banner" id="reviewBanner">⏸ AWAITING YOUR REVIEW — the circuit paused at ARCHITECT. Drag features in/out, then ✓ APPROVE &amp; BUILD to resume.</div>
+  <div class="stage">
+    <div class="project">
+      <div class="proj-head"><span class="t" id="ptitle">CURRENT LAYOUT</span><span class="s" id="psub"></span></div>
+      <div id="sections"></div>
+    </div>
+    <div class="sep"></div>
+    <div class="right">
+      <div class="display">
+        <div class="dh"><span>FEATURE DISPLAY</span><span id="dtag">— IDLE</span></div>
+        <div class="viz-wrap"><canvas id="viz"></canvas><iframe id="demoFrame" title="feature demo"></iframe><div class="expand-btn" id="expandBtn" title="Full view">⛶</div><div class="viz-empty" id="vizEmpty">focus a section, or open a folder — hover to preview · <b>click a feature to ARM it, then click a section (or the ＋ zone) to place</b> · dragging works too</div></div>
+        <div class="disp-meta"><div class="nm" id="dnm">—</div><div class="ds" id="dds"></div><div class="meta2" id="dmeta"></div></div>
+      </div>
+      <div class="folders">
+        <div class="pmode" id="pmode">
+          <button data-mode="sections" class="sec"><span>◫ SECTIONS</span><span class="sub">drag a block onto the canvas</span></button>
+          <button data-mode="features"><span>✛ FEATURES + INTERACTIONS</span><span class="sub">drag into a section</span></button>
+        </div>
+        <div class="ftabs" id="ftabs"></div>
+        <div class="flist" id="flist"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal"><div class="mbox">
+    <h4 id="mtitle">FEATURE NEEDS MEDIA</h4>
+    <p id="mdesc"></p>
+    <div class="mbtns"><button id="mUpload">⬆ UPLOAD PHOTOS / VIDEO</button><button class="stock" id="mStock">◈ USE STOCK</button></div>
+    <div class="mcancel"><span id="mCancel">cancel</span></div>
+  </div></div>
+
+  <div class="dmodal" id="dmodal">
+    <div class="dbar"><span class="dm-name" id="dmName">—</span><span class="dm-tag" id="dmTag"></span><span class="sp"></span>
+      <button id="dmOpen">↗ OPEN IN TAB</button><button id="dmClose">✕ CLOSE  ·  ESC</button></div>
+    <div class="dframe-wrap"><iframe id="dmFrame" title="feature demo full view"></iframe></div>
+  </div>
+
+  <input type="file" id="mfile" multiple style="display:none">
+  <div class="toast" id="toast"></div>
+
+<script>
+const ARCH_NAME={A:'CINEMATIC HERO',B:'SPLIT 50/50',C:'MARQUEE',D:'EDITORIAL GALLERY',E:'PINNED SCROLLY',F:'BEFORE / AFTER',G:'STAT BAND',H:'TESTIMONIAL',I:'LEDGER',J:'MAP BAND',K:'CTA BAND',L:'OFFSET CARDS',NAV:'NAV BAR',FT:'FOOTER',OV:'OVERLAY'};
+const SCHEM={
+  A:`<rect x=0 y=0 width=100 height=38 fill='none' stroke='%23a86e12'/><path d='M0 30 L40 12 L70 24 L100 8' stroke='%23ffb000' fill='none'/><rect x=8 y=22 width=34 height=5 fill='%23ffce4d'/>`,
+  C:`<rect x=0 y=13 width=100 height=12 fill='none' stroke='%23a86e12'/><g fill='%23ffb000'><rect x=6 y=17 width=10 height=4/><rect x=24 y=17 width=10 height=4/><rect x=42 y=17 width=10 height=4/><rect x=60 y=17 width=10 height=4/><rect x=78 y=17 width=10 height=4/></g>`,
+  D:`<g stroke='%23a86e12' fill='%23140c00'><rect x=0 y=0 width=30 height=24/><rect x=34 y=0 width=40 height=14/><rect x=78 y=0 width=22 height=38/><rect x=0 y=28 width=30 height=10/><rect x=34 y=18 width=40 height=20/></g>`,
+  E:`<rect x=30 y=2 width=40 height=34 fill='%23140c00' stroke='%23ffb000'/><g stroke='%23a86e12'><line x1=74 y1=9 x2=96 y2=9/><line x1=74 y1=19 x2=92 y2=19/><line x1=74 y1=29 x2=96 y2=29/></g>`,
+  F:`<rect x=0 y=0 width=100 height=38 fill='none' stroke='%23a86e12'/><line x1=50 y1=0 x2=50 y2=38 stroke='%2300c8ff' stroke-width=2/><rect x=6 y=6 width=38 height=26 fill='%23241400'/>`,
+  G:`<rect x=0 y=0 width=100 height=38 fill='%23241400' stroke='%23a86e12'/><text x=10 y=27 fill='%23ffb000' font-size=20 font-family=monospace>12K+</text>`,
+  H:`<circle cx=18 cy=19 r=11 fill='none' stroke='%23a86e12'/><line x1=38 y1=12 x2=96 y2=12 stroke='%23ffce4d'/><line x1=38 y1=21 x2=88 y2=21 stroke='%23a86e12'/><text x=38 y=34 fill='%235ce03a' font-size=9>★★★★★</text>`,
+  I:`<g stroke='%23a86e12'><line x1=4 y1=8 x2=70 y2=8/><line x1=4 y1=18 x2=70 y2=18/><line x1=4 y1=28 x2=70 y2=28/><line x1=84 y1=8 x2=96 y2=8 stroke='%23ffb000'/><line x1=84 y1=18 x2=96 y2=18 stroke='%23ffb000'/><line x1=84 y1=28 x2=96 y2=28 stroke='%23ffb000'/></g>`,
+  J:`<rect x=0 y=0 width=100 height=38 fill='%23140c00' stroke='%23a86e12'/><path d='M0 26 Q30 10 55 22 T100 14' stroke='%23a86e12' fill='none'/><circle cx=58 cy=20 r=3 fill='%2300c8ff'/>`,
+  K:`<rect x=0 y=0 width=100 height=38 fill='%23241400' stroke='%23ffb000'/><rect x=34 y=13 width=32 height=12 fill='%235ce03a' opacity=.7/>`,
+  L:`<g fill='%23140c00' stroke='%23a86e12'><rect x=2 y=6 width=30 height=26/><rect x=38 y=2 width=26 height=34/><rect x=70 y=10 width=28 height=22/></g>`,
+  NAV:`<rect x=0 y=4 width=100 height=10 fill='%23241400' stroke='%23a86e12'/><rect x=4 y=7 width=16 height=4 fill='%23ffb000'/><g fill='%23a86e12'><rect x=60 y=7 width=8 height=4/><rect x=72 y=7 width=8 height=4/><rect x=84 y=7 width=12 height=4/></g>`,
+  FT:`<rect x=0 y=6 width=100 height=32 fill='%23140c00' stroke='%23a86e12'/><g fill='%23a86e12'><rect x=6 y=12 width=18 height=3/><rect x=6 y=18 width=12 height=3/><rect x=34 y=12 width=14 height=3/><rect x=34 y=18 width=10 height=3/><rect x=62 y=12 width=16 height=3/></g><rect x=6 y=28 width=40 height=5 fill='%23ffb000'/>`,
+  OV:`<rect x=0 y=0 width=100 height=38 fill='none' stroke='%232a1c00' stroke-dasharray='3 3'/><rect x=30 y=9 width=40 height=20 fill='%23241400' stroke='%2300c8ff'/><rect x=36 y=15 width=20 height=3 fill='%2300c8ff'/>`,
+};
+
+/* ── CATALOG (seed — the mining pass merges its real entries into this array) ── */
+const CATALOG=[
+ // HERO variants
+ {id:'hero-webgl',name:'WebGL scrubbed hero',scope:'section-variant',folder:'Hero',sectionTypes:['A'],media:{needs:'either',canStock:true},viz:'particles',desc:'R3F cinematic hero, scroll-scrubbed, adaptive quality + no-WebGL fallback.',source:'biolab-atlas-3d'},
+ {id:'hero-video',name:'Muted video-loop hero',scope:'section-variant',folder:'Hero',sectionTypes:['A'],media:{needs:'video',canStock:true},viz:'reveal',desc:'Full-bleed silent loop, overlaid headline + one CTA. Ken-Burns fallback.',source:'north-phoenix-detail-pros'},
+ {id:'hero-gradient',name:'Living gradient hero',scope:'section-variant',folder:'Hero',sectionTypes:['A'],media:{needs:'none',canStock:false},viz:'gradient',desc:'Fragment-shader mesh gradient in brand colors, slow drift.',source:'nocturne-coffee'},
+ // GALLERY variants
+ {id:'gal-bento',name:'Editorial bento gallery',scope:'section-variant',folder:'Gallery',sectionTypes:['D'],media:{needs:'photos',canStock:true},viz:'bento',desc:'Asymmetric masonry, mixed aspect ratios, hover detail. Never a 3-col grid.',source:'demo'},
+ {id:'gal-scrollrow',name:'Scroll-scrub series row',scope:'section-variant',folder:'Gallery',sectionTypes:['D','L'],media:{needs:'photos',canStock:true},viz:'parallax',desc:'Horizontal product/work row that scrubs on vertical scroll (demo SeriesScrollRow).',source:'demo'},
+ {id:'gal-draggable',name:'Draggable canvas gallery',scope:'section-variant',folder:'Gallery',sectionTypes:['D'],media:{needs:'photos',canStock:true},viz:'bento',desc:'Free-drag board of work; inertia + snap.',source:'aiden-date'},
+ // PROOF / reviews variants
+ {id:'proof-spotlight',name:'Review spotlight rotator',scope:'section-variant',folder:'Proof',sectionTypes:['H'],media:{needs:'none',canStock:false},viz:'reveal',desc:'One big full-bleed verbatim quote + portrait, rotating. Real reviews only.',source:'rose-plumbing'},
+ {id:'proof-video',name:'Video testimonials',scope:'section-variant',folder:'Proof',sectionTypes:['H'],media:{needs:'video',canStock:false},viz:'reveal',desc:'Customer video wall — higher-trust social proof (demo VideoTestimonials).',source:'demo'},
+ {id:'proof-marquee',name:'Trust / logo marquee',scope:'section-variant',folder:'Proof',sectionTypes:['C','H'],media:{needs:'photos',canStock:true},viz:'marquee',desc:'Client or press logos in a quiet grid or marquee.',source:'library'},
+ // LEDGER / menu variants
+ {id:'ledger-menu',name:'Editorial menu ledger',scope:'section-variant',folder:'Gallery',sectionTypes:['I'],media:{needs:'photos',canStock:true},viz:'ledger',desc:'Menu by course with select dish photos + typographic hierarchy. Not cards.',source:'joes-tacos'},
+ {id:'ledger-specs',name:'Spec / price ledger',scope:'section-variant',folder:'Gallery',sectionTypes:['I'],media:{needs:'none',canStock:false},viz:'ledger',desc:'Clean spec/ingredient/price table with hierarchy.',source:'moe-smoke-shop'},
+ // STAT variants
+ {id:'stat-counter',name:'Animated stat band',scope:'section-variant',folder:'Proof',sectionTypes:['G'],media:{needs:'none',canStock:false},viz:'counter',desc:'Oversized numbers count up on enter; brand-color field.',source:'ember-and-oak'},
+ // MAP
+ {id:'map-locator',name:'Store / service-area locator',scope:'section-variant',folder:'Gallery',sectionTypes:['J'],media:{needs:'none',canStock:false},viz:'map',desc:'Full-width map + city list (demo StoreLocator / NationwideLocations).',source:'demo'},
+ // ENHANCEMENTS (apply to many)
+ {id:'enh-mask',name:'Mask-rise reveal',scope:'enhancement',folder:'Reveal',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'mask',desc:'Text/media clip-rises on enter (demo --ease-sig). One gesture per section.',source:'demo'},
+ {id:'enh-borderdraw',name:'Border-draw on scroll',scope:'enhancement',folder:'Reveal',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'borderdraw',desc:'Section frame strokes itself in on scroll into view.',source:'demo'},
+ {id:'enh-stagger',name:'Stagger cascade',scope:'enhancement',folder:'Reveal',sectionTypes:['D','L','I'],media:{needs:'none',canStock:false},viz:'stagger',desc:'Children stagger in with a spring; reduced-motion → fade.',source:'ember-and-oak'},
+ {id:'enh-magnetic',name:'Magnetic CTA',scope:'enhancement',folder:'Interactive',sectionTypes:['K','A'],media:{needs:'none',canStock:false},viz:'magnetic',desc:'Button eases toward the cursor within a radius; touch fallback = tap.',source:'aiden-date'},
+ {id:'enh-mousegrad',name:'Mouse-follow gradient',scope:'enhancement',folder:'Interactive',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'cursor',desc:'A soft brand-color light follows the cursor over a dark section (demo MouseGradient).',source:'demo'},
+ {id:'enh-tilt',name:'3D card tilt',scope:'enhancement',folder:'Interactive',sectionTypes:['L','D'],media:{needs:'none',canStock:false},viz:'tilt',desc:'Cards tilt to the pointer with parallax depth; disabled on touch (demo TiltCard).',source:'demo'},
+ {id:'enh-pinscrub',name:'GSAP pinned video-scroll',scope:'enhancement',folder:'Motion',sectionTypes:['E','A','D'],media:{needs:'video',canStock:true},viz:'pin',desc:'Section pins while a video/sequence scrubs to scroll (GSAP ScrollTrigger).',source:'biolab-atlas'},
+ {id:'enh-parallax',name:'Layered parallax',scope:'enhancement',folder:'Motion',sectionTypes:['A','D','J'],media:{needs:'none',canStock:false},viz:'parallax',desc:'Foreground/background move at different rates for depth.',source:'rx-outdoor-living'},
+ {id:'enh-marquee',name:'Infinite marquee',scope:'enhancement',folder:'Motion',sectionTypes:['C'],media:{needs:'none',canStock:false},viz:'marquee',desc:'Seamless horizontal ticker — logos, services, dishes, words.',source:'demo'},
+ {id:'enh-typewriter',name:'Typewriter headline',scope:'enhancement',folder:'Text',sectionTypes:['A','K'],media:{needs:'none',canStock:false},viz:'stagger',desc:'Headline types/scrambles in on load (demo Typewriter).',source:'demo'},
+ // SIGNATURE
+ {id:'sig-beforeafter',name:'Before / After slider',scope:'section-variant',folder:'Signature',sectionTypes:['F'],media:{needs:'photos',canStock:true},viz:'slider',desc:'Drag to wipe between two states — the local-service signature.',source:'north-phoenix-detail-pros'},
+ {id:'sig-3dvisualizer',name:'3D config visualizer',scope:'section-variant',folder:'Signature',sectionTypes:['F','E'],media:{needs:'none',canStock:false},viz:'slider',desc:'Live-reskin a hero subject (grass/tint/paint) in 3D (demo GrassVisualizer3D).',source:'demo'},
+ {id:'sig-matchquiz',name:'AI match quiz',scope:'section-variant',folder:'Signature',sectionTypes:['E','I'],media:{needs:'none',canStock:false},viz:'stagger',desc:'Guided quiz recommends a product/service (demo TurfMatch).',source:'demo'},
+ // PAGES
+ {id:'page-contact',name:'Contact + form page',scope:'page',folder:'Pages',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'ledger',desc:'Full contact route — form (P6 wired) + map + hours.',source:'demo ContactQuoteForm'},
+ {id:'page-about',name:'About / story page',scope:'page',folder:'Pages',sectionTypes:['ALL'],media:{needs:'photos',canStock:true},viz:'reveal',desc:'Brand story route — narrative + team + values.',source:'ember-and-oak'},
+ {id:'page-faq',name:'FAQ page',scope:'page',folder:'Pages',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'ledger',desc:'Accordion FAQ route (demo FAQ).',source:'demo'},
+];
+/* ── mined from real builds (blue-dragon · biolab-atlas-3d · aiden-date) ── */
+const CATALOG_MINED=[
+ {id:'webgl-particle-hero',name:'WebGL2 Interactive Particle Hero',scope:'section-variant',folder:'Hero',sectionTypes:['A'],media:{needs:'either',canStock:true},viz:'particles',description:'Raw WebGL2 point-cloud of 700-2400 particles that drift and repel from the cursor over a dimmed photo + vignette; a living atmospheric field.',source:'blue-dragon HeroCanvas'},
+ {id:'frosted-glass-cta-card',name:'Frosted-Glass CTA Card',scope:'enhancement',folder:'Hero',sectionTypes:['A','K'],media:{needs:'none',canStock:false},viz:'mask',description:'Centered glass card over a busy background: eyebrow, headline, sub-line, call/directions buttons. Premium, legible over motion.',source:'blue-dragon Hero'},
+ {id:'gradient-text-headline',name:'Gradient Clipped-Text Headline',scope:'enhancement',folder:'Text',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'gradient',description:'Headline words painted with a background-clip gradient so key phrases glow against dark type. Instant emphasis, no extra markup.',source:'blue-dragon Hero'},
+ {id:'animated-scroll-hint',name:'Animated Scroll-Down Indicator',scope:'enhancement',folder:'Motion',sectionTypes:['A'],media:{needs:'none',canStock:false},viz:'reveal',description:'A mouse glyph pinned to the hero bottom with a bouncing dot + Scroll label; a quiet nudge to keep going.',source:'blue-dragon Hero'},
+ {id:'scroll-reveal-system',name:'IntersectionObserver Reveal System',scope:'enhancement',folder:'Reveal',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'stagger',description:'Drop-in engine: any .reveal element fades/slides in on scroll, with reveal-delay-N stagger and a MutationObserver auto-wiring new nodes.',source:'blue-dragon ScrollRevealInit'},
+ {id:'ambient-glow-orbs',name:'Ambient Radial Glow Orbs',scope:'enhancement',folder:'Signature',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'gradient',description:'Large off-canvas radial-gradient blobs bled into section corners to add depth + color temperature to flat dark backgrounds.',source:'blue-dragon Mission'},
+ {id:'trust-stat-band',name:'Icon Trust / Stat Band',scope:'section-variant',folder:'Proof',sectionTypes:['G'],media:{needs:'none',canStock:false},viz:'counter',description:'Bordered grid of stat tiles (icon chip + big value + label + sub-line), one tile tap-to-call; a compact credibility strip.',source:'blue-dragon TrustStrip'},
+ {id:'review-theme-cards',name:'Verified Quote + Theme Cards',scope:'section-variant',folder:'Proof',sectionTypes:['H'],media:{needs:'none',canStock:false},viz:'reveal',description:'One hero verbatim star-rated quote paired with smaller recurring-theme icon cards + a source-link chip. Honest proof, no invented quotes.',source:'blue-dragon Reviews'},
+ {id:'category-teaser-grid',name:'Category Card Grid + Featured Photos',scope:'section-variant',folder:'Gallery',sectionTypes:['D','L'],media:{needs:'photos',canStock:true},viz:'bento',description:'Auto-fill grid of icon category cards + browse-all link, then a two-up featured-photo row and accent callout; a what-we-carry teaser.',source:'blue-dragon ProductsTeaser'},
+ {id:'split-story-with-badge',name:'Split Text/Image + Overlay Badge',scope:'section-variant',folder:'Text',sectionTypes:['ALL'],media:{needs:'photos',canStock:true},viz:'reveal',description:'Two-column narrative: staggered-reveal copy beside a framed photo with a blurred glass caption badge; a warm story block.',source:'blue-dragon Mission'},
+ {id:'location-hours-map-block',name:'Address / Hours / Map Block',scope:'section-variant',folder:'Interactive',sectionTypes:['J'],media:{needs:'either',canStock:true},viz:'map',description:'Find-us section: address, tap-to-call, hours list and a storefront photo beside a tall embedded map. Everything a walk-in needs.',source:'blue-dragon Location'},
+ {id:'dark-mode-map-embed',name:'Dark-Mode Google Maps Embed',scope:'enhancement',folder:'Interactive',sectionTypes:['J'],media:{needs:'none',canStock:false},viz:'map',description:'CSS-only trick that dark-themes any embedded Google Map (invert + hue-rotate) so it matches a dark site with no API key.',source:'blue-dragon Location'},
+ {id:'glow-tap-call-cta',name:'Glowing Tap-to-Call Closing CTA',scope:'section-variant',folder:'Signature',sectionTypes:['K'],media:{needs:'either',canStock:true},viz:'gradient',description:'Closing CTA band over a faint photo + radial glow: eyebrow, headline, an oversized glowing phone button, hours/address reminders.',source:'blue-dragon FinalCTA'},
+ {id:'volumetric-3d-hero-scene',name:'Cinematic Volumetric 3D Scene',scope:'section-variant',folder:'WebGL',sectionTypes:['A'],media:{needs:'none',canStock:false},viz:'particles',description:'three.js hero: a slow-spinning fresnel-glass DNA helix with a radiation break, transmission crystals, GPGPU dust, ACES + bloom.',source:'biolab-atlas-3d'},
+ {id:'gpgpu-curl-dust',name:'GPGPU Curl-Noise Particle Dust',scope:'enhancement',folder:'WebGL',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'particles',description:'25k GPU points advected by divergence-free curl noise in a ping-ponged float texture, pulled to an attractor, drawn additively.',source:'biolab-atlas-3d'},
+ {id:'parametric-helix-primitive',name:'Parametric Double-Helix Geometry',scope:'enhancement',folder:'WebGL',sectionTypes:['A'],media:{needs:'none',canStock:false},viz:'reveal',description:'Code-defined DNA double helix (turns/rise/radius params) from CatmullRom tubes, colored rungs, phosphate nodes and a Gaussian break.',source:'biolab-atlas-3d'},
+ {id:'cinematic-composite-depth',name:'Three-Band Composite Depth',scope:'enhancement',folder:'Signature',sectionTypes:['A'],media:{needs:'either',canStock:false},viz:'parallax',description:'Depth from three layers at different rates: far parallax backdrop, mid 3D scene, near screen-blended bokeh parallaxed to the pointer.',source:'biolab-atlas-3d'},
+ {id:'postfx-grade-stack',name:'Cinematic Post-FX Grade Stack',scope:'enhancement',folder:'Motion',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'gradient',description:'EffectComposer chain — ACES tone map, threshold UnrealBloom, then radial chromatic aberration + vignette + lift; the filmic grade.',source:'biolab-atlas-3d'},
+ {id:'film-grain-vignette-overlay',name:'Film Grain + Vignette Overlay',scope:'enhancement',folder:'Signature',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'cursor',description:'Two fixed pointer-through layers — an SVG fractal-noise grain and a radial vignette — over any page for cheap analog-film atmosphere.',source:'biolab-atlas-3d'},
+ {id:'playful-proposal-page',name:'Multi-Screen Journey Page',scope:'page',folder:'Pages',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'reveal',description:'Single-page multi-screen experience: ask → mini-game → pick → quiz → confirm, with rise transitions, step dots and persistent state.',source:'aiden-date'},
+ {id:'evasive-no-magnetic-yes',name:'Evasive No + Magnetic Yes Buttons',scope:'enhancement',folder:'Interactive',sectionTypes:['K'],media:{needs:'none',canStock:false},viz:'magnetic',description:'The No button sprouts legs and flees the cursor while Yes grows, sprouts wings, magnetically leans in and fills a power meter.',source:'aiden-date'},
+ {id:'flip-card-grid',name:'3D Flip-Card Grid',scope:'section-variant',folder:'Gallery',sectionTypes:['D','L'],media:{needs:'none',canStock:true},viz:'tilt',description:'Auto-fill grid of cards that rotateY-flip on hover to a back face (emoji, place, link), with selected/flash state + touch fallback.',source:'aiden-date'},
+ {id:'chip-filter-running-budget',name:'Chip Filter + Live Budget Total',scope:'enhancement',folder:'Interactive',sectionTypes:['D','I'],media:{needs:'none',canStock:false},viz:'ledger',description:'Pill/chip category filter over a card list, wired to a running cost pill that live-sums selected items and swaps copy as picks change.',source:'aiden-date'},
+ {id:'spin-the-wheel-roulette',name:'Canvas Spin-the-Wheel Picker',scope:'enhancement',folder:'Interactive',sectionTypes:['K'],media:{needs:'none',canStock:false},viz:'slider',description:'A modal canvas roulette of colored segments that spins with easing to randomly land on and select an option; a gamified decision.',source:'aiden-date'},
+ {id:'canvas-dodge-minigame',name:'Cursor-Steered Mini-Game',scope:'enhancement',folder:'Interactive',sectionTypes:['K'],media:{needs:'none',canStock:false},viz:'cursor',description:'A themed canvas dodge game (steer with mouse/touch, evade N hazards to unlock the next screen) with hit anims and a win gate.',source:'aiden-date'},
+ {id:'procedural-webaudio-score',name:'Procedural WebAudio SFX + Score',scope:'enhancement',folder:'Motion',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'marquee',description:'A no-asset audio layer: synthesized clicks/chimes/whooshes + a looping lo-fi bed whose filter and detune intensify with a danger value.',source:'aiden-date'},
+ {id:'confetti-heart-cannon',name:'Confetti / Heart Particle Cannon',scope:'enhancement',folder:'Motion',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'particles',description:'Full-screen canvas FX firing gravity-driven confetti and heart bursts from screen edges on celebration moments; reward feedback.',source:'aiden-date'},
+ {id:'blackhole-swallow-countdown',name:'Black-Hole Swallow + Countdown',scope:'enhancement',folder:'Transitions',sectionTypes:['K'],media:{needs:'none',canStock:false},viz:'counter',description:'A finale that scale-spins the whole stage into a canvas black hole, then fades to a glowing ring countdown to the saved date.',source:'aiden-date'},
+ {id:'typewriter-love-note',name:'Typewriter Multi-Line Note',scope:'enhancement',folder:'Text',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'stagger',description:'A blinking-cursor typewriter that types a scripted sequence of lines with randomized timing + a rotating reason-#N ticker.',source:'aiden-date'},
+ {id:'confirmation-ticket-ics',name:'Ticket Confirmation + Calendar/SMS',scope:'section-variant',folder:'Signature',sectionTypes:['K'],media:{needs:'none',canStock:false},viz:'reveal',description:'A boarding-pass confirmation card (gradient stub, punched edge, detail rows) with .ics download, SMS share and maps link.',source:'aiden-date'},
+ {id:'floating-polaroids-ambient',name:'Floating Polaroids Ambient Layer',scope:'enhancement',folder:'Motion',sectionTypes:['ALL'],media:{needs:'photos',canStock:true},viz:'parallax',description:'A fixed background of CSS polaroid cards drifting slowly upward and rotating on randomized loops; a warm in-motion atmosphere.',source:'aiden-date'},
+ {id:'charm-preloader',name:'Themed Fake-Progress Preloader',scope:'enhancement',folder:'Transitions',sectionTypes:['ALL'],media:{needs:'none',canStock:false},viz:'counter',description:'An intro overlay with a randomized fake progress bar, an equalizer animation and icon swaps, that fades out and starts the page.',source:'aiden-date'},
+];
+CATALOG.push(...CATALOG_MINED);
+CATALOG.forEach(f=>{ if(!f.desc) f.desc=f.description; });
+/* load the full mined catalog — works under tracker-server (/catalog) OR Athena (/feature-catalog.json) */
+(async()=>{ let arr=null;
+  for(const u of ['/catalog','/feature-catalog.json']){ try{ const r=await fetch(u); if(r.ok){ arr=await r.json(); break; } }catch{} }
+  if(!arr) return;
+  const seen=new Set(CATALOG.map(f=>f.id));
+  arr.forEach(f=>{ if(!f.desc) f.desc=f.description; if(f.id && !seen.has(f.id)){ seen.add(f.id); CATALOG.push(f); } });
+  if(typeof render==='function') render();
+})();
+
+/* ── MANIFESTS (a built site's CURRENT layout — sections carry live features) ── */
+function mani(arr){return arr.map((s,i)=>({id:'s'+i,arch:s[0],name:s[1],slot:s[2],desc:s[3],variant:s[4]||null,enhancements:s[5]||[],media:s[6]||null}));}
+const SITES={
+ 'demo-detailing':{label:'DEMO · auto detailing',cat:'local-service',url:'https://example.com',sections:mani([
+   ['A','HERO','anchor','Full-bleed install video, headline + Get-a-Quote','hero-video',['enh-parallax'],{source:'stock'}],
+   ['C','HOOK BAND','anchor','★ rating · years · # jobs · certifications',null,['enh-marquee'],null],
+   ['F','TRANSFORMATION','sig','Before/after drag slider on a real job','sig-beforeafter',[],{source:'stock'}],
+   ['B','SERVICES','gap','One band per service, alternating sides',null,['enh-mask'],null],
+   ['D','THE WORK','anchor','Asymmetric bento of finished jobs','gal-bento',['enh-stagger'],{source:'stock'}],
+   ['E','PROCESS','gap','Pinned scrolly — Book → Prep → Install → Reveal',null,[],null],
+   ['H','PROOF','anchor','Full-bleed Google review + stars','proof-spotlight',[],null],
+   ['G','GUARANTEE','anchor','Warranty / turnaround as oversized numbers','stat-counter',[],null],
+   ['J','SERVICE AREA','gap','Cities served map','map-locator',[],null],
+   ['K','QUOTE CTA','anchor','Full-bleed slab — quote form + tap-to-call',null,['enh-magnetic'],null]])},
+ 'demo-store':{label:'DEMO · product store',cat:'product',url:'https://example.com',sections:mani([
+   ['A','HERO','anchor','Product hero on color field + Shop','hero-video',['enh-typewriter'],{source:'upload'}],
+   ['C','SHOP BY CATEGORY','anchor','Turf · Accessories · Bulk gateways',null,['enh-marquee'],null],
+   ['E','TURFMATCH','sig','AI product-match quiz','sig-matchquiz',[],null],
+   ['D','HOTTEST PRODUCTS','anchor','Scroll-scrub series row','gal-scrollrow',['enh-tilt'],{source:'upload'}],
+   ['B','VISUALIZER','gap','3D grass visualizer','sig-3dvisualizer',['enh-mousegrad'],null],
+   ['H','TESTIMONIALS','anchor','Video testimonials','proof-video',[],null],
+   ['G','STATS','anchor','Rolls sold · states shipped','stat-counter',[],null],
+   ['J','NATIONWIDE','gap','Store locator map','map-locator',[],null],
+   ['K','CTA','anchor','Quote CTA + email capture',null,['enh-magnetic'],null]])},
+};
+
+let curSite='demo-detailing', focused=null, curFolder='__this', curFeat=null, pendingDrop=null, armed=null, paletteMode='features';
+function isSectionScope(f){return f.scope==='section-variant'||f.scope==='page';}
+function isFeatureScope(f){return f.scope==='enhancement';}
+const el=id=>document.getElementById(id);
+
+/* when embedded in Athena, ?slug=<project> preselects that site; a real manifest is
+   loaded from the backend if one exists (else the built-in sample layout is shown) */
+const QSLUG=new URLSearchParams(location.search).get('slug');
+if(QSLUG && SITES[QSLUG]) curSite=QSLUG;
+async function hydrateManifest(slug){
+  if(!slug) return;
+  try{ const r=await fetch('/api/projects/'+slug+'/manifest'); if(!r.ok) return;
+    const m=await r.json();
+    if(Array.isArray(m.sections)){ SITES[slug]=Object.assign({label:m.label||slug,cat:m.cat||'local-service',url:m.url||''}, SITES[slug]||{}, {sections:m.sections}); curSite=slug; if(typeof refreshSites==='function')refreshSites(); render(); if(typeof publishEditing==='function')publishEditing(); }
+  }catch{}
+}
+let awaitingReview=false;
+async function checkReview(slug){ if(!slug) return;
+  try{ const r=await fetch('/api/projects/'+slug+'/review'); if(!r.ok) return;
+    const d=await r.json(); awaitingReview = d.status==='awaiting';
+    el('reviewBanner').classList.toggle('on', awaitingReview);
+    const ab=el('apply'); if(awaitingReview){ ab.textContent='✓ APPROVE & BUILD'; ab.classList.add('approve'); }
+    else { ab.textContent='✓ APPLY EDITS'; ab.classList.remove('approve'); }
+  }catch{} }
+
+/* site select (rebuilt whenever a template adds a new working skeleton) */
+const catSel=el('cat');
+function refreshSites(){ catSel.innerHTML='';
+  Object.entries(SITES).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.label;catSel.appendChild(o);});
+  catSel.value=curSite; }
+refreshSites();
+catSel.onchange=()=>{curSite=catSel.value;focused=null;render();};
+
+/* ── TEMPLATES — industry starting-points from the block registry ── */
+let TEMPLATES=[], SECMETA={};
+function tSlot(m){ return m.sig?'sig':(m.kind==='global'||m.kind==='overlay')?'global':(m.priority==='essential'?'anchor':'gap'); }
+function buildFromTemplate(tid){ const t=TEMPLATES.find(x=>x.id===tid); if(!t)return;
+  const sections=t.sections.map((sid,i)=>{ const m=SECMETA[sid]||{name:sid,arch:'D',purpose:''};
+    return {id:'s'+i, arch:m.arch, name:(m.name||sid).toUpperCase(), slot:tSlot(m), desc:m.purpose||'', variant:null, enhancements:[], media:null, block:sid}; });
+  const key='tpl:'+tid;
+  SITES[key]={label:t.name+' (template)', cat:t.cat, url:'', sections};
+  curSite=key; focused=null; refreshSites(); render();
+  toast(`▤ started from ${t.name} · ${sections.length} blocks · edit + APPLY to save`);
+}
+fetch('/feature-templates.json').then(r=>r.json()).then(d=>{
+  TEMPLATES=d.templates||[]; SECMETA=d.sectionMeta||{};
+  const ts=el('tmpl'); TEMPLATES.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.name;ts.appendChild(o);});
+  ts.onchange=()=>{ if(ts.value){ buildFromTemplate(ts.value); ts.value=''; } };
+}).catch(()=>{});
+
+function feat(id){return CATALOG.find(f=>f.id===id);}
+function fits(f,arch){return f.sectionTypes.includes('ALL')||f.sectionTypes.includes(arch);}
+
+const PART_TYPES=['Heading','Text','Photo','Video','Button','List','Icon','Spacer'];
+function render(){
+  const site=SITES[curSite];
+  el('proj').textContent='EDIT · '+site.label.split(' · ')[0];
+  el('ptitle').textContent=site.sections.length?'CURRENT LAYOUT':'BLANK CANVAS';
+  el('psub').textContent=site.sections.length?site.sections.length+' SECTIONS · click a section to scope · drag section-blocks to add':'empty — drag a section block from the right (or pick a ＋TEMPLATE) to start building';
+  el('preview').href=site.url;
+  const wrap=el('sections'); wrap.innerHTML='';
+  site.sections.forEach((s,i)=>{
+    s.parts=s.parts||[]; s.enhancements=s.enhancements||[];
+    const d=document.createElement('div'); d.className='sect '+(s.slot||'gap')+(focused===i?' focus':''); d.dataset.i=i;
+    const live=[]; if(s.variant)live.push({f:feat(s.variant),kind:'var'}); s.enhancements.forEach(e=>live.push({f:feat(e),kind:'enh'}));
+    d.innerHTML=`<div class="sect-top"><span class="badge">${s.arch}</span>
+        <span class="nm" contenteditable spellcheck="false" data-nm="${i}">${s.name}</span>
+        <span class="tag ${s.slot==='sig'?'sig':''}">${s.slot==='anchor'?'🔒':s.slot==='sig'?'★':'⬚'} ${ARCH_NAME[s.arch]||s.arch}</span>
+        <span class="sect-ctl"><button data-up="${i}" title="move up">▲</button><button data-down="${i}" title="move down">▼</button><button class="del" data-del="${i}" title="remove section">✕</button></span></div>
+      <div class="shot"><img src="/api/projects/${curSite}/sections/${s.id}.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="fallback" style="display:none"><svg viewBox="0 0 100 38" preserveAspectRatio="none">${decodeURIComponent(SCHEM[s.arch]||'')}</svg><span class="lbl">NO SCREENSHOT YET · SCHEMATIC</span></div></div>
+      <div class="vision">
+        <div class="vision-h"><span class="lbl">◎ VISION — point Athena at what you're picturing</span><button class="vexp" data-vexp="${i}" title="expand into build directives">⚡ EXPAND</button></div>
+        <div class="desc" contenteditable spellcheck="false" data-desc="${i}">${esc(s.desc||'')}</div>
+        <div class="vbrief${s.visionSource==='local'?' src-local':''}" data-vbrief="${i}">${(s.visionBrief&&s.visionBrief.length)?s.visionBrief.map((b,bi)=>`<div class="vb"><span contenteditable spellcheck="false" data-vb="${i}:${bi}">${esc(b)}</span></div>`).join(''):''}</div>
+      </div>
+      <div class="live" data-live="${i}"><div class="live-h"><span class="chev">▸</span> FEATURES <span class="cnt">${live.length}</span></div>
+        <div class="live-b">${live.map(l=>l.f?`<span class="fchip-live ${l.kind}" data-fid="${l.f.id}">${l.kind==='var'?'◆':'⬢'} ${l.f.name}${s.media&&l.kind==='var'?` <span class="src">[${s.media.source}]</span>`:''} <span class="x" data-rem="${i}:${l.f.id}">✕</span></span>`:'').join('')}</div></div>
+      <div class="parts" data-parts="${i}"><div class="parts-h"><span class="chev">▸</span> PARTS <span class="cnt">${s.parts.length}</span>
+          <span class="parts-pal">${PART_TYPES.map(p=>`<button data-addpart="${i}:${p}">+${p}</button>`).join('')}</span></div>
+        <div class="parts-b">${s.parts.map((pt,pi)=>partHTML(pt,i,pi)).join('')||'<span class="parts-empty">arrange the section — add a Photo, Text, Heading, List, Icon… describe each and Athena fills it in</span>'}</div></div>
+      <div class="hint"></div>`;
+    d.addEventListener('click',e=>{if(e.target.closest('.live-h,.parts-h,.parts-pal,.sect-ctl,.part,.vision-h,[contenteditable],.x'))return;
+      if(armed){const a=armed;armed=null;tryInject(i,a.id);return;} focused=i;paletteMode='features';curFolder='__this';render();});
+    d.addEventListener('dragover',e=>{e.preventDefault();const f=curFeat;const ok=f&&fits(f,s.arch);d.classList.toggle('drop',ok);d.classList.toggle('reject',!ok);d.querySelector('.hint').textContent=ok?'▼ SET / INJECT':'✗ DOES NOT FIT';});
+    d.addEventListener('dragleave',()=>{d.classList.remove('drop','reject');});
+    d.addEventListener('drop',e=>{e.preventDefault();d.classList.remove('drop','reject');const fid=e.dataTransfer.getData('text/plain');tryInject(i,fid);});
+    wrap.appendChild(d);
+  });
+  // add-section drop zone (drag a section-variant here to create a new section)
+  const az=document.createElement('div'); az.className='addzone';
+  az.textContent=site.sections.length?'＋ drop a section block here to add it below':'＋ drag your first section block here to start building';
+  az.addEventListener('dragover',e=>{e.preventDefault();az.classList.add('on');});
+  az.addEventListener('dragleave',()=>az.classList.remove('on'));
+  az.addEventListener('drop',e=>{e.preventDefault();az.classList.remove('on');addSection(e.dataTransfer.getData('text/plain'));});
+  az.addEventListener('click',()=>{if(armed){const a=armed;armed=null;addSection(a.id);}});
+  wrap.appendChild(az);
+  // handlers
+  wrap.querySelectorAll('.live-h').forEach(h=>h.onclick=()=>h.closest('.live').classList.toggle('open'));
+  wrap.querySelectorAll('.parts-h').forEach(h=>h.onclick=e=>{if(e.target.closest('.parts-pal'))return;h.closest('.parts').classList.toggle('open');});
+  wrap.querySelectorAll('[data-rem]').forEach(x=>x.onclick=()=>{const[i,fid]=x.dataset.rem.split(':');removeFeat(+i,fid);});
+  wrap.querySelectorAll('[data-nm]').forEach(n=>n.onblur=()=>{site.sections[+n.dataset.nm].name=n.textContent.trim();});
+  wrap.querySelectorAll('[data-desc]').forEach(n=>n.onblur=()=>{site.sections[+n.dataset.desc].desc=n.textContent.trim();});
+  wrap.querySelectorAll('[data-vexp]').forEach(b=>b.onclick=()=>interpretVision(+b.dataset.vexp,b));
+  wrap.querySelectorAll('[data-vb]').forEach(n=>n.onblur=()=>{const[i,bi]=n.dataset.vb.split(':');if(site.sections[+i].visionBrief)site.sections[+i].visionBrief[+bi]=n.textContent.trim();});
+  wrap.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>moveSection(+b.dataset.up,-1));
+  wrap.querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>moveSection(+b.dataset.down,1));
+  wrap.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>removeSection(+b.dataset.del));
+  wrap.querySelectorAll('[data-addpart]').forEach(b=>b.onclick=()=>{const[i,p]=b.dataset.addpart.split(':');addPart(+i,p);});
+  wrap.querySelectorAll('[data-pu]').forEach(b=>b.onclick=()=>{const[i,pi]=b.dataset.pu.split(':');movePart(+i,+pi,-1);});
+  wrap.querySelectorAll('[data-pd]').forEach(b=>b.onclick=()=>{const[i,pi]=b.dataset.pd.split(':');movePart(+i,+pi,1);});
+  wrap.querySelectorAll('[data-px]').forEach(b=>b.onclick=()=>{const[i,pi]=b.dataset.px.split(':');removePart(+i,+pi);});
+  wrap.querySelectorAll('[data-pn]').forEach(n=>n.onblur=()=>{const[i,pi]=n.dataset.pn.split(':');site.sections[+i].parts[+pi].raw=n.textContent.trim();});
+  wrap.querySelectorAll('[data-interp]').forEach(b=>b.onclick=()=>{const[i,pi]=b.dataset.interp.split(':');interpretPart(+i,+pi,b);});
+  wrap.querySelectorAll('[data-edit]').forEach(n=>n.onblur=()=>{const[i,pi,k]=n.dataset.edit.split(':');const p=site.sections[+i].parts[+pi];if(!p.data)return;
+    if(k.startsWith('item')){const idx=+k.slice(4);if(p.data.items&&p.data.items[idx]!=null){if(typeof p.data.items[idx]==='object')p.data.items[idx].label=n.textContent.trim();else p.data.items[idx]=n.textContent.trim();}}
+    else{p.data[k]=n.textContent.trim();}});
+  wrap.querySelectorAll('[data-rmit]').forEach(b=>b.onclick=()=>{const[i,pi,idx]=b.dataset.rmit.split(':');const p=site.sections[+i].parts[+pi];if(p.data&&p.data.items){p.data.items.splice(+idx,1);render();openParts(+i);}});
+  wrap.querySelectorAll('[data-alt]').forEach(b=>b.onclick=()=>{const[i,pi,idx]=b.dataset.alt.split(':');const p=site.sections[+i].parts[+pi];if(p.data&&p.data.alts&&p.data.alts[+idx]!=null){const cur=p.data.value;p.data.value=p.data.alts[+idx];p.data.alts[+idx]=cur;render();openParts(+i);}});
+  renderFolders();
+}
+const PART_PH={Heading:"describe the headline… e.g. 'bold promise about heat rejection'",Text:"describe the copy… e.g. 'reassure about warranty + speed'",List:"describe the list… e.g. 'a list of citrus fruits' or 'tint, ppf, detail'",Icon:"describe the icons… e.g. 'speed, safety, warranty'",Video:"describe the clip… e.g. '6s loop of tint being applied'",Photo:"describe the photo… e.g. 'close-up of a tinted Tesla'",Button:"describe the button… e.g. 'book now → contact'",Spacer:"gap size — e.g. 'large'"};
+const NO_INTAKE=['Spacer'];
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function partHTML(pt,i,pi){
+  const canInterp=!NO_INTAKE.includes(pt.type);
+  const raw=esc(pt.raw!=null?pt.raw:(pt.note||''));
+  const btn=canInterp?`<button class="interp" data-interp="${i}:${pi}" title="Athena interprets your brief">⚡ INTERPRET</button>`:'';
+  return `<div class="part"><div class="prow"><span class="pt">▤ ${pt.type}</span>`+
+    `<span class="pn" contenteditable spellcheck="false" data-pn="${i}:${pi}" data-ph="${esc(PART_PH[pt.type]||'describe it…')}">${raw}</span>`+
+    btn+`<span class="pctl"><button data-pu="${i}:${pi}">▲</button><button data-pd="${i}:${pi}">▼</button><button class="del" data-px="${i}:${pi}">✕</button></span></div>`+
+    resultHTML(pt,i,pi)+`</div>`;
+}
+function resultHTML(pt,i,pi){
+  const d=pt.data; if(!d) return '';
+  const cls='pres'+(pt.source==='local'?' src-local':'');
+  const T=pt.type;
+  if(T==='List'&&d.items) return `<div class="${cls}">${d.items.map((it,x)=>`<span class="it"><span contenteditable spellcheck="false" data-edit="${i}:${pi}:item${x}">${esc(it)}</span><span class="rm" data-rmit="${i}:${pi}:${x}">✕</span></span>`).join('')}</div>`;
+  if(T==='Icon'&&d.items) return `<div class="${cls}">${d.items.map((it,x)=>`<span class="it">${esc(it.icon||'◆')} <span contenteditable spellcheck="false" data-edit="${i}:${pi}:item${x}">${esc(it.label||'')}</span><span class="rm" data-rmit="${i}:${pi}:${x}">✕</span></span>`).join('')}</div>`;
+  if(T==='Heading') return `<div class="${cls}"><span class="htxt" contenteditable spellcheck="false" data-edit="${i}:${pi}:value">${esc(d.value||'')}</span>${(d.alts&&d.alts.length)?`<span class="alts">${d.alts.map((a,x)=>`<span class="alt" data-alt="${i}:${pi}:${x}" title="use this instead">${esc(a)}</span>`).join('')}</span>`:''}</div>`;
+  if(T==='Text') return `<div class="${cls}"><span class="body" contenteditable spellcheck="false" data-edit="${i}:${pi}:value">${esc(d.value||'')}</span></div>`;
+  if(T==='Button') return `<div class="${cls}"><span class="btnpill"><span contenteditable spellcheck="false" data-edit="${i}:${pi}:label">${esc(d.label||'')}</span> → <span contenteditable spellcheck="false" data-edit="${i}:${pi}:href">${esc(d.href||'#')}</span></span></div>`;
+  if(T==='Video'||T==='Photo') return `<div class="${cls}"><span class="spec"><span contenteditable spellcheck="false" data-edit="${i}:${pi}:${T==='Video'?'spec':'alt'}">${esc(d.spec||d.alt||'')}</span><span class="badge">${esc(d.suggest||'stock')}${d.query?' · '+esc(d.query):''}</span></span></div>`;
+  return '';
+}
+function openParts(i){const p=document.querySelector(`[data-parts="${i}"]`);if(p)p.classList.add('open');}
+async function interpretPart(i,pi,btn){
+  const s=SITES[curSite].sections[i],p=s.parts[pi];
+  const raw=(p.raw||'').trim(); if(!raw){toast('describe it first, then ⚡ interpret',true);return;}
+  btn.classList.add('busy');btn.textContent='⚡ …';
+  try{
+    const r=await fetch('/api/interpret-part',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({partType:p.type,raw,section:{name:s.name,arch:ARCH_NAME[s.arch]||s.arch},business:(SITES[curSite].label||'').split(' · ')[0]})});
+    const j=await r.json();
+    if(j&&j.ok){p.data=j.result;p.source=j.source;render();openParts(i);
+      toast(j.source==='athena'?`✓ Athena interpreted your ${p.type.toLowerCase()}`:`⚠ offline — split locally (edit inline)`,j.source!=='athena');}
+    else{toast('interpret failed',true);}
+  }catch(e){toast('interpret failed — '+e.message,true);}
+  finally{const b=document.querySelector(`[data-interp="${i}:${pi}"]`);if(b){b.classList.remove('busy');b.textContent='⚡ INTERPRET';}}
+}
+async function interpretVision(i,btn){
+  const s=SITES[curSite].sections[i]; const raw=(s.desc||'').trim();
+  if(!raw){toast('describe your vision first, then ⚡ expand',true);return;}
+  btn.classList.add('busy');btn.textContent='⚡ …';
+  try{
+    const r=await fetch('/api/interpret-part',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({partType:'Vision',raw,section:{name:s.name,arch:ARCH_NAME[s.arch]||s.arch},business:(SITES[curSite].label||'').split(' · ')[0]})});
+    const j=await r.json();
+    if(j&&j.ok&&j.result){s.visionBrief=j.result.bullets||j.result.items||[];s.visionSource=j.source;render();openParts(i);
+      toast(j.source==='athena'?`✓ Athena expanded your vision → ${s.visionBrief.length} build directives`:`⚠ offline — split locally`,j.source!=='athena');}
+    else toast('expand failed',true);
+  }catch(e){toast('expand failed — '+e.message,true);}
+  finally{const b=document.querySelector(`[data-vexp="${i}"]`);if(b){b.classList.remove('busy');b.textContent='⚡ EXPAND';}}
+}
+function addSection(fid){ const f=feat(fid);
+  if(!f){ toast('drag a section block (VARIANT/PAGE) here',true); return; }
+  if(f.scope==='enhancement'){ toast(`“${f.name}” is an enhancement — drop it onto a section, not the canvas`,true); return; }
+  const arch=(f.sectionTypes&&f.sectionTypes[0]&&f.sectionTypes[0]!=='ALL')?f.sectionTypes[0]:'D';
+  const sec={id:'s'+Date.now().toString(36),arch,name:f.name.toUpperCase(),slot:'gap',desc:f.desc||'',
+    variant:(f.scope==='page'?null:fid),enhancements:[],media:(f.media&&f.media.needs!=='none')?{source:'stock'}:null,parts:[]};
+  SITES[curSite].sections.push(sec); focused=SITES[curSite].sections.length-1;
+  paletteMode='features'; curFolder='__this'; render();
+  toast(`＋ added “${f.name}” · now describe the VISION + drag in features/interactions`);
+}
+function moveSection(i,dir){ const a=SITES[curSite].sections,j=i+dir; if(j<0||j>=a.length)return; [a[i],a[j]]=[a[j],a[i]]; focused=(focused===i?j:focused===j?i:focused); render(); }
+function removeSection(i){ SITES[curSite].sections.splice(i,1); focused=null; render(); }
+function addPart(i,type){ const s=SITES[curSite].sections[i]; s.parts=s.parts||[]; s.parts.push({type,raw:'',data:null}); render();
+  const p=document.querySelector(`[data-parts="${i}"]`); if(p)p.classList.add('open'); }
+function movePart(i,pi,dir){ const p=SITES[curSite].sections[i].parts,j=pi+dir; if(j<0||j>=p.length)return; [p[pi],p[j]]=[p[j],p[pi]]; render(); const el2=document.querySelector(`[data-parts="${i}"]`); if(el2)el2.classList.add('open'); }
+function removePart(i,pi){ SITES[curSite].sections[i].parts.splice(pi,1); render(); const el2=document.querySelector(`[data-parts="${i}"]`); if(el2)el2.classList.add('open'); }
+
+function tryInject(i,fid){
+  const site=SITES[curSite], sec=site.sections[i], f=feat(fid); if(!f)return;
+  if(!fits(f,sec.arch)){toast(`✗ “${f.name}” doesn’t fit ${sec.name} — fits ${f.sectionTypes.map(a=>ARCH_NAME[a]||a).join(', ')}`,true);return;}
+  if(f.media && f.media.needs!=='none'){ pendingDrop={i,fid}; openMedia(f,sec); return; }
+  applyInject(i,fid,null);
+}
+function applyInject(i,fid,mediaSource){
+  const sec=SITES[curSite].sections[i], f=feat(fid);
+  if(f.scope==='section-variant'){ sec.variant=fid; if(mediaSource)sec.media={source:mediaSource}; }
+  else { if(!sec.enhancements.includes(fid))sec.enhancements.push(fid); if(mediaSource)sec.media={source:mediaSource}; }
+  render();
+  toast(`⬢ ${f.name} → ${sec.name}${mediaSource?` · ${mediaSource}`:''} · Athena will interpret × bible × ${SITES[curSite].cat}`);
+}
+function removeFeat(i,fid){const sec=SITES[curSite].sections[i];if(sec.variant===fid)sec.variant=null;sec.enhancements=sec.enhancements.filter(e=>e!==fid);render();}
+
+/* media modal */
+function openMedia(f,sec){el('mtitle').textContent=`“${f.name}” NEEDS ${f.media.needs.toUpperCase()}`;
+  el('mdesc').textContent=`Injecting into ${sec.name}. Upload the client’s real ${f.media.needs} for this section, or use category-matched stock for the preview (labelled swappable).`;
+  el('mStock').style.display=f.media.canStock?'':'none'; el('modal').classList.add('show');}
+el('mUpload').onclick=()=>{ el('mfile').click(); };            // open the file picker; injection completes on file select
+el('mfile').onchange=async e=>{ const files=[...e.target.files]; closeMedia();
+  if(pendingDrop){ applyInject(pendingDrop.i,pendingDrop.fid,'upload'); }
+  let ok=0; for(const f of files){ try{ const r=await fetch('/api/projects/'+curSite+'/upload?name='+encodeURIComponent(f.name),{method:'POST',headers:{'Content-Type':f.type||'application/octet-stream'},body:f}); if(r.ok)ok++; }catch{} }
+  pendingDrop=null; e.target.value=''; if(files.length) toast(`⬆ ${ok}/${files.length} file(s) uploaded to ${curSite}`); };
+el('mStock').onclick=()=>{closeMedia();if(pendingDrop)applyInject(pendingDrop.i,pendingDrop.fid,'stock');pendingDrop=null;};
+el('mCancel').onclick=()=>{closeMedia();pendingDrop=null;};
+function closeMedia(){el('modal').classList.remove('show');}
+
+/* palette — SECTIONS (draggable blocks) ⇄ FEATURES+INTERACTIONS (drop into a section) */
+function setMode(m){paletteMode=m;curFolder=m==='sections'?'__allsec':'__this';renderFolders();}
+document.querySelectorAll('#pmode button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+function modePool(){return CATALOG.filter(paletteMode==='sections'?isSectionScope:isFeatureScope);}
+function foldersList(){return [...new Set(modePool().map(f=>f.folder))];}
+function renderFolders(){
+  document.querySelectorAll('#pmode button').forEach(b=>b.classList.toggle('on',b.dataset.mode===paletteMode));
+  const tabs=el('ftabs'); tabs.innerHTML='';
+  const site=SITES[curSite]; const arch=focused!=null?site.sections[focused].arch:null;
+  if(paletteMode==='sections'){
+    const all=document.createElement('div'); all.className='ftab'+(curFolder==='__allsec'?' on':'');
+    all.innerHTML=`◫ ALL BLOCKS<span class="n">${modePool().length}</span>`;
+    all.onclick=()=>{curFolder='__allsec';renderFolders();}; tabs.appendChild(all);
+  } else {
+    const t0=document.createElement('div'); t0.className='ftab this'+(curFolder==='__this'?' on':'');
+    const n=arch?modePool().filter(f=>fits(f,arch)).length:0;
+    t0.innerHTML=`◈ THIS SECTION${arch?` · ${site.sections[focused].name}`:''}<span class="n">${arch?n:'–'}</span>`;
+    t0.onclick=()=>{curFolder='__this';renderFolders();}; tabs.appendChild(t0);
+  }
+  foldersList().forEach(fo=>{const b=document.createElement('div');b.className='ftab'+(curFolder===fo?' on':'');
+    b.innerHTML=`${fo}<span class="n">${modePool().filter(f=>f.folder===fo).length}</span>`;b.onclick=()=>{curFolder=fo;renderFolders();};tabs.appendChild(b);});
+  renderList();
+}
+function renderList(){
+  const list=el('flist'); list.innerHTML=''; const site=SITES[curSite];
+  let items;
+  if(curFolder==='__allsec'){ items=modePool(); }
+  else if(curFolder==='__this'){ if(focused==null){list.innerHTML='<div class="fempty">◈ click a section on the left to see the features + interactions that fit it — or switch to ◫ SECTIONS to add a new block</div>';return;}
+    const arch=site.sections[focused].arch; items=modePool().filter(f=>fits(f,arch)); }
+  else items=modePool().filter(f=>f.folder===curFolder);
+  if(!items.length){list.innerHTML=`<div class="fempty">${paletteMode==='sections'?'no section blocks in this group':'no features here that fit — try another group'}</div>`;return;}
+  const ICON={Hero:'▲',Reveal:'◇',Interactive:'✛',Motion:'≋',Text:'T',WebGL:'◈',Transitions:'⇄',Forms:'▤',Gallery:'▦',Proof:'❝',Signature:'★',Pages:'▧',Nav:'☰',Pricing:'$',Footer:'▂'};
+  items.forEach(ft=>{const c=document.createElement('div');c.className='fchip'+(curFeat&&curFeat.id===ft.id?' sel':'')+(armed&&armed.id===ft.id?' armed':'');c.draggable=true;c.dataset.fid=ft.id;
+    const md=ft.media&&ft.media.needs!=='none'?`<span class="md">◐ ${ft.media.needs}</span>`:'';
+    c.innerHTML=`<span class="ic">${ICON[ft.folder]||'•'}</span><span class="body"><span class="fn">${ft.name}<span class="sc">${ft.scope==='section-variant'?'VARIANT':ft.scope==='page'?'PAGE':'ENHANCE'}</span>${md}</span><br><span class="fd">${ft.desc}</span></span><span class="grip">⋮⋮</span>`;
+    c.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',ft.id);e.dataTransfer.effectAllowed='copy';curFeat=ft;});
+    c.addEventListener('mouseenter',()=>{if(!armed)selectFeat(ft);});
+    c.addEventListener('click',()=>armFeature(ft));
+    list.appendChild(c);});
+}
+function armFeature(ft){ armed=ft; selectFeat(ft);
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.toggle('armed',c.dataset.fid===ft.id));
+  toast(`▣ “${ft.name}” armed — click a SECTION to place it, or the ＋ zone to add it as a new section`); }
+/* icy-tech demo library — loaded from /demos/index.json */
+let DEMOS={mechanics:[],features:[]};
+fetch('/demos/index.json').then(r=>r.ok?r.json():null).then(d=>{if(d)DEMOS=d;}).catch(()=>{});
+const demoFrame=el('demoFrame');
+function demoUrl(ft){
+  if(DEMOS.features&&DEMOS.features.includes(ft.id)) return '/demos/f/'+ft.id+'.html';
+  if(DEMOS.mechanics&&DEMOS.mechanics.includes(ft.viz)) return '/demos/m/'+ft.viz+'.html';
+  return null;
+}
+let curDemoUrl=null, curDemoName='';
+function showDemo(ft){
+  const u=demoUrl(ft);
+  const eb=el('expandBtn');
+  if(u){ if(demoFrame.dataset.src!==u){demoFrame.dataset.src=u;demoFrame.src=u;} demoFrame.style.display='block'; cv.style.display='none';
+    curDemoUrl=u; curDemoName=ft.name; eb.classList.add('live'); }
+  else { demoFrame.style.display='none'; demoFrame.removeAttribute('src'); demoFrame.dataset.src=''; cv.style.display='block';
+    curDemoUrl=null; eb.classList.remove('live'); }
+}
+/* full-view overlay */
+const dmodal=el('dmodal'),dmFrame=el('dmFrame');
+function openFull(){ if(!curDemoUrl)return; dmFrame.src=curDemoUrl; el('dmName').textContent=curDemoName;
+  el('dmTag').textContent='● '+(curFeat?curFeat.viz.toUpperCase():''); dmodal.classList.add('show'); }
+function closeFull(){ dmodal.classList.remove('show'); dmFrame.removeAttribute('src'); }
+el('expandBtn').addEventListener('click',openFull);
+el('dmClose').addEventListener('click',closeFull);
+el('dmOpen').addEventListener('click',()=>{if(curDemoUrl)window.open(curDemoUrl,'_blank');});
+dmodal.addEventListener('click',e=>{if(e.target===dmodal)closeFull();});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&dmodal.classList.contains('show'))closeFull();});
+function selectFeat(ft){curFeat=ft;el('vizEmpty').style.display='none';el('dtag').textContent='● '+ft.viz.toUpperCase();
+  el('dnm').innerHTML=ft.name+`<span class="scope">${ft.scope==='section-variant'?'SECTION VARIANT':ft.scope==='page'?'PAGE':'ENHANCEMENT'}</span>`;
+  el('dds').textContent=ft.desc;
+  el('dmeta').innerHTML=`FITS → <b>${ft.sectionTypes.includes('ALL')?'ANY':ft.sectionTypes.map(a=>ARCH_NAME[a]||a).join(' · ')}</b>`+
+    (ft.media&&ft.media.needs!=='none'?`<span>MEDIA → <span class="m">${ft.media.needs}${ft.media.canStock?' (stock ok)':''}</span></span>`:'')+
+    `<span>SRC → ${ft.source}</span>`;
+  showDemo(ft);
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.toggle('sel',c.dataset.fid===ft.id));}
+
+/* retro visualizer */
+const cv=el('viz'),ctx=cv.getContext('2d');let dpr=Math.min(devicePixelRatio||1,2),VW,VH,mx=0,my=0;
+function sizeViz(){const w=cv.parentElement.clientWidth,h=cv.parentElement.clientHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);VW=w;VH=h;}
+cv.parentElement.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;});
+const A='#ffb000',AD='#a86e12',G='#5ce03a',HO='#00c8ff';
+function vt(t){ctx.clearRect(0,0,VW,VH);const cx=VW/2,cy=VH/2;if(!curFeat)return;const k=curFeat.viz;ctx.strokeStyle=AD;ctx.lineWidth=1;
+ if(k==='particles'){for(let i=0;i<70;i++){const a=i*0.6+t,r=20+((i*13)%(Math.min(VW,VH)/2-16));const x=cx+Math.cos(a)*r,y=cy+Math.sin(a*1.1)*r*0.6;ctx.fillStyle=i%7?A:HO;ctx.globalAlpha=0.4+0.6*Math.abs(Math.sin(a));ctx.fillRect(x,y,2,2);}ctx.globalAlpha=1;}
+ else if(k==='gradient'){for(let i=0;i<5;i++){const g=ctx.createRadialGradient(cx+Math.sin(t+i)*40,cy+Math.cos(t*0.7+i)*22,4,cx,cy,VW*0.5);g.addColorStop(0,i%2?'rgba(255,176,0,.10)':'rgba(92,224,58,.08)');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,VW,VH);}}
+ else if(k==='reveal'||k==='mask'){const p=(Math.sin(t)*0.5+0.5);ctx.fillStyle='#241400';ctx.fillRect(cx-70,cy-14,140,28);ctx.save();ctx.beginPath();ctx.rect(cx-70,cy-14+28*(1-p),140,28*p);ctx.clip();ctx.fillStyle=A;ctx.fillRect(cx-60,cy-6,110,5);ctx.fillStyle=AD;ctx.fillRect(cx-60,cy+3,80,4);ctx.restore();ctx.strokeStyle=AD;ctx.strokeRect(cx-70,cy-14,140,28);}
+ else if(k==='borderdraw'){const P=(t*0.5)%1;let d=P*2*(140+56);const seg=[[cx-70,cy-28,140,'h'],[cx+70,cy-28,56,'v'],[cx+70,cy+28,-140,'h'],[cx-70,cy+28,-56,'v']];ctx.strokeStyle=G;ctx.lineWidth=2;ctx.beginPath();for(const[sx,sy,ln,dir]of seg){const L=Math.abs(ln),use=Math.min(L,d);d-=use;if(use<=0)break;ctx.moveTo(sx,sy);ctx.lineTo(dir==='h'?sx+Math.sign(ln)*use:sx,dir==='v'?sy+Math.sign(ln)*use:sy);}ctx.stroke();}
+ else if(k==='stagger'){for(let i=0;i<5;i++){const o=Math.max(0,Math.min(1,Math.sin(t-i*0.25)*0.5+0.5));ctx.globalAlpha=o;ctx.fillStyle=i%2?A:AD;ctx.fillRect(cx-64,cy-26+i*11-(1-o)*8,110,7);}ctx.globalAlpha=1;}
+ else if(k==='magnetic'){const bx=cx+(mx-cx)*0.25,by=cy+(my-cy)*0.25;ctx.strokeStyle=AD;ctx.setLineDash([3,4]);ctx.beginPath();ctx.arc(cx,cy,42,0,7);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=G;ctx.globalAlpha=.8;ctx.fillRect(bx-26,by-10,52,20);ctx.globalAlpha=1;ctx.fillStyle='#050300';ctx.font='9px monospace';ctx.fillText('CTA',bx-9,by+3);ctx.fillStyle=HO;ctx.fillRect(mx-2,my-2,4,4);}
+ else if(k==='cursor'){ctx.fillStyle='#0a0600';ctx.fillRect(cx-80,cy-30,160,60);const g=ctx.createRadialGradient(mx,my,2,mx,my,60);g.addColorStop(0,'rgba(255,176,0,.5)');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,VW,VH);}
+ else if(k==='tilt'){const rx=(my-cy)/VH,ry=(mx-cx)/VW;ctx.save();ctx.translate(cx,cy);ctx.transform(1,rx*0.4,-ry*0.4,1,0,0);ctx.strokeStyle=A;ctx.fillStyle='#241400';ctx.fillRect(-46,-30,92,60);ctx.strokeRect(-46,-30,92,60);ctx.fillStyle=AD;ctx.fillRect(-36,-6,60,5);ctx.restore();}
+ else if(k==='pin'){const p=(Math.sin(t)*0.5+0.5);ctx.strokeStyle=AD;ctx.strokeRect(cx-70,cy-30,140,60);for(let i=0;i<3;i++){ctx.globalAlpha=i===Math.floor(p*3)?1:0.25;ctx.fillStyle=A;ctx.fillRect(cx-60,cy-22+i*20,20,14);ctx.fillStyle=AD;ctx.fillRect(cx-34,cy-18+i*20,90,5);}ctx.globalAlpha=1;ctx.fillStyle=HO;ctx.fillRect(cx+64,cy-30+60*p,3,8);}
+ else if(k==='parallax'){for(let L=0;L<3;L++){const off=Math.sin(t+L)*(6+L*8);ctx.globalAlpha=0.4+L*0.2;ctx.fillStyle=L===2?A:AD;ctx.fillRect(cx-70+off,cy-24+L*16,140,12);}ctx.globalAlpha=1;}
+ else if(k==='marquee'){const off=(t*40)%40;ctx.fillStyle=A;for(let x=-40;x<VW+40;x+=40){ctx.fillRect(x+off,cy-3,22,6);}ctx.strokeStyle=AD;ctx.strokeRect(cx-VW*0.42,cy-12,VW*0.84,24);}
+ else if(k==='slider'){const sx=cx+Math.sin(t)*60;ctx.fillStyle='#241400';ctx.fillRect(cx-70,cy-26,140,52);ctx.save();ctx.beginPath();ctx.rect(cx-70,cy-26,sx-(cx-70),52);ctx.clip();ctx.fillStyle='#0e2a06';ctx.fillRect(cx-70,cy-26,140,52);ctx.fillStyle=G;ctx.fillRect(cx-60,cy-4,50,4);ctx.restore();ctx.strokeStyle=HO;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sx,cy-26);ctx.lineTo(sx,cy+26);ctx.stroke();ctx.fillStyle=HO;ctx.beginPath();ctx.arc(sx,cy,6,0,7);ctx.fill();}
+ else if(k==='counter'){ctx.fillStyle=A;ctx.font='bold 30px monospace';const n=Math.floor((Math.sin(t)*0.5+0.5)*1240);ctx.fillText(n+'+',cx-40,cy+8);ctx.fillStyle=AD;ctx.font='8px monospace';ctx.fillText('JOBS COMPLETED',cx-40,cy+22);}
+ else if(k==='bento'){const b=[[-70,-28,40,34],[-26,-28,44,20],[22,-28,48,56],[-70,10,40,18],[-26,-4,44,32]];b.forEach((r,i)=>{ctx.fillStyle=i===2?'#241400':'#140c00';ctx.strokeStyle=i===2?A:AD;ctx.fillRect(cx+r[0],cy+r[1],r[2],r[3]);ctx.strokeRect(cx+r[0],cy+r[1],r[2],r[3]);});}
+ else if(k==='ledger'){for(let i=0;i<4;i++){ctx.strokeStyle=AD;ctx.beginPath();ctx.moveTo(cx-70,cy-22+i*14);ctx.lineTo(cx+40,cy-22+i*14);ctx.stroke();ctx.fillStyle=A;ctx.fillRect(cx+52,cy-27+i*14,18,5);}}
+ else if(k==='map'){ctx.strokeStyle=AD;ctx.strokeRect(cx-70,cy-28,140,56);ctx.beginPath();ctx.moveTo(cx-70,cy+8);ctx.quadraticCurveTo(cx-10,cy-18,cx+30,cy);ctx.quadraticCurveTo(cx+60,cy+12,cx+70,cy-6);ctx.stroke();const px=cx+Math.sin(t)*30;ctx.fillStyle=HO;ctx.beginPath();ctx.arc(px,cy+Math.cos(t)*8,3,0,7);ctx.fill();}
+ else{ctx.strokeStyle=AD;ctx.strokeRect(cx-60,cy-24,120,48);}}
+let T=0;function loop(){T+=0.016;if(cv.clientWidth&&cv.width!==Math.round(cv.clientWidth*dpr))sizeViz();vt(T);requestAnimationFrame(loop);}
+addEventListener('resize',sizeViz);
+
+let tt=null;function toast(m,err){const e=el('toast');e.textContent=m;e.className='toast show'+(err?' err':'');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),2800);}
+el('apply').onclick=async()=>{const s=SITES[curSite];const n=s.sections.reduce((a,x)=>a+(x.variant?1:0)+x.enhancements.length,0);
+  const body={label:s.label,cat:s.cat,url:s.url,sections:s.sections};
+  if(awaitingReview){
+    // APPROVE & BUILD — save the edited manifest + release the paused circuit
+    try{ await fetch('/api/projects/'+curSite+'/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'approve',manifest:body})}); }catch{}
+    awaitingReview=false; el('reviewBanner').classList.remove('on'); el('apply').textContent='✓ APPLY EDITS'; el('apply').classList.remove('approve');
+    toast(`✓ APPROVED · ${s.label.split(' · ')[0]} · ${n} features → circuit resuming build (P5)`);
+  } else {
+    try{ await fetch('/api/projects/'+curSite+'/manifest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); }catch{}
+    toast(`✓ ${s.label.split(' · ')[0]} · ${n} features · manifest saved`);
+  }
+  publishEditing();};
+
+/* EXECUTE — lock the schematic + hand it to the NEOFORM build; pipeline lights up */
+el('execute').onclick=async()=>{
+  const s=SITES[curSite]; if(!s.sections.length){toast('compose a layout first — drag in some sections',true);return;}
+  const body={label:s.label,cat:s.cat,url:s.url,sections:s.sections};
+  const btn=el('execute'); btn.classList.add('busy'); btn.textContent='▶ …';
+  try{
+    const r=await fetch('/api/projects/'+curSite+'/build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({manifest:body,source:'edit-execute'})});
+    const j=await r.json();
+    if(j&&j.ok){ toast(j.message||`▶ build started · ${j.sections} sections`); publishEditing(); }
+    else toast('execute failed — '+((j&&j.error)||r.status),true);
+  }catch(e){toast('execute failed — '+e.message,true);}
+  finally{btn.classList.remove('busy');btn.textContent='▶ EXECUTE BUILD';}
+};
+/* share the currently-open schematic with the rest of Athena (the chat reads this) */
+function publishEditing(){ try{ const s=SITES[curSite];
+  localStorage.setItem('athena:editing',JSON.stringify({slug:curSite,label:(s&&s.label)||curSite,sections:(s&&s.sections.length)||0,at:Date.now()})); }catch{} }
+
+render();sizeViz();loop();hydrateManifest(QSLUG);checkReview(QSLUG);publishEditing();
+</script>
+</body>
+</html>

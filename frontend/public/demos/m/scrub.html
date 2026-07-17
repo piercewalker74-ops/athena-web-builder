@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scrub</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px;width:100%;max-width:460px}
+ .frame{height:230px;border-radius:16px;position:relative;overflow:hidden;display:grid;place-items:center}
+ .frame .filler{position:absolute;inset:0;border-radius:0}
+ .car{position:relative;font-size:56px;transition:transform .05s linear;filter:drop-shadow(0 6px 12px rgba(0,0,0,.4))}
+ .fnum{position:absolute;top:12px;left:14px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--frost);background:rgba(4,18,30,.55);padding:3px 9px;border-radius:6px}
+ .track{height:5px;border-radius:999px;background:var(--line);position:relative;cursor:pointer}
+ .track .f{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--cyan);box-shadow:var(--glow)}
+ .track .kn{position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:var(--ice);box-shadow:var(--glow)}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em;text-align:center}
+</style></head>
+<body class="demo"><div class="demo-name">m · scroll-scrub</div>
+<div class="stage">
+  <div class="frame frost"><span class="fnum" id="fn">FRAME 000</span><div class="filler"></div><div class="car" id="car">🚗</div></div>
+  <div class="track" id="tr"><div class="f" id="tf"></div><div class="kn" id="kn"></div></div>
+  <div class="hint">scrub the timeline · frames advance with progress</div>
+</div>
+<script>
+const car=document.getElementById('car'),fn=document.getElementById('fn'),tf=document.getElementById('tf'),kn=document.getElementById('kn'),tr=document.getElementById('tr');
+function set(p){p=Math.max(0,Math.min(1,p));tf.style.width=p*100+'%';kn.style.left=p*100+'%';
+ car.style.transform=`translateX(${(p-.5)*180}px) rotateY(${p*20}deg) scale(${.85+p*.4})`;fn.textContent='FRAME '+String(Math.round(p*120)).padStart(3,'0');}
+let drag=false;tr.addEventListener('mousedown',e=>{drag=true;mv(e);});addEventListener('mouseup',()=>drag=false);
+addEventListener('mousemove',e=>{if(drag)mv(e);});
+function mv(e){const r=tr.getBoundingClientRect();set((e.clientX-r.left)/r.width);}
+let a=0;setInterval(()=>{if(!drag){a+=.02;set(.5+Math.sin(a)*.5);}},30);
+</script></body></html>

@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>spec-count-up</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+ @media(min-width:480px){.grid{grid-template-columns:repeat(4,1fr)}}
+ .spec{padding:20px 12px;text-align:center}
+ .num{font-size:clamp(24px,5vw,40px);font-weight:700;letter-spacing:-.02em;line-height:1}
+ .num .u{font-size:.45em;color:var(--ice);opacity:.75;margin-left:2px;letter-spacing:0}
+ .num.str{font-size:clamp(15px,3vw,20px)}
+ .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ice);opacity:.7;margin-top:8px}
+</style></head>
+<body class="demo"><div class="demo-name">f · spec-count-up</div>
+<div class="stage">
+  <div class="eyebrow">EMERALD 45 · TURF SPECS</div>
+  <h2 class="big" style="font-size:22px">Built to the numbers</h2>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+// [target, decimals, unit, label]  — string specs use s:'text'
+const SPECS=[
+ {t:45,d:0,u:'oz',l:'FACE WEIGHT'},
+ {t:1.75,d:2,u:'in',l:'PILE HEIGHT'},
+ {t:15,d:0,u:'yr',l:'WARRANTY'},
+ {s:'Lead-Free',l:'CERTIFIED'}
+];
+const grid=document.getElementById('grid');
+SPECS.forEach(sp=>{const d=document.createElement('div');d.className='spec frost';
+  d.innerHTML=`<div class="num glow ${sp.s?'str':''}"></div><div class="lbl">${sp.l}</div>`;grid.appendChild(d);});
+function ease(t){return 1-Math.pow(1-t,3);}
+function run(){const nodes=[...grid.querySelectorAll('.num')];const start=performance.now();
+ (function step(now){const p=Math.min(1,(now-start)/1500);
+   SPECS.forEach((sp,i)=>{const el=nodes[i];
+     if(sp.s){el.textContent=sp.s;return;}
+     const v=(ease(p)*sp.t).toFixed(sp.d);el.innerHTML=v+`<span class="u">${sp.u}</span>`;});
+   if(p<1)requestAnimationFrame(step);})(start);}
+run();setInterval(run,3800);
+</script></body></html>

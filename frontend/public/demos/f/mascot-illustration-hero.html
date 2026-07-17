@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mascot-illustration-hero</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:center}
+ @media(max-width:480px){.stage{grid-template-columns:1fr;text-align:center}.art{order:-1}}
+ .copy .big{font-size:clamp(24px,4.6vw,40px);margin:10px 0 12px}
+ .cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+ @media(max-width:480px){.cta{justify-content:center}}
+ .art{display:flex;justify-content:center}
+ .drop{width:100%;max-width:230px;animation:bob 3.4s ease-in-out infinite}
+ @keyframes bob{50%{transform:translateY(-9px)}}
+ .ray{transform-origin:130px 118px;animation:spin 26s linear infinite}
+ @keyframes spin{to{transform:rotate(360deg)}}
+ .pupil{transition:transform .1s ease-out}
+ .shine{animation:tw 3.4s ease-in-out infinite}
+ @keyframes tw{50%{opacity:.4}}
+</style></head>
+<body class="demo"><div class="demo-name">f · mascot-illustration-hero</div>
+<div class="stage">
+  <div class="copy">
+    <div class="eyebrow">MEET DRIPP</div>
+    <h1 class="big glow">Spotless windows,<br>zero streaks.</h1>
+    <div class="sub">Our little water-drop does the heavy lifting so your glass stays crystal — booked online in under a minute.</div>
+    <div class="cta"><button class="btn">Book a clean</button><button class="btn ghost">Meet the crew</button></div>
+  </div>
+  <div class="art">
+    <svg class="drop" viewBox="0 0 260 300" id="m">
+      <g class="ray" fill="none" stroke="#2fe0ff" stroke-width="4" stroke-linecap="round" opacity=".55">
+        <line x1="130" y1="8" x2="130" y2="30"/><line x1="220" y1="118" x2="242" y2="118"/>
+        <line x1="18" y1="118" x2="40" y2="118"/><line x1="196" y1="52" x2="212" y2="36"/>
+        <line x1="64" y1="52" x2="48" y2="36"/><line x1="196" y1="184" x2="212" y2="200"/>
+        <line x1="64" y1="184" x2="48" y2="200"/>
+      </g>
+      <path d="M130 40 C185 118 205 150 205 190 A75 75 0 1 1 55 190 C55 150 75 118 130 40 Z"
+        fill="url(#g)" stroke="#8fe6ff" stroke-width="2"/>
+      <defs><radialGradient id="g" cx="42%" cy="38%" r="72%">
+        <stop offset="0" stop-color="#c8f2ff"/><stop offset="60%" stop-color="#5cd6f2"/><stop offset="100%" stop-color="#2b9fc2"/>
+      </radialGradient></defs>
+      <ellipse class="shine" cx="98" cy="150" rx="16" ry="26" fill="#eaf6ff" opacity=".7"/>
+      <g class="eyes">
+        <circle cx="108" cy="196" r="16" fill="#04121e"/><circle cx="160" cy="196" r="16" fill="#04121e"/>
+        <circle class="pupil" cx="108" cy="196" r="6" fill="#eaf6ff"/><circle class="pupil" cx="160" cy="196" r="6" fill="#eaf6ff"/>
+      </g>
+      <ellipse cx="88" cy="222" rx="12" ry="7" fill="#2fe0ff" opacity=".45"/>
+      <ellipse cx="180" cy="222" rx="12" ry="7" fill="#2fe0ff" opacity=".45"/>
+      <path d="M118 224 Q134 240 150 224" fill="none" stroke="#04121e" stroke-width="5" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>
+<script>
+const pupils=[...document.querySelectorAll('.pupil')];
+function move(x,y){pupils.forEach(p=>{const r=p.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;
+ const a=Math.atan2(y-cy,x-cx),d=Math.min(6,Math.hypot(x-cx,y-cy)/26);
+ p.setAttribute('transform',`translate(${Math.cos(a)*d},${Math.sin(a)*d})`);});}
+document.addEventListener('mousemove',e=>move(e.clientX,e.clientY));
+// idle wander
+let t=0;setInterval(()=>{t+=.05;const r=document.getElementById('m').getBoundingClientRect();
+ move(r.left+r.width/2+Math.cos(t)*90,r.top+r.height/2+Math.sin(t*1.3)*70);},90);
+</script></body></html>

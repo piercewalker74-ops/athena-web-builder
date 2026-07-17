@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>lightbox-gallery</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+ .cell{position:relative;height:88px;border-radius:10px;overflow:hidden;cursor:pointer}
+ .cell .filler{position:absolute;inset:0;border-radius:0}
+ .cell .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 8px 6px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+   color:var(--frost);background:linear-gradient(transparent,rgba(4,18,30,.85));opacity:0;transition:opacity .3s}
+ .cell:hover .cap{opacity:1}
+ .cell.active{outline:2px solid var(--cyan);outline-offset:-2px}
+ .box{position:absolute;inset:0;background:rgba(4,12,20,.86);backdrop-filter:blur(4px);border-radius:12px;display:none;
+   align-items:center;justify-content:center;z-index:5}
+ .box.open{display:flex}
+ .lb{position:relative;width:78%;max-width:360px;height:230px}
+ .lb .filler{position:absolute;inset:0;border-radius:14px}
+ .lb .lcap{position:absolute;left:0;right:0;bottom:-26px;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ice2)}
+ .nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+   cursor:pointer;color:#04121e;background:var(--cyan);box-shadow:var(--glow);font-size:15px}
+ .prev{left:-6px}.next{right:-6px}
+ .x{position:absolute;top:10px;right:12px;font-size:16px;color:var(--ice2);cursor:pointer;z-index:6}
+</style></head>
+<body class="demo"><div class="demo-name">f · lightbox-gallery</div>
+<div class="stage">
+  <div class="eyebrow">PROJECT GALLERY · CLICK ANY TILE</div>
+  <div class="grid" id="grid"></div>
+  <div class="box" id="box">
+    <div class="x" id="x">✕</div>
+    <div class="lb"><div class="filler eel" id="big"><span class="tag" id="bt">01</span></div>
+      <div class="nav prev" id="prev">‹</div><div class="nav next" id="next">›</div>
+      <div class="lcap" id="lcap">Backyard turf — 1,200 sq ft</div>
+    </div>
+  </div>
+</div>
+<script>
+const caps=['Backyard turf · 1,200 sqft','Putting green · 6 holes','Rooftop deck · Chicago','Pet run · drainage base','Playground fall-zone','Pool surround · bullnose'];
+const grid=document.getElementById('grid'),box=document.getElementById('box'),big=document.getElementById('big'),
+ bt=document.getElementById('bt'),lcap=document.getElementById('lcap');
+let idx=0,auto=true;
+caps.forEach((c,i)=>{const d=document.createElement('div');d.className='cell frost';
+ d.innerHTML=`<div class="filler"><span class="tag">0${i+1}</span></div><div class="cap">${c}</div>`;
+ d.onclick=()=>{open(i);auto=false;};grid.appendChild(d);});
+const cells=[...grid.children];
+function show(i){idx=(i+caps.length)%caps.length;bt.textContent='0'+(idx+1);lcap.textContent=caps[idx];
+ cells.forEach((c,j)=>c.classList.toggle('active',j===idx));}
+function open(i){box.classList.add('open');show(i);}
+function close(){box.classList.remove('open');cells.forEach(c=>c.classList.remove('active'));auto=true;}
+document.getElementById('prev').onclick=e=>{e.stopPropagation();show(idx-1);};
+document.getElementById('next').onclick=e=>{e.stopPropagation();show(idx+1);};
+document.getElementById('x').onclick=close;
+addEventListener('keydown',e=>{if(!box.classList.contains('open'))return;
+ if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(idx-1);if(e.key==='ArrowRight')show(idx+1);});
+// autoplay walkthrough so it looks alive
+open(0);setInterval(()=>{if(auto){show(idx+1);}},2200);
+</script></body></html>

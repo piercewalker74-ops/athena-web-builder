@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>warranty-claim-form</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:440px;width:100%}
+ .card{padding:20px}
+ h1{font-size:20px;margin-bottom:2px}
+ .sub{margin-bottom:16px}
+ label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase;margin:0 0 5px}
+ .field{margin-bottom:14px}
+ select,input{width:100%;padding:10px 12px;border-radius:9px;background:var(--glass);border:1px solid var(--line);color:var(--frost);font-family:var(--sans);font-size:13px}
+ select:focus,input:focus{outline:none;border-color:var(--cyan);box-shadow:var(--glow)}
+ .zone{border:2px dashed var(--line2);border-radius:14px;padding:16px;text-align:center;transition:all .3s;background:var(--glass);cursor:pointer}
+ .zone.hot{border-color:var(--cyan);background:rgba(47,224,255,.06);box-shadow:var(--glow)}
+ .zone .ic{font-size:26px}.zone p{font-size:10px;color:var(--ice);opacity:.6;margin-top:2px}
+ .thumbs{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+ .th{position:relative;width:52px;height:52px;border-radius:8px;overflow:hidden;opacity:0;transform:scale(.8);transition:all .3s}
+ .th.in{opacity:1;transform:none}
+ .th .x{position:absolute;top:2px;right:2px;width:15px;height:15px;border-radius:50%;background:rgba(4,18,30,.85);color:var(--ice2);font-size:10px;display:grid;place-items:center;cursor:pointer}
+ .cnt{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice);opacity:.7;margin-top:8px}
+ .cnt.ok{color:var(--teal)}
+ .honey{position:absolute;left:-9999px}
+ .done{text-align:center;padding:22px 10px;display:none}
+ .done .ck{width:52px;height:52px;border-radius:50%;background:linear-gradient(120deg,var(--cyan),var(--teal));display:grid;place-items:center;font-size:26px;color:#04121e;margin:0 auto 12px;box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">f · warranty-claim-form</div>
+<div class="stage">
+ <div class="frost card" id="form">
+  <div class="eyebrow">TURF WARRANTY · FILE A CLAIM</div>
+  <h1 class="glow">Report a defect</h1>
+  <p class="sub">Fade, seam lift or matting? Submit 3+ photos and we'll dispatch a crew.</p>
+  <div class="field"><label>Product</label>
+   <select><optgroup label="Pet Turf"><option>K9 ProFlow 1.5"</option><option>PetGrass Elite 1.75"</option></optgroup>
+   <optgroup label="Landscape"><option selected>Emerald Ridge 2.0"</option><option>Meadow Blend 1.5"</option></optgroup></select></div>
+  <div class="field"><label>Install date</label><input type="text" value="04 / 2024"></div>
+  <div class="field"><label>Reference photos (min 3)</label>
+   <div class="zone" id="z"><div class="ic">⬆</div><p>click to add compressed photos</p></div>
+   <div class="thumbs" id="thumbs"></div>
+   <div class="cnt" id="cnt">0 of 3 required · client-side compressed</div>
+  </div>
+  <input class="honey" tabindex="-1" autocomplete="off" placeholder="Leave blank">
+  <button class="btn" id="sub" style="width:100%;justify-content:center">Submit claim</button>
+ </div>
+ <div class="frost card done" id="done">
+  <div class="ck">✓</div><h1 class="glow">Claim #TG-4471 filed</h1>
+  <p class="sub" style="margin:6px 0 0">A turf specialist reviews your photos within 2 business days.</p>
+ </div>
+</div>
+<script>
+const z=document.getElementById('z'),thumbs=document.getElementById('thumbs'),cnt=document.getElementById('cnt');
+let photos=[];
+function render(){thumbs.innerHTML='';photos.forEach((p,i)=>{const t=document.createElement('div');t.className='th filler';
+ t.innerHTML='<span class="x">×</span>';t.querySelector('.x').onclick=e=>{e.stopPropagation();photos.splice(i,1);render();};
+ thumbs.appendChild(t);requestAnimationFrame(()=>t.classList.add('in'));});
+ const n=photos.length;cnt.textContent=n>=3?n+' photos attached · ready to submit':n+' of 3 required · client-side compressed';
+ cnt.classList.toggle('ok',n>=3);}
+z.onclick=()=>{z.classList.add('hot');setTimeout(()=>z.classList.remove('hot'),400);if(photos.length<6){photos.push(1);render();}};
+document.getElementById('sub').onclick=()=>{if(photos.length<3){z.classList.add('hot');cnt.textContent='⚠ add '+(3-photos.length)+' more photo(s)';return;}
+ document.getElementById('form').style.display='none';document.getElementById('done').style.display='block';};
+// auto demo loop
+let step=0;function demo(){step++;const f=document.getElementById('form'),d=document.getElementById('done');
+ if(step<=3){photos=Array(step).fill(1);render();}
+ else if(step===4){document.getElementById('sub').click();}
+ else{d.style.display='none';f.style.display='block';photos=[];render();step=0;}}
+setInterval(demo,1100);
+</script></body></html>

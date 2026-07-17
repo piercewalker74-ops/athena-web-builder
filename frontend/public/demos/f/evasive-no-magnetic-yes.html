@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evasive No / Magnetic Yes</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:460px;height:300px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;border-radius:16px}
+ h2{font-size:24px;text-align:center}
+ .btns{position:relative;width:100%;height:80px}
+ .yes,.no{position:absolute;top:20px}
+ .yes{left:26%;transition:transform .18s ease-out}
+ .no{right:26%;transition:transform .25s cubic-bezier(.3,1.2,.5,1)}
+ .no{background:transparent;color:var(--ice2);border:1px solid var(--line2);box-shadow:none}
+ .hint{position:absolute;bottom:16px;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">f · evasive-no / magnetic-yes</div>
+<div class="stage frost">
+  <h2 class="glow">Ready to book your install?</h2>
+  <div class="btns">
+    <button class="btn yes" id="yes">Yes, let's go →</button>
+    <button class="btn no" id="no">Not now</button>
+  </div>
+  <div class="hint">the “yes” leans toward you · the “no” dodges your cursor</div>
+</div>
+<script>
+const yes=document.getElementById('yes'),no=document.getElementById('no');
+document.addEventListener('mousemove',e=>{
+ // magnetic yes
+ const yr=yes.getBoundingClientRect(),ycx=yr.left+yr.width/2,ycy=yr.top+yr.height/2;
+ const ydx=e.clientX-ycx,ydy=e.clientY-ycy,yd=Math.hypot(ydx,ydy);
+ if(yd<140)yes.style.transform=`translate(${ydx*.28}px,${ydy*.28}px) scale(1.06)`;else yes.style.transform='';
+ // evasive no
+ const nr=no.getBoundingClientRect(),ncx=nr.left+nr.width/2,ncy=nr.top+nr.height/2;
+ const ndx=ncx-e.clientX,ndy=ncy-e.clientY,nd=Math.hypot(ndx,ndy);
+ if(nd<110){const f=(110-nd)/110*70;no.style.transform=`translate(${Math.sign(ndx)*f}px,${Math.sign(ndy)*f*.5}px)`;}
+});
+</script></body></html>

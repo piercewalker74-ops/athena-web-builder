@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>faq-accordion</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:8px;max-width:520px}
+ .cat{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--cyan);text-transform:uppercase;margin:12px 2px 2px;opacity:.85}
+ .cat:first-child{margin-top:0}
+ .item{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--glass)}
+ .q{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;font-size:14px;font-weight:600}
+ .tog{position:relative;width:14px;height:14px;flex:0 0 auto}
+ .tog:before,.tog:after{content:'';position:absolute;background:var(--cyan);border-radius:2px;box-shadow:0 0 8px rgba(47,224,255,.6);transition:transform .35s}
+ .tog:before{left:0;top:6px;width:14px;height:2px}
+ .tog:after{left:6px;top:0;width:2px;height:14px}
+ .item.on .tog:after{transform:scaleY(0)}
+ .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,.8,.3,1)}
+ .item.on .a{grid-template-rows:1fr}
+ .a>div{overflow:hidden}
+ .a p{padding:0 16px 14px;font-size:12px;color:var(--ice);opacity:.75;line-height:1.6}
+ .item.on{border-color:var(--line2);box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">f · faq-accordion</div>
+<div class="stage">
+ <div class="eyebrow" style="margin-bottom:2px">ARTIFICIAL TURF · FAQ</div>
+ <div id="wrap"></div>
+</div>
+<script>
+const DATA=[['Durability & Pets',[
+ ['Will my dog ruin it?','No. Our pet turf drains at 30 in/hr and rinses clean — no dead spots, no odor when installed over our antimicrobial infill.'],
+ ['Does it get hot in summer?','Landscape blends run warm in direct sun; HydroChill infill drops surface temp up to 30°F on the hottest days.']]],
+ ['Install & Warranty',[
+ ['How long does it last?','15-year manufacturer warranty against fade and matting. Most lawns look new past 20 years with a rinse now and then.'],
+ ['Can you install on a slope?','Yes — we grade, compact and pin every edge. Slopes up to 30° are routine for our crews.']]]];
+const wrap=document.getElementById('wrap');const items=[];
+DATA.forEach(([cat,qs])=>{const c=document.createElement('div');c.className='cat';c.textContent=cat;wrap.appendChild(c);
+ qs.forEach(([q,a])=>{const d=document.createElement('div');d.className='item';
+  d.innerHTML=`<div class="q">${q}<span class="tog"></span></div><div class="a"><div><p>${a}</p></div></div>`;
+  d.querySelector('.q').onclick=()=>toggle(d);wrap.appendChild(d);items.push(d);});});
+function toggle(d){const on=!d.classList.contains('on');items.forEach(x=>x.classList.remove('on'));if(on)d.classList.add('on');}
+let cur=-1;function cycle(){cur=(cur+1)%items.length;toggle(items[cur]);}
+cycle();setInterval(cycle,2500);
+</script></body></html>

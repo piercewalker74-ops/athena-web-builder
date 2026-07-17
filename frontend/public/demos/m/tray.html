@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>tray</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:400px;height:340px;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
+ .scene{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(160deg,#082238,#04121e)}
+ .scene h2{font-size:22px}
+ .fab{position:absolute;bottom:18px;right:18px;width:52px;height:52px;border-radius:50%;background:linear-gradient(120deg,var(--cyan),var(--ice));
+   display:grid;place-items:center;font-size:22px;color:#04121e;cursor:pointer;box-shadow:var(--glow);z-index:3;transition:transform .3s}
+ .fab.open{transform:rotate(45deg)}
+ .tray{position:absolute;left:0;right:0;bottom:0;background:var(--ink);border-top:1px solid var(--line2);border-radius:20px 20px 0 0;
+   padding:18px;transform:translateY(100%);transition:transform .45s cubic-bezier(.3,.8,.3,1);z-index:2;box-shadow:0 -10px 40px rgba(0,0,0,.5)}
+ .tray.up{transform:none}
+ .grab{width:40px;height:4px;border-radius:999px;background:var(--line2);margin:0 auto 14px}
+ .opt{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;transition:background .2s}
+ .opt:hover{background:var(--glass)}.opt .ic{width:34px;height:34px;border-radius:9px;background:var(--glass2);display:grid;place-items:center}
+ .opt b{font-size:13px}.opt p{font-size:10px;color:var(--ice);opacity:.6}
+</style></head>
+<body class="demo"><div class="demo-name">m · slide-up tray</div>
+<div class="stage">
+  <div class="scene"><h2 class="glow">Quote builder</h2></div>
+  <div class="fab" id="fab">＋</div>
+  <div class="tray" id="tray">
+    <div class="grab"></div>
+    <div class="opt"><span class="ic">🚗</span><div><b>Full Vehicle</b><p>all glass · ceramic</p></div></div>
+    <div class="opt"><span class="ic">🛡</span><div><b>Paint Protection</b><p>hood + fenders</p></div></div>
+    <div class="opt"><span class="ic">✨</span><div><b>Detail Package</b><p>correction + coat</p></div></div>
+  </div>
+</div>
+<script>
+const fab=document.getElementById('fab'),tray=document.getElementById('tray');let open=false;
+function set(v){open=v;fab.classList.toggle('open',v);tray.classList.toggle('up',v);}
+fab.onclick=()=>set(!open);
+setInterval(()=>set(!open),2400);
+</script></body></html>

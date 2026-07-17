@@ -1,0 +1,111 @@
+/* ══════════════════════════════════════════════════════════════════
+   SECTOR MAP — top-left 3D minimap (M2 fusion build).
+   Sits at the top of the left rail, above the nav. Canvas engine
+   draws in a 260×240 world space and scales to the rail width.
+   ══════════════════════════════════════════════════════════════════ */
+
+.sector-map {
+  position: fixed;
+  right: 10px;
+  bottom: 96px;               /* clear the transmit bar + ticker */
+  width: 224px;
+  z-index: 60;                /* under the command palette */
+  background: rgba(5, 5, 1, 0.88);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.7), var(--glow-amber-sm);
+  backdrop-filter: blur(2px);
+  font-family: var(--font-mono);
+  user-select: none;
+}
+
+/* ── Header / collapse toggle ── */
+.sector-map__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-dim);
+  color: var(--amber-dim);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+.sector-map--collapsed .sector-map__header { border-bottom: none; }
+.sector-map__header:hover { color: var(--amber); }
+.sector-map__header { cursor: grab; touch-action: none; }
+.sector-map__header:active { cursor: grabbing; }
+
+.sector-map__header-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--holo);
+  box-shadow: var(--glow-holo);
+  animation: sm-blink 2.4s step-end infinite;
+}
+
+.sector-map__header-chev {
+  margin-left: auto;
+  color: var(--chrome);
+  font-size: 8px;
+}
+
+@keyframes sm-blink {
+  0%, 74%  { opacity: 1; }
+  75%, 84% { opacity: 0.25; }
+  85%      { opacity: 1; }
+}
+
+/* ── Canvas ── */
+.sector-map__canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 260 / 240;
+  cursor: default;
+}
+.sector-map__canvas--hover { cursor: pointer; }
+.sector-map--collapsed .sector-map__canvas { display: none; }
+
+/* CRT power-on flicker — replayed on boot + section change */
+@keyframes sm-poweron {
+  0%   { opacity: 0; }
+  7%   { opacity: 0.85; }
+  13%  { opacity: 0.1; }
+  21%  { opacity: 1; }
+  29%  { opacity: 0.35; }
+  38%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+.sector-map__canvas--boot { animation: sm-poweron 0.6s linear; }
+
+/* ── Readout strip ── */
+.sector-map__readout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 5px;
+  border-top: 1px solid var(--border-dim);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+}
+.sector-map__readout-key { color: var(--chrome); }
+.sector-map__readout-val {
+  color: var(--holo);
+  text-shadow: 0 0 4px rgba(0, 200, 255, 0.5);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .sector-map__header-dot { animation: none; }
+  .sector-map__canvas--boot { animation: none; }
+}
+
+/* ── Small screens: the overlay would cover too much — hide it ── */
+@media (max-width: 767px) {
+  .sector-map { display: none; }
+}

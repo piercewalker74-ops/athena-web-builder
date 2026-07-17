@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>canvas</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;border-radius:18px;position:relative;overflow:hidden;display:grid;place-items:center}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .cap{position:relative;text-align:center;pointer-events:none}
+</style></head>
+<body class="demo"><div class="demo-name">m · generative canvas</div>
+<div class="stage frost"><canvas id="c"></canvas>
+ <div class="cap"><div class="eyebrow">FLOW FIELD</div><h1 class="big glow">Generative art</h1></div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');let W,H,dpr=Math.min(devicePixelRatio||1,2),P=[],t=0,mx=-99,my=-99;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#04121e';ctx.fillRect(0,0,W,H);}
+size();addEventListener('resize',size);
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;});
+for(let i=0;i<260;i++)P.push({x:Math.random()*W,y:Math.random()*H});
+function ang(x,y){let a=(Math.sin(x*0.008+t)+Math.cos(y*0.008-t*0.7))*Math.PI;
+ if(mx>0){const dx=x-mx,dy=y-my,d=Math.hypot(dx,dy);if(d<90)a+=Math.atan2(dy,dx)*(1-d/90);}return a;}
+function loop(){t+=0.006;ctx.fillStyle='rgba(4,18,30,.05)';ctx.fillRect(0,0,W,H);
+ for(const p of P){const a=ang(p.x,p.y);p.px=p.x;p.py=p.y;p.x+=Math.cos(a)*1.4;p.y+=Math.sin(a)*1.4;
+  if(p.x<0||p.x>W||p.y<0||p.y>H){p.x=Math.random()*W;p.y=Math.random()*H;continue;}
+  ctx.strokeStyle='rgba(143,230,255,.5)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.px,p.py);ctx.lineTo(p.x,p.y);ctx.stroke();}
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

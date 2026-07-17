@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gpgpu-curl-dust</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;position:relative;border-radius:18px;overflow:hidden}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .cap{position:absolute;left:20px;top:18px;pointer-events:none}
+ .stat{position:absolute;right:14px;bottom:14px;font-family:var(--mono);font-size:10px;color:var(--ice);opacity:.7;letter-spacing:.14em;text-align:right}
+</style></head>
+<body class="demo"><div class="demo-name">f · gpgpu-curl-dust</div>
+<div class="stage frost"><canvas id="c"></canvas>
+ <div class="cap"><div class="eyebrow">GPGPU · CURL NOISE</div><h1 class="big glow" style="font-size:26px">Divergence-free dust</h1></div>
+ <div class="stat" id="stat">2400 points<br>additive · attractor</div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');let W,H,dpr=Math.min(devicePixelRatio||1,2),t=0,ax,ay,tax,tay;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ax=tax=W/2;ay=tay=H/2;}
+size();addEventListener('resize',size);
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();tax=e.clientX-r.left;tay=e.clientY-r.top;});
+// pseudo curl-noise via layered sines (divergence-free flow field)
+function flow(x,y){const s=0.006;const a=Math.sin(y*s+t)+Math.cos(x*s*1.3-t*0.7);const b=Math.cos(x*s-t*0.9)+Math.sin(y*s*1.4+t*0.6);return[Math.cos(a*1.6),Math.sin(b*1.6)];}
+const N=1400,P=[];for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,life:Math.random()*100});
+function loop(){t+=0.01;ax+=(tax-ax)*.05;ay+=(tay-ay)*.05;
+ ctx.fillStyle='rgba(4,18,30,.18)';ctx.fillRect(0,0,W,H);
+ ctx.globalCompositeOperation='lighter';
+ for(const p of P){const[fx,fy]=flow(p.x,p.y);
+  const dx=ax-p.x,dy=ay-p.y,d=Math.hypot(dx,dy)+1;// pull to attractor
+  p.x+=fx*1.4+dx/d*0.6;p.y+=fy*1.4+dy/d*0.6;p.life-=1;
+  if(p.life<0||p.x<0||p.x>W||p.y<0||p.y>H){p.x=Math.random()*W;p.y=Math.random()*H;p.life=60+Math.random()*80;}
+  ctx.beginPath();ctx.arc(p.x,p.y,1.1,0,7);
+  ctx.fillStyle=d<120?'rgba(180,236,255,.55)':'rgba(47,224,255,.35)';ctx.fill();}
+ ctx.globalCompositeOperation='source-over';
+ // attractor glow
+ const g=ctx.createRadialGradient(ax,ay,0,ax,ay,60);g.addColorStop(0,'rgba(47,224,255,.35)');g.addColorStop(1,'transparent');
+ ctx.fillStyle=g;ctx.beginPath();ctx.arc(ax,ay,60,0,7);ctx.fill();
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

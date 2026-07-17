@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>biomarker-range-cards</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ .card{padding:14px}
+ .card .hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+ .card .nm{font-size:13px;font-weight:600}
+ .card .val{font-family:var(--mono);font-size:20px;color:var(--frost)}.card .val small{font-size:11px;color:var(--ice);opacity:.6}
+ .badge{font-family:var(--mono);font-size:8px;letter-spacing:.1em;padding:3px 7px;border-radius:5px;text-transform:uppercase;border:1px solid}
+ .track{position:relative;height:8px;border-radius:999px;margin-top:4px;background:linear-gradient(90deg,rgba(255,143,91,.4),rgba(91,255,157,.5) 40% 68%,rgba(255,143,91,.4))}
+ .band{position:absolute;top:0;bottom:0;left:40%;right:32%;background:rgba(91,255,157,.18);border-left:1px solid rgba(91,255,157,.5);border-right:1px solid rgba(91,255,157,.5)}
+ .marker{position:absolute;top:-4px;width:4px;height:16px;border-radius:3px;background:var(--frost);box-shadow:var(--glow);left:0;transition:left 1.3s cubic-bezier(.2,.8,.2,1)}
+ .rng{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--ice);opacity:.5;margin-top:6px}
+ @media(max-width:440px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body class="demo"><div class="demo-name">f · biomarker-range-cards</div>
+<div class="stage">
+  <div class="eyebrow">BIOMARKER PANEL · YOUR RESULTS</div>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const B=[
+ ['hs-CRP','0.6','mg/L','optimal',18],['Vitamin D','52','ng/mL',null,54],
+ ['Fasting Glucose','101','mg/dL','watch',72],['ApoB','118','mg/dL','alert',88]];
+const cols={optimal:['#5bff9d','OPTIMAL'],watch:['#ffcf5b','WATCH'],alert:['#ff5b7a','ALERT']};
+const grid=document.getElementById('grid');const markers=[];
+B.forEach(([nm,val,unit,st,pos])=>{const [c,txt]=cols[st]||['#5bff9d','OPTIMAL'];
+ const d=document.createElement('div');d.className='card frost';
+ d.innerHTML=`<div class="hd"><div><div class="nm">${nm}</div><div class="val">${val} <small>${unit}</small></div></div>
+  <span class="badge" style="color:${c};border-color:${c}55">${txt}</span></div>
+  <div class="track"><div class="band"></div><div class="marker" style="background:${c};box-shadow:0 0 12px ${c}"></div></div>
+  <div class="rng"><span>low</span><span>optimal range</span><span>high</span></div>`;
+ grid.appendChild(d);markers.push([d.querySelector('.marker'),pos]);});
+function run(){markers.forEach(([m])=>m.style.left='0');setTimeout(()=>markers.forEach(([m,p])=>m.style.left=p+'%'),150);}
+run();setInterval(run,4600);
+</script></body></html>

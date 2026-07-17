@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mask-text-rise</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center}
+ .eyebrow{margin-bottom:12px}
+ .clip{overflow:hidden;padding:3px 0;position:relative}
+ .clip:after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line)}
+ .clip span{display:block;transform:translateY(110%);transition:transform .85s cubic-bezier(.16,1,.3,1)}
+ .clip.in span{transform:none}
+ .big{font-size:clamp(30px,8vw,64px);font-weight:680}
+ .sub{margin-top:14px;max-width:360px}
+ .subclip{overflow:hidden}
+ .subclip span{display:block;transform:translateY(110%);transition:transform .8s cubic-bezier(.16,1,.3,1)}
+ .subclip.in span{transform:none}
+</style></head>
+<body class="demo"><div class="demo-name">f · mask-text-rise</div>
+<div class="stage">
+  <div class="eyebrow">HEADING MASK-RISE</div>
+  <div class="clip" id="l1"><span class="big glow">Words that</span></div>
+  <div class="clip" id="l2"><span class="big glow">sweep up out</span></div>
+  <div class="clip" id="l3"><span class="big glow">of a mask.</span></div>
+  <div class="subclip sub" id="s1"><span>The signature title entrance — each line rises from translateY(110%) inside an overflow clip.</span></div>
+</div>
+<script>
+const parts=[document.getElementById('l1'),document.getElementById('l2'),document.getElementById('l3'),document.getElementById('s1')];
+function run(){parts.forEach(p=>p.classList.remove('in'));
+ parts.forEach((p,i)=>setTimeout(()=>p.classList.add('in'),240+i*160));}
+run();setInterval(run,4600);
+</script></body></html>

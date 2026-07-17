@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>sticky-quote-tray</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:420px;height:360px;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,#082238,#04121e)}
+ .grid{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ .hd{grid-column:1/-1}.hd .eyebrow{margin-bottom:2px}.hd h2{font-size:16px}
+ .p{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--glass);transition:border-color .2s}
+ .p .filler{height:52px;border-radius:8px;margin-bottom:8px}
+ .p b{font-size:12px}.p .pr{font-family:var(--mono);font-size:10px;color:var(--cyan);display:block;margin:2px 0 8px}
+ .add{width:100%;font-size:11px;font-weight:600;padding:6px;border-radius:8px;border:1px solid var(--line2);background:transparent;color:var(--ice2);cursor:pointer;transition:all .2s}
+ .p.sel{border-color:var(--cyan);box-shadow:var(--glow)}
+ .p.sel .add{background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;border-color:transparent}
+ .tray{position:absolute;left:0;right:0;bottom:0;background:var(--ink);border-top:1px solid var(--line2);
+   padding:14px 16px;transform:translateY(130%);transition:transform .5s cubic-bezier(.3,.9,.3,1);z-index:3;
+   display:flex;align-items:center;gap:12px;box-shadow:0 -10px 40px rgba(0,0,0,.5)}
+ .tray.up{transform:none}
+ .badge{width:38px;height:38px;border-radius:10px;background:linear-gradient(120deg,var(--cyan),var(--teal));display:grid;place-items:center;font-weight:700;color:#04121e;box-shadow:var(--glow)}
+ .tray .info{flex:1}.tray .info b{font-size:13px}.tray .info span{font-size:10px;color:var(--ice);opacity:.6;display:block}
+ .clr{font-size:11px;color:var(--ice);opacity:.6;cursor:pointer;background:none;border:none;font-family:var(--mono)}
+ .view{font-size:12px;font-weight:600;padding:9px 16px}
+</style></head>
+<body class="demo"><div class="demo-name">f · sticky-quote-tray</div>
+<div class="stage">
+ <div class="grid" id="grid">
+  <div class="hd"><div class="eyebrow">TURF SELECTION</div><h2 class="glow">Build your quote</h2></div>
+ </div>
+ <div class="tray" id="tray">
+  <div class="badge" id="badge">0</div>
+  <div class="info"><b>Rolls in your quote</b><span id="sub">tap products to add</span></div>
+  <button class="clr" id="clr">clear</button>
+  <button class="btn view">View quote →</button>
+ </div>
+</div>
+<script>
+const P=[['Emerald Ridge','$4.19/ft²'],['K9 ProFlow','$3.75/ft²'],['Putt Pro','$5.40/ft²'],['Meadow Blend','$2.95/ft²']];
+const grid=document.getElementById('grid'),tray=document.getElementById('tray'),badge=document.getElementById('badge'),sub=document.getElementById('sub');
+const cards=[];
+P.forEach(p=>{const d=document.createElement('div');d.className='p';
+ d.innerHTML=`<div class="filler"></div><b>${p[0]}</b><span class="pr">${p[1]}</span><button class="add">+ Add to quote</button>`;
+ d.querySelector('.add').onclick=()=>{d.classList.toggle('sel');d.querySelector('.add').textContent=d.classList.contains('sel')?'✓ Added':'+ Add to quote';update();};
+ grid.appendChild(d);cards.push(d);});
+function update(){const n=cards.filter(c=>c.classList.contains('sel')).length;badge.textContent=n;
+ sub.textContent=n?n+' product'+(n>1?'s':'')+' · est. review in 1 day':'tap products to add';
+ tray.classList.toggle('up',n>0);}
+document.getElementById('clr').onclick=()=>{cards.forEach(c=>{c.classList.remove('sel');c.querySelector('.add').textContent='+ Add to quote';});update();};
+// auto demo
+let i=0;function demo(){i++;if(i<=3)cards[i-1].querySelector('.add').click();else if(i===5)document.getElementById('clr').click();else if(i>6)i=0;}
+setInterval(demo,1400);
+</script></body></html>

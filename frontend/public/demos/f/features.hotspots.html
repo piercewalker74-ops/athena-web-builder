@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive Hotspots</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:520px;display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+ .img{position:relative;height:280px;border-radius:16px;overflow:hidden}
+ .img .filler{position:absolute;inset:0;border-radius:0}
+ .hs{position:absolute;width:24px;height:24px;transform:translate(-50%,-50%);cursor:pointer}
+ .hs .ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--cyan);animation:pl 2.2s ease-out infinite}
+ @keyframes pl{0%{transform:scale(.5);opacity:.9}100%{transform:scale(1.8);opacity:0}}
+ .hs .dot{position:absolute;inset:7px;border-radius:50%;background:var(--cyan);box-shadow:var(--glow)}
+ .hs.on .dot{background:var(--ice);transform:scale(1.3)}
+ .panel{min-height:150px}
+ .panel .num{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:.2em}
+ .panel h2{font-size:22px;margin:6px 0}.panel p{font-size:13px;color:var(--ice);opacity:.78;line-height:1.55}
+ .fade{animation:fi .35s}@keyframes fi{from{opacity:0;transform:translateY(8px)}}
+</style></head>
+<body class="demo"><div class="demo-name">f · interactive hotspots</div>
+<div class="stage">
+  <div class="img frost"><div class="filler eel"><span class="tag">SUBJECT</span></div><div id="spots"></div></div>
+  <div class="panel" id="panel"></div>
+</div>
+<script>
+const SP=[[62,30,'01','Sensory Head','Electroreceptors map the seafloor in total darkness — the model\'s articulated jaw actuates here.'],
+ [48,55,'02','Segmented Spine','A 3D-printed vertebral chain lets the body flex through tight lava-tube geometry.'],
+ [30,74,'03','Propulsion Tail','Undulating fin drive — silent, snag-resistant thrust for icy subsurface oceans.']];
+const spots=document.getElementById('spots'),panel=document.getElementById('panel');
+SP.forEach((s,i)=>{const h=document.createElement('div');h.className='hs'+(i===0?' on':'');h.style.left=s[0]+'%';h.style.top=s[1]+'%';
+ h.innerHTML='<div class="ring"></div><div class="dot"></div>';h.onmouseenter=()=>sel(i);spots.appendChild(h);});
+const hs=[...spots.children];
+function sel(i){hs.forEach((h,j)=>h.classList.toggle('on',j===i));
+ panel.innerHTML=`<div class="num">PART ${SP[i][2]}</div><h2 class="glow">${SP[i][3]}</h2><p>${SP[i][4]}</p>`;
+ panel.classList.remove('fade');void panel.offsetWidth;panel.classList.add('fade');}
+let c=0;sel(0);setInterval(()=>{c=(c+1)%SP.length;sel(c);},2600);
+</script></body></html>

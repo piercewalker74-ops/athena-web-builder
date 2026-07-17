@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>aurora-marquee-testimonials</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;padding:14px 0;border-radius:16px}
+ .aurora{position:absolute;inset:0;z-index:0;pointer-events:none;filter:blur(30px)}
+ .aurora span{position:absolute;width:220px;height:220px;border-radius:50%;opacity:.4}
+ .a1{background:radial-gradient(circle,rgba(47,224,255,.6),transparent 65%);animation:d1 14s ease-in-out infinite}
+ .a2{background:radial-gradient(circle,rgba(57,211,201,.55),transparent 65%);animation:d2 18s ease-in-out infinite}
+ .a3{background:radial-gradient(circle,rgba(143,230,255,.4),transparent 65%);animation:d1 22s ease-in-out infinite reverse}
+ @keyframes d1{0%,100%{transform:translate(-40px,20px)}50%{transform:translate(280px,120px)}}
+ @keyframes d2{0%,100%{transform:translate(400px,180px)}50%{transform:translate(60px,-30px)}}
+ .spot{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),rgba(47,224,255,.12),transparent 70%)}
+ .mrow{position:relative;z-index:2;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+ .track{display:flex;gap:14px;width:max-content;animation:m 30s linear infinite}
+ .track.rev{animation-direction:reverse;animation-duration:38s}
+ .mrow:hover .track{animation-play-state:paused}
+ @keyframes m{to{transform:translateX(-50%)}}
+ .card{width:250px;flex:none;padding:14px 16px;border-radius:12px;white-space:normal}
+ .stars{color:var(--cyan);font-size:12px;letter-spacing:2px}
+ .card p{font-size:12.5px;line-height:1.45;color:var(--frost);margin:6px 0 8px}
+ .who{font-family:var(--mono);font-size:10px;color:var(--ice);opacity:.75;display:flex;align-items:center;gap:7px}
+ .who .av{width:20px;height:20px;border-radius:50%;background:linear-gradient(120deg,var(--cyan),var(--teal))}
+</style></head>
+<body class="demo"><div class="demo-name">f · aurora-marquee-testimonials</div>
+<div class="stage frost" id="st">
+  <div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="spot" id="spot"></div>
+  <div style="position:relative;z-index:2;padding:0 16px"><div class="eyebrow">WHAT HOMEOWNERS SAY</div></div>
+  <div class="mrow"><div class="track" id="t1"></div></div>
+  <div class="mrow"><div class="track rev" id="t2"></div></div>
+</div>
+<script>
+const A=[['★★★★★','Our backyard went from mud to a putting-green in a weekend. Zero mowing since.','Dana R. · Riverside'],
+['★★★★★','The turf feels shockingly real underfoot and drains after storms in minutes.','Marcus L. · Corona'],
+['★★★★★','Dogs love it, we love it, and no more muddy paw prints.','Priya S. · Ontario']];
+const Bs=[['★★★★★','Crew laid 1,800 sq ft in one day. Seams are invisible.','Tom & Beth · Fontana'],
+['★★★★★','Three summers in and the color hasn\'t faded a shade.','Elena V. · Chino'],
+['★★★★★','Water bill dropped 60%. Best landscaping call we made.','Ray K. · Rancho']];
+function fill(el,arr){const one=arr.map(([s,q,w])=>`<div class="card frost"><div class="stars">${s}</div><p>“${q}”</p><div class="who"><span class="av"></span>${w}</div></div>`).join('');el.innerHTML=one+one;}
+fill(document.getElementById('t1'),A);fill(document.getElementById('t2'),Bs);
+const st=document.getElementById('st'),spot=document.getElementById('spot');
+st.addEventListener('mousemove',e=>{const r=st.getBoundingClientRect();spot.style.setProperty('--mx',(e.clientX-r.left)+'px');spot.style.setProperty('--my',(e.clientY-r.top)+'px');});
+</script></body></html>

@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>typewriter-love-note</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:30px 26px;display:flex;flex-direction:column;gap:10px;min-height:300px;justify-content:center}
+ .note{font-family:var(--mono);font-size:clamp(15px,3vw,20px);line-height:1.9;color:var(--frost);min-height:170px}
+ .note .ln{display:block;white-space:pre-wrap}
+ .note .accent{color:var(--cyan)}
+ .car{display:inline-block;width:9px;height:1.05em;background:var(--cyan);margin-left:2px;vertical-align:-2px;
+   box-shadow:var(--glow);animation:bl 1s steps(1) infinite}
+ @keyframes bl{50%{opacity:0}}
+ .ticker{display:flex;align-items:center;gap:10px;margin-top:8px}
+ .ticker .no{font-family:var(--mono);font-size:11px;color:#04121e;background:linear-gradient(120deg,var(--cyan),var(--ice));
+   border-radius:6px;padding:3px 9px;letter-spacing:.05em}
+ .ticker .rz{font-size:13px;color:var(--ice);opacity:.85;transition:opacity .4s}
+</style></head>
+<body class="demo"><div class="demo-name">f · typewriter-love-note</div>
+<div class="stage frost">
+  <div class="eyebrow">A NOTE, TYPED JUST FOR YOU</div>
+  <div class="note" id="note"></div>
+  <div class="ticker"><span class="no" id="no">REASON #1</span><span class="rz" id="rz">the way you laugh at your own jokes</span></div>
+</div>
+<script>
+const lines=[
+ {t:'Hey you.',a:false},
+ {t:'I kept trying to say this out loud…',a:false},
+ {t:'so I wrote it instead. ',a:false},
+ {t:'You make ordinary days feel rare.',a:true}];
+const note=document.getElementById('note');
+const reasons=['the way you laugh at your own jokes','how you remember the small things',
+ 'your terrible taste in movies','the sound of your footsteps home','you, exactly as you are'];
+function typeAll(){note.innerHTML='';let li=0;
+ function line(){if(li>=lines.length){setTimeout(()=>{typeAll();},2600);return;}
+  const L=lines[li],span=document.createElement('span');span.className='ln'+(L.a?' accent':'');note.appendChild(span);
+  const car=document.createElement('span');car.className='car';note.appendChild(car);
+  let ci=0;(function ch(){if(ci<=L.t.length){span.textContent=L.t.slice(0,ci);ci++;
+    setTimeout(ch,40+Math.random()*90+(L.t[ci-1]===' '?30:0));}
+   else{car.remove();li++;setTimeout(line,520);}})();}
+ line();}
+typeAll();
+// rotating reason ticker
+let ri=0;setInterval(()=>{ri=(ri+1)%reasons.length;const rz=document.getElementById('rz');
+ rz.style.opacity=0;setTimeout(()=>{document.getElementById('no').textContent='REASON #'+(ri+1);rz.textContent=reasons[ri];rz.style.opacity=.85;},400);},2400);
+</script></body></html>

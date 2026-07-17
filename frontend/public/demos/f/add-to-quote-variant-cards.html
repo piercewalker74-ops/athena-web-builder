@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>add-to-quote-variant-cards</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:520px}
+ .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+ .head h2{font-size:18px}.count{font-family:var(--mono);font-size:11px;color:var(--cyan)}
+ .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+ .card{position:relative;border-radius:14px;background:var(--glass);backdrop-filter:blur(6px);padding:12px;overflow:hidden}
+ .card svg{position:absolute;inset:1px;width:calc(100% - 2px);height:calc(100% - 2px);pointer-events:none}
+ .card rect{fill:none;stroke:var(--teal);stroke-width:2;rx:14;stroke-dasharray:900;stroke-dashoffset:900;
+   filter:drop-shadow(0 0 6px rgba(57,211,201,.6));transition:stroke-dashoffset .9s ease}
+ .card.draw rect{stroke-dashoffset:0}
+ .ph{height:60px;border-radius:9px;border:1px dashed var(--line2);display:grid;place-items:center;
+   font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--ice);opacity:.55;margin-bottom:8px;text-align:center}
+ .card b{font-size:13px}.card .pr{font-family:var(--mono);font-size:10px;color:var(--cyan);display:block;margin:2px 0 8px}
+ .chips{display:flex;gap:5px;margin-bottom:9px}
+ .vc{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--ice2);cursor:pointer;transition:all .2s}
+ .vc.on{background:var(--glass2);border-color:var(--cyan);color:var(--frost)}
+ .add{width:100%;font-size:11px;font-weight:600;padding:7px;border-radius:8px;border:1px solid var(--line2);background:transparent;color:var(--ice2);cursor:pointer;transition:all .2s}
+ .card.sel .add{background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;border-color:transparent}
+</style></head>
+<body class="demo"><div class="demo-name">f · add-to-quote-variant-cards</div>
+<div class="stage">
+ <div class="head"><div><div class="eyebrow">INSTALL ACCESSORIES</div><h2 class="glow">Add to your quote</h2></div>
+  <span class="count" id="count">0 in quote</span></div>
+ <div class="grid" id="grid"></div>
+</div>
+<script>
+const A=[['Seam Tape','$0.90/ft',['6"','12"']],['Bender Board','$14/ea',['4ft','8ft']],
+ ['Galv. Nails','$22/box',['4"','6"']],['Zeofill Infill','$18/bag',['50lb','25lb']]];
+const grid=document.getElementById('grid'),count=document.getElementById('count');const cards=[];
+A.forEach(a=>{const c=document.createElement('div');c.className='card';
+ c.innerHTML=`<svg><rect x="0" y="0" width="100%" height="100%"/></svg>
+  <div class="ph">◇ photo coming soon</div><b>${a[0]}</b><span class="pr">${a[1]}</span>
+  <div class="chips">${a[2].map((v,i)=>`<span class="vc${i?'':' on'}">${v}</span>`).join('')}</div>
+  <button class="add">+ Add</button>`;
+ c.querySelectorAll('.vc').forEach(v=>v.onclick=()=>{c.querySelectorAll('.vc').forEach(x=>x.classList.remove('on'));v.classList.add('on');});
+ c.querySelector('.add').onclick=()=>{c.classList.toggle('sel');c.querySelector('.add').textContent=c.classList.contains('sel')?'✓ In quote':'+ Add';upd();};
+ c.onmouseenter=()=>{c.classList.remove('draw');void c.offsetWidth;c.classList.add('draw');};
+ grid.appendChild(c);cards.push(c);});
+function upd(){count.textContent=cards.filter(c=>c.classList.contains('sel')).length+' in quote';}
+// auto demo: draw borders + toggle
+let i=0;function demo(){const c=cards[i%cards.length];c.classList.remove('draw');void c.offsetWidth;c.classList.add('draw');
+ if(i%2===0){c.querySelector('.add').click();setTimeout(()=>{if(c.classList.contains('sel')){/*keep few*/}},0);}
+ i++;if(i>7){cards.forEach(c=>{c.classList.remove('sel');c.querySelector('.add').textContent='+ Add';});upd();i=0;}}
+setInterval(demo,1300);
+</script></body></html>

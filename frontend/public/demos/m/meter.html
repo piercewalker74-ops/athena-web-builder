@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>meter</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:18px}
+ .m .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px}
+ .m .top b{font-family:var(--mono);color:var(--cyan)}
+ .bar{height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+ .fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--cyan),var(--ice));
+   box-shadow:var(--glow);transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+</style></head>
+<body class="demo"><div class="demo-name">m · meter</div>
+<div class="stage">
+  <div class="eyebrow">SKILL / SPEC METERS</div>
+  <div class="m"><div class="top"><span>UV Rejection</span><b>99%</b></div><div class="bar"><div class="fill" data-v="99"></div></div></div>
+  <div class="m"><div class="top"><span>Heat Rejection (IR)</span><b>86%</b></div><div class="bar"><div class="fill" data-v="86"></div></div></div>
+  <div class="m"><div class="top"><span>Glare Reduction</span><b>78%</b></div><div class="bar"><div class="fill" data-v="78"></div></div></div>
+  <div class="m"><div class="top"><span>Optical Clarity</span><b>94%</b></div><div class="bar"><div class="fill" data-v="94"></div></div></div>
+</div>
+<script>
+const fills=[...document.querySelectorAll('.fill')];
+function run(){fills.forEach(f=>f.style.width='0');setTimeout(()=>fills.forEach(f=>f.style.width=f.dataset.v+'%'),120);}
+run();setInterval(run,4200);
+</script></body></html>

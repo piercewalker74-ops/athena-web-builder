@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>confetti-heart-cannon</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;position:relative;border-radius:16px;overflow:hidden;cursor:pointer}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .cap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center;gap:6px}
+ .cap .b{font-size:clamp(28px,6vw,46px);font-weight:700}
+ .fire{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ice);opacity:.6}
+</style></head>
+<body class="demo"><div class="demo-name">f · confetti-heart-cannon</div>
+<div class="stage frost" id="st"><canvas id="c"></canvas>
+ <div class="cap"><div class="eyebrow">CELEBRATION FX</div><div class="b glow">You're all set! 🎉</div></div>
+ <div class="fire">tap anywhere to fire the cannon</div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d'),st=document.getElementById('st');
+let W,H,dpr=Math.min(devicePixelRatio||1,2),P=[];
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+size();addEventListener('resize',size);
+const cols=['#2fe0ff','#39d3c9','#8fe6ff','#b8ecff','#ffffff','#ff7ea8'];
+function heart(x,y,s,a,col){ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.scale(s/16,s/16);ctx.fillStyle=col;ctx.beginPath();
+ ctx.moveTo(0,4);ctx.bezierCurveTo(0,1,-6,-4,-8,0);ctx.bezierCurveTo(-11,5,-2,10,0,13);
+ ctx.bezierCurveTo(2,10,11,5,8,0);ctx.bezierCurveTo(6,-4,0,1,0,4);ctx.fill();ctx.restore();}
+function burst(ox,oy,hearts){const n=hearts?24:40;for(let i=0;i<n;i++){const ang=(-Math.PI/2)+(Math.random()-.5)*1.4,sp=3+Math.random()*7;
+ P.push({x:ox,y:oy,vx:Math.cos(ang)*sp+(Math.random()-.5)*2,vy:Math.sin(ang)*sp,g:.14+Math.random()*.08,
+  s:hearts?9+Math.random()*7:5+Math.random()*6,a:Math.random()*6,va:(Math.random()-.5)*.3,
+  col:hearts?(Math.random()<.6?'#ff7ea8':'#2fe0ff'):cols[i%cols.length],life:1,heart:hearts,
+  w:4+Math.random()*5,h:7+Math.random()*6});}}
+function fire(){burst(W*.5,H,false);burst(W*.12,H*.9,true);burst(W*.88,H*.9,true);}
+st.addEventListener('click',fire);
+function loop(){ctx.clearRect(0,0,W,H);
+ for(const p of P){p.vy+=p.g;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;p.life-=.006;
+  if(p.heart){heart(p.x,p.y,p.s,p.a,p.col);}
+  else{ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.col;
+   ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h*(.5+.5*Math.abs(Math.sin(p.a))));ctx.restore();ctx.globalAlpha=1;}}
+ P=P.filter(p=>p.y<H+30&&p.life>0);requestAnimationFrame(loop);}
+loop();
+fire();setInterval(fire,2600);
+</script></body></html>

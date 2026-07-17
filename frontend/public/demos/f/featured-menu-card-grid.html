@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>featured-menu-card-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:20px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+ .mc{padding:16px 14px;border-radius:12px;position:relative;overflow:hidden;
+   opacity:0;transform:translateY(18px) scale(.96);transition:all .55s cubic-bezier(.2,.8,.2,1)}
+ .mc.in{opacity:1;transform:none}
+ .mc .nm{font-size:15px;font-weight:650}
+ .mc .pr{font-family:var(--mono);font-size:14px;color:var(--cyan);margin-top:2px}
+ .mc .note{font-size:11px;color:var(--ice);opacity:.65;margin-top:8px;line-height:1.45}
+ .mc.feat{border:1px solid var(--cyan);box-shadow:0 0 0 1px rgba(47,224,255,.3),var(--glow)}
+ .ribbon{position:absolute;top:11px;right:-30px;transform:rotate(38deg);background:linear-gradient(120deg,var(--cyan),var(--ice));
+   color:#04121e;font-family:var(--mono);font-size:8px;letter-spacing:.12em;padding:3px 34px;font-weight:700}
+</style></head>
+<body class="demo"><div class="demo-name">f · featured-menu-card-grid</div>
+<div class="stage">
+  <div class="eyebrow" style="text-align:center">CURATED · SIGNATURE SELECTIONS</div>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const items=[
+ ['Frost Negroni','$16','Barrel-cold gin, glacier bitters, orange peel.',0],
+ ['Cod en Papillote','$31','Line-caught cod, fennel, saffron — our House Specialty.',1],
+ ['Charred Leek','$14','Cyan crème, toasted hazelnut, chive oil.',0],
+ ['Smoked Beet Tartare','$15','Horseradish snow, rye crisp.',0],
+ ['Dry-Aged Ribeye','$46','45-day aged, bone-marrow butter.',0],
+ ['Sea-Ice Sorbet','$9','Yuzu, elderflower, cracked pepper.',0]
+];
+const g=document.getElementById('grid');
+items.forEach(it=>{const c=document.createElement('div');c.className='mc frost'+(it[3]?' feat':'');
+ c.innerHTML=`${it[3]?'<div class="ribbon">HOUSE SPECIALTY</div>':''}<div class="nm">${it[0]}</div><div class="pr">${it[1]}</div><div class="note">${it[2]}</div>`;
+ g.appendChild(c);});
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),150+i*100));}
+run();setInterval(run,5200);
+</script></body></html>

@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>features.spec_table</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:20px}
+ .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+ .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px;padding:8px 4px;
+   font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice);opacity:.7;text-transform:uppercase;border-bottom:1px solid var(--line2)}
+ .cols .hl{color:var(--cyan);opacity:1}
+ .row{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px;align-items:center;padding:13px 4px;
+   border-bottom:1px dashed var(--line);opacity:0;transform:translateX(-12px);transition:all .5s}
+ .row.in{opacity:1;transform:none}
+ .nm{font-size:14px;font-weight:600}
+ .v{font-family:var(--mono);font-size:13px;color:var(--ice2)}
+ .v.us{color:var(--cyan)}
+ .yes{color:var(--teal)}.no{color:rgba(234,246,255,.4)}
+</style></head>
+<body class="demo"><div class="demo-name">f · features.spec_table</div>
+<div class="stage frost">
+  <div class="head"><h2 class="big" style="font-size:20px">Compare the build</h2><span class="chip">◇ spec sheet</span></div>
+  <div class="cols"><div>Specification</div><div class="hl">Pioneer Pro</div><div>Standard</div></div>
+  <div id="rows"></div>
+</div>
+<script>
+const data=[
+ ['Pile height','1.75 in','1.25 in'],
+ ['Face weight','92 oz','60 oz'],
+ ['UV warranty','15 yr','8 yr'],
+ ['Drainage','Full-flow','Perf-only'],
+ ['Pet antimicrobial','yes','no'],
+ ['Fire rating','Class A','Class B']];
+const R=document.getElementById('rows');
+data.forEach(d=>{const r=document.createElement('div');r.className='row';
+ const mark=v=>v==='yes'?'<span class="yes">✓</span>':v==='no'?'<span class="no">✕</span>':v;
+ r.innerHTML=`<div class="nm">${d[0]}</div><div class="v us">${mark(d[1])}</div><div class="v">${mark(d[2])}</div>`;R.appendChild(r);});
+const rows=[...R.children];
+function run(){rows.forEach(r=>r.classList.remove('in'));rows.forEach((r,i)=>setTimeout(()=>r.classList.add('in'),160+i*130));}
+run();setInterval(run,5000);
+</script></body></html>

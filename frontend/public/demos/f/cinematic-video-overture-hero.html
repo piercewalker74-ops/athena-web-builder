@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>cinematic-video-overture-hero</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;border-radius:18px;overflow:hidden;position:relative}
+ .layer{position:absolute;inset:0}
+ .video .filler{position:absolute;inset:0;border-radius:0}
+ .video{transition:opacity 1s}
+ .scan{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0 5px,rgba(0,0,0,.14) 5px 6px);opacity:.5}
+ .photo{opacity:0;transition:opacity 1.4s}
+ .photo.on{opacity:1}
+ .photo .filler{position:absolute;inset:0;border-radius:0}
+ .wm{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-family:var(--mono);letter-spacing:.32em;
+   font-size:22px;color:var(--frost);transition:all 1s cubic-bezier(.6,0,.2,1);z-index:4}
+ .wm.corner{left:16px;top:16px;transform:none;font-size:12px;color:var(--cyan)}
+ .lines{position:absolute;left:22px;bottom:56px;z-index:4;display:flex;flex-direction:column;gap:2px}
+ .clip{overflow:hidden;padding:1px 0}
+ .clip span{display:block;transform:translateY(115%);transition:transform .8s cubic-bezier(.2,.85,.2,1)}
+ .clip.in span{transform:none}
+ .l1{font-size:clamp(24px,5vw,40px);font-weight:650}.l2{font-size:clamp(24px,5vw,40px);font-weight:650}
+ .skip{position:absolute;right:14px;bottom:14px;z-index:5;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+   color:var(--ice2);border:1px solid var(--line2);border-radius:999px;padding:6px 14px;cursor:pointer;background:rgba(4,18,30,.5)}
+ .playbar{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--line);z-index:4}
+ .playbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--ice));box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">f · cinematic-video-overture-hero</div>
+<div class="stage frost" id="st">
+  <div class="layer photo" id="photo"><div class="filler eel"><span class="tag">PHOTO</span></div></div>
+  <div class="layer video" id="video"><div class="filler"><span class="tag">AERIAL · MUTED</span></div><div class="scan"></div></div>
+  <div class="wm" id="wm">HORIZON</div>
+  <div class="lines">
+    <div class="clip" id="cl1"><span class="l1 glow">Turf, filmed</span></div>
+    <div class="clip" id="cl2"><span class="l2 glow">from above.</span></div>
+  </div>
+  <div class="skip" id="skip">Skip ▸</div>
+  <div class="playbar"><i id="pb"></i></div>
+</div>
+<script>
+const video=document.getElementById('video'),photo=document.getElementById('photo'),wm=document.getElementById('wm'),
+ cl1=document.getElementById('cl1'),cl2=document.getElementById('cl2'),skip=document.getElementById('skip'),pb=document.getElementById('pb');
+let raf,restart;
+function overture(){cancelAnimationFrame(raf);pb.style.width='100%';
+ wm.classList.add('corner');video.style.opacity='0';photo.classList.add('on');
+ setTimeout(()=>cl1.classList.add('in'),300);setTimeout(()=>cl2.classList.add('in'),560);
+ clearTimeout(restart);restart=setTimeout(playVideo,3400);}
+function playVideo(){wm.classList.remove('corner');video.style.opacity='1';photo.classList.remove('on');
+ cl1.classList.remove('in');cl2.classList.remove('in');pb.style.width='0';
+ const start=performance.now();cancelAnimationFrame(raf);
+ (function tick(now){const p=Math.min(1,(now-start)/3600);pb.style.width=(p*100)+'%';
+   if(p<1)raf=requestAnimationFrame(tick);else overture();})(start);}
+skip.addEventListener('click',overture);
+playVideo();
+</script></body></html>

@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>frosted-glass-cta-card</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-radius:18px}
+ .bg{position:absolute;inset:-30%;filter:blur(24px);
+   background:
+     radial-gradient(circle at 25% 30%,#2fe0ff,transparent 38%),
+     radial-gradient(circle at 75% 35%,#39d3c9,transparent 40%),
+     radial-gradient(circle at 55% 80%,#8fe6ff,transparent 42%),
+     radial-gradient(circle at 15% 75%,#1b6fb0,transparent 40%);
+   animation:swirl 14s linear infinite}
+ @keyframes swirl{to{transform:rotate(360deg) scale(1.15)}}
+ .grid{position:absolute;inset:0;opacity:.4;background:repeating-linear-gradient(90deg,transparent 0 38px,rgba(143,230,255,.12) 38px 39px),repeating-linear-gradient(0deg,transparent 0 38px,rgba(143,230,255,.12) 38px 39px)}
+ .card{position:relative;z-index:2;width:min(400px,86%);padding:30px 26px;text-align:center;border-radius:18px;
+   background:rgba(8,26,40,.45);border:1px solid var(--line2);backdrop-filter:blur(16px);
+   box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 20px 60px rgba(0,0,0,.4),var(--glow);
+   transform:translateY(20px);opacity:0;transition:all 1s cubic-bezier(.2,.8,.2,1)}
+ .card.in{transform:none;opacity:1}
+ .card .big{font-size:clamp(24px,5vw,36px);margin:10px 0 8px}
+ .card .btns{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+</style></head>
+<body class="demo"><div class="demo-name">f · frosted-glass-cta-card</div>
+<div class="stage">
+  <div class="bg"></div><div class="grid"></div>
+  <div class="card" id="card">
+    <div class="eyebrow">OPEN 7 DAYS · WALK-INS WELCOME</div>
+    <h1 class="big glow">Ready when<br>you are.</h1>
+    <p class="sub">Glass-legible over anything. Book a slot or drop by — we'll have the kettle on.</p>
+    <div class="btns"><button class="btn">☎ Call now</button><button class="btn ghost">◎ Directions</button></div>
+  </div>
+</div>
+<script>
+const card=document.getElementById('card');
+function run(){card.classList.remove('in');requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('in')));}
+run();setInterval(run,5000);
+</script></body></html>

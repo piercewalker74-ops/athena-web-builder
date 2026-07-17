@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mower-reveal</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .field{position:relative;height:250px;border-radius:16px;overflow:hidden}
+ .cards{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px}
+ .cards .filler{height:100%}
+ .c{position:relative}
+ .c b{position:absolute;left:8px;top:8px;font-size:12px;z-index:2}
+ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+ .mow{position:absolute;bottom:8px;width:64px;height:66px;pointer-events:none;z-index:3}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em;text-align:center}
+ @keyframes spin{to{transform:rotate(360deg)}}
+ .wheel{animation:spin .5s linear infinite}
+</style></head>
+<body class="demo"><div class="demo-name">f · mower-reveal</div>
+<div class="stage">
+  <div class="field frost">
+    <div class="cards">
+      <div class="c"><div class="filler"><span class="tag">01</span></div><b>Fairway</b></div>
+      <div class="c"><div class="filler eel"><span class="tag">02</span></div><b>Putting</b></div>
+      <div class="c"><div class="filler"><span class="tag">03</span></div><b>Pet Turf</b></div>
+    </div>
+    <canvas id="turf"></canvas>
+    <canvas id="fx"></canvas>
+    <svg class="mow" id="mow" viewBox="0 0 64 66">
+      <rect x="10" y="16" width="40" height="20" rx="4" fill="#0a2436" stroke="#2fe0ff" stroke-width="2"/>
+      <path d="M50 22 L62 8" stroke="#8fe6ff" stroke-width="3" stroke-linecap="round"/>
+      <rect x="4" y="34" width="52" height="8" rx="3" fill="#39d3c9"/>
+      <g class="wheel" style="transform-origin:18px 52px"><circle cx="18" cy="52" r="11" fill="#071a2b" stroke="#8fe6ff" stroke-width="2"/><path d="M18 41v22M7 52h22" stroke="#2fe0ff" stroke-width="1.5"/></g>
+      <g class="wheel" style="transform-origin:44px 54px"><circle cx="44" cy="54" r="9" fill="#071a2b" stroke="#8fe6ff" stroke-width="2"/><path d="M44 45v18M35 54h18" stroke="#2fe0ff" stroke-width="1.5"/></g>
+    </svg>
+  </div>
+  <div class="hint">the push-mower drives across, clearing uncut turf to reveal the cards</div>
+</div>
+<script>
+const turf=document.getElementById('turf'),tx=turf.getContext('2d');
+const fx=document.getElementById('fx'),fc=fx.getContext('2d'),mow=document.getElementById('mow');
+let W,H,dpr=Math.min(devicePixelRatio||1,2),flecks=[],prog=0;
+function frost(){tx.setTransform(dpr,0,0,dpr,0,0);tx.globalCompositeOperation='source-over';
+ const g=tx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#123a2a');g.addColorStop(1,'#0d2e22');tx.fillStyle=g;tx.fillRect(0,0,W,H);
+ for(let i=0;i<1000;i++){tx.fillStyle=`rgba(110,${170+Math.random()*70|0},135,${.3+Math.random()*.4})`;
+  tx.fillRect(Math.random()*W,Math.random()*H,1.6,4+Math.random()*5);}}
+function size(){[turf,fx].forEach(c=>{c.width=(W=c.clientWidth)*dpr;c.height=(H=c.clientHeight)*dpr;});
+ fc.setTransform(dpr,0,0,dpr,0,0);frost();}
+size();addEventListener('resize',size);
+function reset(){frost();prog=0;flecks=[];}
+function run(){prog+=.008;const mowX=prog*(W+100)-80;
+ tx.setTransform(dpr,0,0,dpr,0,0);tx.globalCompositeOperation='destination-out';
+ tx.fillRect(0,0,mowX+22,H);
+ mow.style.left=Math.min(W-58,Math.max(-4,mowX))+'px';
+ if(prog<1&&Math.random()<.8)for(let k=0;k<2;k++)flecks.push({x:mowX+14,y:H-24-Math.random()*40,vx:-1-Math.random()*2.5,vy:-2-Math.random()*2.5,life:1});
+ fc.clearRect(0,0,W,H);
+ flecks.forEach(f=>{f.x+=f.vx;f.y+=f.vy;f.vy+=.14;f.life-=.028;if(f.life>0){fc.fillStyle=`rgba(120,235,165,${f.life})`;fc.fillRect(f.x,f.y,3,3);}});
+ flecks=flecks.filter(f=>f.life>0);
+ if(prog<1.15)requestAnimationFrame(run);else setTimeout(()=>{reset();requestAnimationFrame(run);},1600);}
+reset();requestAnimationFrame(run);
+</script></body></html>

@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>confirmation-ticket-ics</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;justify-content:center}
+ .ticket{width:340px;max-width:100%;border-radius:16px;overflow:hidden;position:relative;
+   opacity:0;transform:translateY(26px);filter:blur(6px);transition:all .9s cubic-bezier(.2,.8,.2,1)}
+ .ticket.in{opacity:1;transform:none;filter:none}
+ .stub{background:linear-gradient(120deg,var(--cyan),var(--teal));color:#04121e;padding:18px 20px}
+ .stub .k{font-family:var(--mono);font-size:9px;letter-spacing:.2em;opacity:.75}
+ .stub .big{font-size:24px;font-weight:750;margin-top:2px}
+ .stub .r{display:flex;justify-content:space-between;margin-top:12px;font-size:12px;font-weight:600}
+ .body{background:var(--glass2);backdrop-filter:blur(6px);padding:6px 20px 18px}
+ .perf{position:relative;height:18px}
+ .perf:before,.perf:after{content:'';position:absolute;top:0;width:18px;height:18px;border-radius:50%;background:var(--deep)}
+ .perf:before{left:-29px}.perf:after{right:-29px}
+ .perf .dash{position:absolute;top:9px;left:0;right:0;border-top:1px dashed var(--line2)}
+ .drow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12px}
+ .drow .l{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice);opacity:.6}
+ .drow .v{color:var(--frost);font-weight:600}
+ .acts{display:flex;gap:8px;margin-top:14px}
+ .acts button{flex:1;font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;border-radius:999px;padding:9px 4px;
+   color:var(--ice2);background:var(--glass);border:1px solid var(--line2)}
+ .acts button.pri{color:#04121e;background:linear-gradient(120deg,var(--cyan),var(--ice));border:none}
+ .toast{position:absolute;left:50%;bottom:-6px;transform:translate(-50%,20px);opacity:0;transition:all .4s;
+   font-family:var(--mono);font-size:10px;color:var(--cyan);background:rgba(4,18,30,.85);border:1px solid var(--line2);border-radius:999px;padding:5px 12px}
+ .toast.on{opacity:1;transform:translate(-50%,0)}
+</style></head>
+<body class="demo"><div class="demo-name">f · confirmation-ticket-ics</div>
+<div class="stage">
+  <div class="ticket frost" id="tk">
+    <div class="stub"><div class="k">BOOKING CONFIRMED · #TG-4821</div><div class="big">Aurora Rooftop Dinner</div>
+      <div class="r"><span>SAT · AUG 9</span><span>7:30 PM</span><span>PARTY OF 2</span></div></div>
+    <div class="perf"><span class="dash"></span></div>
+    <div class="body">
+      <div class="drow"><span class="l">GUEST</span><span class="v">Jordan Vale</span></div>
+      <div class="drow"><span class="l">VENUE</span><span class="v">Glacier House · Level 14</span></div>
+      <div class="drow"><span class="l">SEATING</span><span class="v">Window · Table 7</span></div>
+      <div class="acts">
+        <button class="pri" id="ics">＋ Calendar</button>
+        <button id="sms">✉ Text me</button>
+        <button id="map">◎ Directions</button>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+<script>
+const tk=document.getElementById('tk');
+function reveal(){tk.classList.remove('in');requestAnimationFrame(()=>requestAnimationFrame(()=>tk.classList.add('in')));}
+reveal();setInterval(reveal,5200);
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800);}
+document.getElementById('ics').onclick=()=>{
+ const ics=['BEGIN:VCALENDAR','VERSION:2.0','BEGIN:VEVENT','SUMMARY:Aurora Rooftop Dinner',
+  'DTSTART:20260809T193000','DTEND:20260809T213000','LOCATION:Glacier House Level 14','END:VEVENT','END:VCALENDAR'].join('\r\n');
+ const url=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));const a=document.createElement('a');
+ a.href=url;a.download='reservation.ics';a.click();URL.revokeObjectURL(url);toast('.ics downloaded ✓');};
+document.getElementById('sms').onclick=()=>toast('SMS confirmation sent');
+document.getElementById('map').onclick=()=>toast('Opening map…');
+</script></body></html>

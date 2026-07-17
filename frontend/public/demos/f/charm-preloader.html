@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>charm-preloader</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;border-radius:16px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+ .page{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+   text-align:center;opacity:0;transform:scale(1.04);transition:opacity .7s,transform .7s}
+ .page.on{opacity:1;transform:none}
+ .page .b{font-size:clamp(26px,6vw,44px);font-weight:700}
+ .pre{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+   background:linear-gradient(160deg,#061726,#03101c);transition:opacity .7s;z-index:3}
+ .pre.gone{opacity:0;pointer-events:none}
+ .ico{font-size:38px;filter:drop-shadow(var(--glow));transition:opacity .25s}
+ .eq{display:flex;gap:5px;align-items:flex-end;height:34px}
+ .eq b{width:6px;border-radius:3px;background:linear-gradient(var(--cyan),var(--teal));min-height:5px}
+ .bar{width:220px;max-width:70vw;height:6px;border-radius:99px;background:var(--glass2);overflow:hidden;border:1px solid var(--line)}
+ .bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--ice));box-shadow:var(--glow)}
+ .pct{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--ice)}
+</style></head>
+<body class="demo"><div class="demo-name">f · charm-preloader</div>
+<div class="stage frost">
+  <div class="page" id="page"><div class="eyebrow">READY</div><div class="b glow">Welcome in ❄</div><div class="sub">the page has loaded beneath the frost</div></div>
+  <div class="pre" id="pre">
+    <div class="ico" id="ico">❄</div>
+    <div class="eq" id="eq"></div>
+    <div class="bar"><span id="fill"></span></div>
+    <div class="pct" id="pct">0%</div>
+  </div>
+</div>
+<script>
+const pre=document.getElementById('pre'),page=document.getElementById('page'),fill=document.getElementById('fill'),
+ pct=document.getElementById('pct'),ico=document.getElementById('ico'),eq=document.getElementById('eq');
+const icons=['❄','🧊','💠','🔷','✦'];
+for(let i=0;i<7;i++){const b=document.createElement('b');eq.appendChild(b);}
+const bars=[...eq.children];let tt=0;
+function eqloop(){tt+=.14;bars.forEach((b,i)=>b.style.height=(6+(Math.sin(tt+i*.7)*.5+.5)*28)+'px');requestAnimationFrame(eqloop);}
+eqloop();
+function run(){let p=0,ii=0;pre.classList.remove('gone');page.classList.remove('on');fill.style.width='0';pct.textContent='0%';
+ const iv=setInterval(()=>{p+=Math.random()*14+3;if(p>100)p=100;fill.style.width=p+'%';pct.textContent=Math.floor(p)+'%';
+   ico.textContent=icons[(ii++)%icons.length];
+   if(p>=100){clearInterval(iv);setTimeout(()=>{pre.classList.add('gone');page.classList.add('on');},350);
+     setTimeout(run,3400);}},260+Math.random()*160);}
+run();
+</script></body></html>

@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>photo-overlay-hero-pills</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;border-radius:18px;overflow:hidden;position:relative}
+ .stage .filler{position:absolute;inset:0;border-radius:0}
+ .grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,18,30,.25) 0%,rgba(4,18,30,.55) 55%,rgba(4,18,30,.92) 100%)}
+ .content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:26px 24px 20px;gap:12px}
+ .clip{overflow:hidden;padding:1px 0}
+ .clip span{display:inline-block;transform:translateY(115%);transition:transform .85s cubic-bezier(.2,.85,.2,1)}
+ .clip.in span{transform:none}
+ .headline{font-size:clamp(28px,6vw,46px);font-weight:750;line-height:1.02}
+ .ctas{display:flex;gap:10px;margin-top:4px}
+ .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+ .info{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--ice2);
+   border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:rgba(150,225,255,.1);backdrop-filter:blur(8px);
+   opacity:0;transform:translateY(12px);transition:all .5s}
+ .info.in{opacity:1;transform:none}
+ .info .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal)}
+</style></head>
+<body class="demo"><div class="demo-name">f · photo-overlay-hero-pills</div>
+<div class="stage frost">
+  <div class="filler"><span class="tag">LIFESTYLE</span></div>
+  <div class="grad"></div>
+  <div class="content">
+    <div><span class="eyebrow">NORTHSIDE · EST. 2011</span></div>
+    <div class="headline">
+      <div class="clip" id="l1"><span>Warm plates,</span></div>
+      <div class="clip" id="l2"><span class="glow">colder nights.</span></div>
+    </div>
+    <div class="ctas"><span class="btn">Reserve a table</span><span class="btn ghost">View menu</span></div>
+    <div class="pills" id="pills"></div>
+  </div>
+</div>
+<script>
+const clips=[document.getElementById('l1'),document.getElementById('l2')];
+const pillData=[['◷','Open till 1 AM'],['◍','Walk-ins welcome'],['⚲','42 Glacier Ave']];
+const pills=document.getElementById('pills');
+pillData.forEach(p=>{const el=document.createElement('span');el.className='info';
+ el.innerHTML=`<span class="dot"></span>${p[0]} ${p[1]}`;pills.appendChild(el);});
+const infos=[...pills.children];
+function run(){clips.forEach(c=>c.classList.remove('in'));infos.forEach(i=>i.classList.remove('in'));
+ clips.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),300+i*220));
+ infos.forEach((el,i)=>setTimeout(()=>el.classList.add('in'),900+i*160));}
+run();setInterval(run,4600);
+</script></body></html>

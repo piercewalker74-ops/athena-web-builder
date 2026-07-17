@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>price-ledger</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:24px 26px}
+ .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+ .head h2{font-size:22px}
+ .row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:baseline;padding:15px 2px;
+   border-bottom:1px solid var(--line);opacity:0;transform:translateX(-14px);transition:all .5s}
+ .row.in{opacity:1;transform:none}
+ .nm{font-size:16px;font-weight:600}
+ .ds{font-size:11px;color:var(--ice);opacity:.6;margin-top:2px}
+ .pr{font-family:Georgia,serif;font-size:20px;color:var(--cyan);white-space:nowrap;text-shadow:0 0 12px rgba(47,224,255,.4)}
+ .pr small{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.6;letter-spacing:.1em;display:block;text-align:right}
+</style></head>
+<body class="demo"><div class="demo-name">f · price-ledger</div>
+<div class="stage frost">
+  <div class="head"><h2 class="big">TREATMENTS</h2><span class="chip">◇ price sheet</span></div>
+  <div id="rows"></div>
+</div>
+<script>
+const data=[
+ ['Signature Facial','60 min · deep cleanse + massage',95],
+ ['Hot-Stone Massage','75 min · full body',120],
+ ['Gel Manicure','shape · cuticle · gel finish',42],
+ ['Brow & Lash Tint','shape + tint combo',38],
+ ['Body Scrub Ritual','45 min · exfoliate + hydrate',78]];
+const R=document.getElementById('rows');
+data.forEach(d=>{const r=document.createElement('div');r.className='row';
+ r.innerHTML=`<div><div class="nm">${d[0]}</div><div class="ds">${d[1]}</div></div>
+   <div class="pr">$${d[2]}<small>FROM</small></div>`;R.appendChild(r);});
+const rows=[...R.children];rows[rows.length-1].style.borderBottom='none';
+function run(){rows.forEach(r=>r.classList.remove('in'));rows.forEach((r,i)=>setTimeout(()=>r.classList.add('in'),200+i*150));}
+run();setInterval(run,4800);
+</script></body></html>

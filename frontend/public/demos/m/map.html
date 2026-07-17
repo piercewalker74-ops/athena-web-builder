@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>map</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{position:relative;border-radius:18px;overflow:hidden;height:320px}
+ svg{position:absolute;inset:0;width:100%;height:100%}
+ .grid line{stroke:var(--line);stroke-width:.5}
+ .pin{cursor:pointer}
+ .pin circle.core{fill:var(--cyan)}
+ .pin circle.pulse{fill:none;stroke:var(--cyan);transform-origin:center;animation:pl 2.4s ease-out infinite}
+ @keyframes pl{0%{r:4px;opacity:.9}100%{r:26px;opacity:0}}
+ .cap{position:absolute;left:16px;bottom:14px}
+ .name{position:absolute;font-family:var(--mono);font-size:10px;color:var(--frost);background:rgba(4,18,30,.7);padding:3px 7px;border-radius:6px;transform:translate(-50%,-160%);white-space:nowrap;pointer-events:none}
+</style></head>
+<body class="demo"><div class="demo-name">m · map</div>
+<div class="stage frost" id="st">
+  <svg viewBox="0 0 400 320" id="svg">
+    <g class="grid" id="g"></g>
+    <path d="M20,190 Q120,120 200,170 T380,140" fill="none" stroke="var(--line2)" stroke-dasharray="4 5"/>
+  </svg>
+  <div class="cap"><div class="eyebrow">SERVICE AREA</div><h2 class="big" style="font-size:22px">6 cities covered</h2></div>
+</div>
+<script>
+const g=document.getElementById('g'),svg=document.getElementById('svg'),st=document.getElementById('st');
+for(let i=0;i<=400;i+=32)g.innerHTML+=`<line x1="${i}" y1="0" x2="${i}" y2="320"/>`;
+for(let i=0;i<=320;i+=32)g.innerHTML+=`<line x1="0" y1="${i}" x2="400" y2="${i}"/>`;
+const cities=[[70,200,'Riverside'],[150,150,'Fontana'],[230,175,'Ontario'],[300,140,'Rancho'],[190,240,'Corona'],[340,200,'Chino']];
+cities.forEach(c=>{const ns='http://www.w3.org/2000/svg';const grp=document.createElementNS(ns,'g');grp.setAttribute('class','pin');
+ grp.innerHTML=`<circle class="pulse" cx="${c[0]}" cy="${c[1]}"/><circle class="core" cx="${c[0]}" cy="${c[1]}" r="4"/>`;
+ grp.addEventListener('mouseenter',()=>{const t=document.createElement('div');t.className='name';t.textContent=c[2];t.style.left=c[0]/400*100+'%';t.style.top=c[1]/320*100+'%';t.id='tt';st.appendChild(t);});
+ grp.addEventListener('mouseleave',()=>{const t=document.getElementById('tt');if(t)t.remove();});
+ svg.appendChild(grp);});
+</script></body></html>

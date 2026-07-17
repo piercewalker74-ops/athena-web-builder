@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>upload</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:420px;width:100%}
+ .zone{border:2px dashed var(--line2);border-radius:16px;padding:30px;text-align:center;transition:all .3s;background:var(--glass)}
+ .zone.hot{border-color:var(--cyan);background:rgba(47,224,255,.06);box-shadow:var(--glow)}
+ .zone .ic{font-size:36px;filter:drop-shadow(0 0 10px rgba(47,224,255,.5))}
+ .zone h3{font-size:15px;margin-top:8px}.zone p{font-size:11px;color:var(--ice);opacity:.6;margin-top:4px}
+ .files{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+ .f{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--glass);border:1px solid var(--line)}
+ .f .th{width:30px;height:30px;border-radius:6px;flex:0 0 auto}
+ .f .nm{font-size:11px;flex:1}.f .pc{font-family:var(--mono);font-size:10px;color:var(--cyan)}
+ .bar{height:4px;border-radius:999px;background:var(--line);margin-top:5px;overflow:hidden}
+ .bar i{display:block;height:100%;width:0;background:var(--cyan);box-shadow:var(--glow);transition:width .2s}
+</style></head>
+<body class="demo"><div class="demo-name">m · upload</div>
+<div class="stage">
+  <div class="zone" id="z"><div class="ic">⬆</div><h3 class="glow">Drop your photos here</h3><p>or click to browse · JPG, PNG, MP4</p></div>
+  <div class="files" id="files"></div>
+</div>
+<script>
+const z=document.getElementById('z'),files=document.getElementById('files');
+const names=['front-tint.jpg','tesla-glass.mp4','before-after.png'];
+function run(){files.innerHTML='';z.classList.add('hot');setTimeout(()=>z.classList.remove('hot'),700);
+ names.forEach((n,i)=>{const f=document.createElement('div');f.className='f';f.style.opacity=0;
+  f.innerHTML=`<div class="th filler"></div><div class="nm">${n}<div class="bar"><i></i></div></div><div class="pc">0%</div>`;files.appendChild(f);
+  setTimeout(()=>{f.style.transition='opacity .3s';f.style.opacity=1;let p=0;const bar=f.querySelector('i'),pc=f.querySelector('.pc');
+   const iv=setInterval(()=>{p=Math.min(100,p+Math.random()*22);bar.style.width=p+'%';pc.textContent=Math.round(p)+'%';
+    if(p>=100){clearInterval(iv);pc.textContent='✓';pc.style.color='var(--teal)';}},180);},i*500);});}
+run();setInterval(run,5200);
+</script></body></html>

@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Command Palette</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:440px}
+ .pal{border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+ .search{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+ .search .k{font-family:var(--mono);font-size:10px;color:var(--ice);opacity:.5;border:1px solid var(--line);border-radius:5px;padding:2px 7px;margin-left:auto}
+ .q{flex:1;font-size:16px;color:var(--frost);position:relative}
+ .q .cur{display:inline-block;width:2px;height:18px;background:var(--cyan);vertical-align:-3px;animation:bl .7s step-end infinite}
+ @keyframes bl{50%{opacity:0}}
+ .list{padding:8px}
+ .row{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:9px;font-size:13.5px;transition:background .15s}
+ .row.on{background:var(--glass2)}
+ .row .ic{width:26px;height:26px;border-radius:7px;background:var(--glass);display:grid;place-items:center;font-size:13px}
+ .row .sh{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.5}
+ .grp{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ice);opacity:.5;padding:8px 12px 4px}
+</style></head>
+<body class="demo"><div class="demo-name">f · command palette</div>
+<div class="stage"><div class="pal frost">
+  <div class="search"><span style="color:var(--cyan)">⌕</span><div class="q"><span id="typed"></span><span class="cur"></span></div><span class="k">⌘K</span></div>
+  <div class="grp">NAVIGATE</div>
+  <div class="list" id="list"></div>
+</div></div>
+<script>
+const rows=[['🚗','Book an install','↵'],['✨','Services & pricing','G S'],['🖼','View gallery','G G'],['📍','Find our shop','G L'],['💬','Chat with us','G C']];
+const list=document.getElementById('list'),typed=document.getElementById('typed');
+rows.forEach((r,i)=>{const d=document.createElement('div');d.className='row'+(i===0?' on':'');
+ d.innerHTML=`<span class="ic">${r[0]}</span>${r[1]}<span class="sh">${r[2]}</span>`;list.appendChild(d);});
+const els=[...list.children];let sel=0;const word='book';let ci=0;
+function typeLoop(){if(ci<=word.length){typed.textContent=word.slice(0,ci++);setTimeout(typeLoop,220);}else setTimeout(()=>{typed.textContent='';ci=0;typeLoop();},2600);}
+typeLoop();
+setInterval(()=>{els[sel].classList.remove('on');sel=(sel+1)%els.length;els[sel].classList.add('on');},1100);
+</script></body></html>

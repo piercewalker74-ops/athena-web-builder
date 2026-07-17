@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>parallax-plate-hero</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+ @media(max-width:480px){.stage{grid-template-columns:1fr}.plate{order:-1}}
+ .copy .big{font-size:clamp(24px,4.6vw,42px);margin:8px 0 12px}
+ .ln{display:block;opacity:0;transform:translateY(120%);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .ln.in{opacity:1;transform:none}
+ .lnw{overflow:hidden}
+ .cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+ .plate{position:relative;height:280px;border-radius:16px;overflow:hidden;perspective:700px}
+ .lyr{position:absolute;inset:-8%;transition:transform .2s ease-out}
+ .bg .filler{width:100%;height:100%;border-radius:0}
+ .fg{display:flex;align-items:center;justify-content:center}
+ .fg .card{width:150px;height:180px;filter:blur(.5px);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+ .fg .filler{width:100%;height:100%}
+ .badge{position:absolute;left:14px;bottom:14px;z-index:3}
+</style></head>
+<body class="demo"><div class="demo-name">f · parallax-plate-hero</div>
+<div class="stage">
+  <div class="copy">
+    <div class="eyebrow">HANDCRAFTED INTERIORS</div>
+    <h1 class="big glow">
+      <span class="lnw"><span class="ln" data-d="0">Rooms that</span></span>
+      <span class="lnw"><span class="ln" data-d="1">feel designed</span></span>
+      <span class="lnw"><span class="ln" data-d="2">around you.</span></span>
+    </h1>
+    <div class="sub">A studio-led remodel where every plate, plane and light layer is placed with intent.</div>
+    <div class="cta"><button class="btn">Start a project</button><button class="btn ghost">View portfolio</button></div>
+  </div>
+  <div class="plate frost" id="pl">
+    <div class="lyr bg" data-d="10"><div class="filler"><span class="tag">BG</span></div></div>
+    <div class="lyr fg" data-d="34"><div class="card filler eel"><span class="tag">SUBJECT</span></div></div>
+    <div class="badge chip">◇ Studio No.7</div>
+  </div>
+</div>
+<script>
+const pl=document.getElementById('pl'),lyr=[...pl.querySelectorAll('.lyr')];let tx=0,ty=0,cx=0,cy=0;
+pl.addEventListener('mousemove',e=>{const r=pl.getBoundingClientRect();tx=(e.clientX-r.left)/r.width-.5;ty=(e.clientY-r.top)/r.height-.5;});
+pl.addEventListener('mouseleave',()=>{tx=0;ty=0;});
+function loop(){cx+=(tx-cx)*.07;cy+=(ty-cy)*.07;lyr.forEach(l=>{const d=+l.dataset.d;l.style.transform=`translate(${-cx*d}px,${-cy*d}px)`;});requestAnimationFrame(loop);}
+loop();
+let a=0;setInterval(()=>{if(!tx&&!ty){a+=.03;tx=Math.sin(a)*.35;ty=Math.cos(a*.7)*.28;setTimeout(()=>{tx=0;ty=0;},60);}},60);
+// staggered headline lines on mount + loop
+const lines=[...document.querySelectorAll('.ln')];
+function rise(){lines.forEach(l=>l.classList.remove('in'));lines.forEach((l,i)=>setTimeout(()=>l.classList.add('in'),200+i*160));}
+rise();setInterval(rise,5200);
+</script></body></html>

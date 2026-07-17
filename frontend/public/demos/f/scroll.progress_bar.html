@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scroll.progress_bar</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{border-radius:16px;overflow:hidden;position:relative}
+ .bar{position:absolute;top:0;left:0;height:4px;width:0;z-index:3;
+   background:linear-gradient(90deg,var(--cyan),var(--teal));box-shadow:0 0 12px rgba(47,224,255,.6)}
+ .barpad{height:4px}
+ .doc{padding:20px;display:flex;flex-direction:column;gap:14px}
+ .topbar{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.14em}
+ .big{font-size:clamp(22px,4.4vw,34px)}
+ .p{height:10px;border-radius:6px;background:linear-gradient(90deg,var(--ice),transparent);opacity:.5}
+ .p.s{width:92%}.p.m{width:74%}.p.l{width:84%}.p.xs{width:46%}
+ .filler{height:90px}
+ .ring{width:34px;height:34px;transform:rotate(-90deg)}
+ .ring circle{fill:none;stroke-width:4}
+ .ring .bg{stroke:var(--line)}
+ .ring .fg{stroke:var(--cyan);stroke-linecap:round}
+</style></head>
+<body class="demo"><div class="demo-name">f · scroll.progress_bar</div>
+<div class="stage frost">
+  <div class="bar" id="bar"></div><div class="barpad"></div>
+  <div class="doc" id="doc">
+    <div class="topbar"><span>READING PROGRESS</span>
+      <svg class="ring" viewBox="0 0 40 40"><circle class="bg" cx="20" cy="20" r="16"/><circle class="fg" id="ring" cx="20" cy="20" r="16" stroke-dasharray="100.5" stroke-dashoffset="100.5"/></svg>
+    </div>
+    <h1 class="big glow">The long read</h1>
+    <div class="p s"></div><div class="p m"></div><div class="p l"></div>
+    <div class="filler"><span class="tag">FIG</span></div>
+    <div class="p s"></div><div class="p xs"></div><div class="p m"></div><div class="p l"></div>
+  </div>
+</div>
+<script>
+const bar=document.getElementById('bar'),ring=document.getElementById('ring');
+const C=2*Math.PI*16;ring.setAttribute('stroke-dasharray',C.toFixed(1));
+let prog=0,dir=1;
+function frame(){
+  prog+=0.0045*dir;
+  if(prog>=1){prog=1;dir=-1;}if(prog<=0){prog=0;dir=1;}
+  bar.style.width=(prog*100)+'%';
+  ring.style.strokeDashoffset=(C*(1-prog)).toFixed(1);
+  requestAnimationFrame(frame);
+}
+frame();
+</script></body></html>

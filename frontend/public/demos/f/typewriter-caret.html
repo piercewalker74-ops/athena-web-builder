@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>typewriter-caret</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+ .big{font-size:clamp(24px,5vw,42px);min-height:1.2em}
+ .swap{color:var(--teal)}
+ .cur{display:inline-block;width:3px;height:1em;background:#4ade80;margin-left:3px;vertical-align:-2px;
+   box-shadow:0 0 12px rgba(74,222,128,.7);animation:bl .68s step-end infinite}
+ @keyframes bl{50%{opacity:0}}
+ .pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+</style></head>
+<body class="demo"><div class="demo-name">f · typewriter-caret</div>
+<div class="stage">
+  <div class="eyebrow">GREEN-CARET TYPEWRITER</div>
+  <h1 class="big glow">Grass that stays <span class="swap" id="w"></span><span class="cur"></span></h1>
+  <div class="pills">
+    <span class="chip">retypes on new text</span><span class="chip">blinking caret</span>
+  </div>
+</div>
+<script>
+const phrases=['green year-round.','soft underfoot.','pet-proof.','drought-free.','put-worthy.'];
+const el=document.getElementById('w');let pi=0,ci=0,del=false;
+function tick(){const w=phrases[pi];
+ if(!del){el.textContent=w.slice(0,++ci);
+   if(ci===w.length){del=true;return setTimeout(tick,1200);}}
+ else{el.textContent=w.slice(0,--ci);
+   if(ci===0){del=false;pi=(pi+1)%phrases.length;return setTimeout(tick,320);}}
+ setTimeout(tick,del?38:78+Math.random()*40);}
+tick();
+</script></body></html>

@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>chip-filter-running-budget</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:20px;display:flex;flex-direction:column;gap:14px}
+ .filters{display:flex;gap:8px;flex-wrap:wrap}
+ .chip{cursor:pointer;transition:all .2s}
+ .chip.on{background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;border-color:transparent}
+ .list{display:flex;flex-direction:column;gap:8px}
+ .item{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--glass);transition:all .25s}
+ .item.hide{display:none}
+ .item .nm{font-size:14px;font-weight:600}
+ .item .ct{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.6;letter-spacing:.1em}
+ .item .pr{font-family:var(--mono);font-size:14px;color:var(--cyan)}
+ .item .add{cursor:pointer;width:26px;height:26px;border-radius:50%;border:1px solid var(--line2);background:transparent;color:var(--ice2);font-size:16px;line-height:1}
+ .item.sel{border-color:var(--cyan);box-shadow:var(--glow)}
+ .item.sel .add{background:var(--cyan);color:#04121e}
+ .total{position:sticky;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:999px;
+   background:linear-gradient(120deg,rgba(47,224,255,.16),rgba(57,211,201,.12));border:1px solid var(--line2)}
+ .total .v{font-family:var(--mono);font-size:20px;color:var(--frost)}
+</style></head>
+<body class="demo"><div class="demo-name">f · chip-filter-running-budget</div>
+<div class="stage frost">
+ <div class="eyebrow">BUILD YOUR PACKAGE</div>
+ <div class="filters" id="filters"></div>
+ <div class="list" id="list"></div>
+ <div class="total"><span class="sub" id="cnt">Nothing selected</span><span class="v" id="sum">$0</span></div>
+</div>
+<script>
+const items=[['Ceramic tint','Glass',349],['Paint protection','Exterior',899],['Interior detail','Interior',180],['Headlight restore','Exterior',90],['Windshield strip','Glass',129],['Ozone treatment','Interior',75]];
+const cats=['All','Glass','Exterior','Interior'];
+const F=document.getElementById('filters'),L=document.getElementById('list'),SUM=document.getElementById('sum'),CNT=document.getElementById('cnt');
+let active='All';const sel=new Set();
+cats.forEach(c=>{const ch=document.createElement('span');ch.className='chip'+(c==='All'?' on':'');ch.textContent=c;
+ ch.onclick=()=>{active=c;[...F.children].forEach(x=>x.classList.toggle('on',x.textContent===c));applyFilter();};F.appendChild(ch);});
+items.forEach(([nm,cat,pr],i)=>{const el=document.createElement('div');el.className='item';el.dataset.cat=cat;el.dataset.pr=pr;
+ el.innerHTML=`<div><div class="nm">${nm}</div><div class="ct">${cat.toUpperCase()}</div></div><div class="pr">$${pr}</div><button class="add">+</button>`;
+ el.querySelector('.add').onclick=()=>{if(sel.has(i)){sel.delete(i);el.classList.remove('sel');el.querySelector('.add').textContent='+';}
+  else{sel.add(i);el.classList.add('sel');el.querySelector('.add').textContent='✓';}total();};
+ L.appendChild(el);});
+function applyFilter(){[...L.children].forEach(el=>el.classList.toggle('hide',active!=='All'&&el.dataset.cat!==active));}
+function total(){let s=0;sel.forEach(i=>s+=items[i][2]);SUM.textContent='$'+s.toLocaleString();
+ CNT.textContent=sel.size?`${sel.size} item${sel.size>1?'s':''} in your build`:'Nothing selected';}
+// auto-demo the interaction on a loop
+let step=0;setInterval(()=>{const btns=[...L.querySelectorAll('.add')];btns[step%btns.length].click();step++;},1800);
+</script></body></html>

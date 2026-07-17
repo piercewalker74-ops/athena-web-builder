@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>alternating-image-split</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px}
+ .row{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center}
+ .row.flip .pic{order:2}
+ @media(max-width:480px){.row{grid-template-columns:1fr}.row.flip .pic{order:0}}
+ .pic .filler{height:150px;width:100%}
+ .txt .eyebrow{display:block;margin-bottom:6px}
+ .txt h2{font-size:clamp(19px,3.6vw,26px);margin-bottom:8px}
+ .txt .sub{margin-bottom:10px}
+ .checks{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+ .checks li{display:flex;gap:8px;font-size:12px;color:var(--frost)}
+ .checks svg{width:16px;height:16px;flex:0 0 auto;stroke:var(--cyan);stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+ .rv{opacity:0;transform:translateY(26px);filter:blur(5px);transition:all .85s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none;filter:none}
+ .row.flip .txt.rv{transform:translateY(26px)}
+</style></head>
+<body class="demo"><div class="demo-name">f · alternating-image-split</div>
+<div class="stage" id="s">
+  <div class="row">
+    <div class="pic rv" data-d="0"><div class="filler eel"><span class="tag">KITCHEN</span></div></div>
+    <div class="txt rv" data-d="1">
+      <span class="eyebrow">REMODELS</span>
+      <h2 class="glow">Kitchens built to gather.</h2>
+      <div class="sub">Custom cabinetry and stone that lasts decades, installed by one dedicated crew.</div>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>3-week turnaround</li>
+        <li><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Lifetime workmanship warranty</li>
+      </ul>
+      <button class="btn">See kitchens</button>
+    </div>
+  </div>
+  <div class="row flip">
+    <div class="pic rv" data-d="0"><div class="filler eel"><span class="tag">BATH</span></div></div>
+    <div class="txt rv" data-d="1">
+      <span class="eyebrow">RENOVATION</span>
+      <h2 class="glow">Spa-grade bathrooms.</h2>
+      <div class="sub">Walk-in showers, heated floors and fixtures chosen with you, not for you.</div>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Waterproofing guaranteed</li>
+        <li><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Fixed, upfront quote</li>
+      </ul>
+      <button class="btn">See baths</button>
+    </div>
+  </div>
+</div>
+<script>
+const rows=[...document.querySelectorAll('.row')];
+function run(){
+ rows.forEach(r=>[...r.querySelectorAll('.rv')].forEach(e=>e.classList.remove('in')));
+ rows.forEach((r,ri)=>{[...r.querySelectorAll('.rv')].forEach(e=>{const d=+e.dataset.d;
+   setTimeout(()=>e.classList.add('in'),300+ri*500+d*200);});});
+}
+run();setInterval(run,5200);
+</script></body></html>

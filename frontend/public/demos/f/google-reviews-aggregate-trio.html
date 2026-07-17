@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>google-reviews-aggregate-trio</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:600px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ .c{padding:16px;border-radius:14px;display:flex;flex-direction:column;gap:8px;opacity:0;transform:translateY(18px);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .c.in{opacity:1;transform:none}
+ .stars{color:var(--cyan);letter-spacing:2px;font-size:13px}
+ .q{font-size:11px;color:var(--frost);line-height:1.5}.who{font-family:var(--mono);font-size:8px;color:var(--ice);opacity:.7;margin-top:auto}
+ .big-score{font-size:44px;font-weight:700;line-height:1}.cnt{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.7}
+ .glink{font-family:var(--mono);font-size:9px;color:var(--cyan)}
+ .teaser{font-size:34px;font-weight:700}.g-ic{width:22px;height:22px;border-radius:50%;background:linear-gradient(120deg,var(--cyan),var(--ice));display:grid;place-items:center;color:#04121e;font-weight:700;font-size:12px}
+</style></head>
+<body class="demo"><div class="demo-name">f · google-reviews-aggregate-trio</div>
+<div class="stage" id="s">
+  <div class="c frost"><div class="stars">★★★★★</div><div class="q">"Best tint in town — no bubbles, done in an afternoon. Cabin's ice-cold now."</div><div class="who">— Marcus R. · verified</div></div>
+  <div class="c frost" style="align-items:center;text-align:center;justify-content:center"><div class="g-ic">G</div><div class="big-score glow">4.9</div><div class="stars">★★★★★</div><div class="cnt">from 312 reviews</div><a class="glink">Read on Google →</a></div>
+  <div class="c frost" style="justify-content:center"><div class="teaser glow">1,200+</div><div class="cnt">5-star installs</div><a class="glink">See them all →</a></div>
+</div>
+<script>
+const c=[...document.querySelectorAll('.c')];
+function run(){c.forEach(x=>x.classList.remove('in'));c.forEach((x,i)=>setTimeout(()=>x.classList.add('in'),200+i*160));}
+run();setInterval(run,4600);
+</script></body></html>

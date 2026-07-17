@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>click-to-load-pdf-embed</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:420px}
+ .doc{position:relative;height:290px;border-radius:16px;overflow:hidden;display:grid;place-items:center;text-align:center}
+ .doc .filler{position:absolute;inset:0;border-radius:0;opacity:.5}
+ .prompt{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;transition:opacity .4s}
+ .pdficon{font-size:44px;filter:drop-shadow(0 0 12px rgba(47,224,255,.5))}
+ .loaded{position:absolute;inset:0;display:none;flex-direction:column}
+ .loaded.on{display:flex;animation:fi .5s}@keyframes fi{from{opacity:0}}
+ .pbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--ink);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:9px;color:var(--ice)}
+ .pg{flex:1;display:flex;flex-direction:column;gap:7px;padding:16px;overflow:hidden}
+ .ln{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--ice),transparent);opacity:0;animation:rise .5s forwards}
+ @keyframes rise{to{opacity:.7}}
+</style></head>
+<body class="demo"><div class="demo-name">f · click-to-load-pdf-embed</div>
+<div class="stage">
+  <div class="eyebrow" style="margin-bottom:8px">DEFERRED PDF PREVIEW</div>
+  <div class="doc frost">
+    <div class="filler"></div>
+    <div class="prompt" id="prompt"><div class="pdficon">📄</div><div class="sub">Product catalogue · 4.2 MB</div><button class="btn" id="load">▸ Load preview</button></div>
+    <div class="loaded" id="loaded">
+      <div class="pbar"><span>◇ catalogue.pdf</span><span style="margin-left:auto">1 / 12</span></div>
+      <div class="pg" id="pg"></div>
+    </div>
+  </div>
+</div>
+<script>
+const load=document.getElementById('load'),prompt=document.getElementById('prompt'),loaded=document.getElementById('loaded'),pg=document.getElementById('pg');
+function mount(){prompt.style.opacity=0;loaded.classList.add('on');pg.innerHTML='';
+ [80,60,90,45,72,55,88].forEach((w,i)=>{const l=document.createElement('div');l.className='ln';l.style.width=w+'%';l.style.animationDelay=(i*90)+'ms';pg.appendChild(l);});}
+function reset(){loaded.classList.remove('on');prompt.style.opacity=1;}
+load.onclick=mount;
+let on=false;setInterval(()=>{on=!on;on?mount():reset();},2800);
+</script></body></html>

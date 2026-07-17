@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>empty-state-reviews</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;justify-content:center}
+ .card{width:100%;max-width:420px;padding:34px 30px;text-align:center;position:relative;overflow:hidden}
+ .rv{opacity:0;transform:translateY(24px);filter:blur(6px);transition:all .9s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none;filter:none}
+ .quote{font-family:Georgia,serif;font-size:96px;line-height:.7;color:var(--cyan);opacity:.3;height:56px}
+ .card h2{font-size:22px;margin:14px 0 10px}
+ .p{font-size:13px;color:var(--ice);opacity:.85;line-height:1.55;max-width:320px;margin:0 auto 18px}
+ .cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+ .dots{margin-top:20px;display:flex;gap:6px;justify-content:center}
+ .dot{width:6px;height:6px;border-radius:50%;background:var(--line2);animation:pl 1.4s ease-in-out infinite}
+ .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+ @keyframes pl{50%{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}}
+</style></head>
+<body class="demo"><div class="demo-name">f · empty-state-reviews</div>
+<div class="stage">
+  <div class="card frost">
+    <div class="quote rv" data-d="0">“</div>
+    <h2 class="rv glow" data-d="1">We’re just getting started.</h2>
+    <p class="p rv" data-d="2">We’d rather show you real words from real customers than invent them. We’re gathering our first reviews now — call us and be one of them.</p>
+    <div class="cta rv" data-d="3"><button class="btn">Call (555) 0142</button><button class="btn ghost">Get a quote</button></div>
+    <div class="dots rv" data-d="4"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+  </div>
+</div>
+<script>
+const els=[...document.querySelectorAll('.rv')];
+function run(){els.forEach(e=>e.classList.remove('in'));els.forEach((e,i)=>setTimeout(()=>e.classList.add('in'),200+i*240));}
+run();setInterval(run,4600);
+</script></body></html>

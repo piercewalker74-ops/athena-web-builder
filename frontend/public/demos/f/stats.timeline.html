@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>stats.timeline</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:18px 8px}
+ .eyebrow{margin-bottom:16px;display:block}
+ .tl{position:relative;padding-left:34px}
+ .spine{position:absolute;left:11px;top:6px;bottom:6px;width:2px;background:var(--line2);overflow:hidden}
+ .spine i{position:absolute;left:0;top:0;width:100%;background:linear-gradient(var(--cyan),var(--teal));box-shadow:var(--glow);height:0;transition:height 1.6s cubic-bezier(.4,0,.2,1)}
+ .node{position:relative;padding:0 0 22px 0;opacity:0;transform:translateX(-10px);transition:all .5s}
+ .node.in{opacity:1;transform:none}
+ .node:before{content:'';position:absolute;left:-29px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--deep);border:2px solid var(--line2);transition:border-color .4s,box-shadow .4s}
+ .node.in:before{border-color:var(--cyan);box-shadow:var(--glow)}
+ .yr{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.08em}
+ .ti{font-size:15px;font-weight:650;margin:2px 0}
+ .ds{font-size:11px;color:var(--ice);opacity:.65}
+</style></head>
+<body class="demo"><div class="demo-name">f · stats.timeline</div>
+<div class="stage frost" style="padding:22px 20px">
+  <div class="eyebrow">OUR MILESTONES</div>
+  <div class="tl"><div class="spine"><i id="fill"></i></div><div id="nodes"></div></div>
+</div>
+<script>
+const data=[
+ ['2014','Founded','Two installers, one truck, one county.'],
+ ['2017','First warehouse','Opened the regional supply depot.'],
+ ['2020','1,000 lawns','Crossed a thousand installs statewide.'],
+ ['2023','Turf mill','Brought fibre extrusion in-house.'],
+ ['2026','Going national','Franchise program launches.']];
+const N=document.getElementById('nodes'),fill=document.getElementById('fill');
+data.forEach(d=>{const n=document.createElement('div');n.className='node';
+ n.innerHTML=`<div class="yr">${d[0]}</div><div class="ti glow">${d[1]}</div><div class="ds">${d[2]}</div>`;N.appendChild(n);});
+const nodes=[...N.children];
+function run(){fill.style.height='0';nodes.forEach(n=>n.classList.remove('in'));
+ setTimeout(()=>fill.style.height='100%',60);
+ nodes.forEach((n,i)=>setTimeout(()=>n.classList.add('in'),200+i*300));}
+run();setInterval(run,5600);
+</script></body></html>

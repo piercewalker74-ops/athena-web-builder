@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Score Ring + Percentile</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:500px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+ .ring{position:relative;width:160px;height:160px}
+ svg.r{transform:rotate(-90deg)}
+ .track{stroke:var(--line);stroke-width:11;fill:none}
+ .prog{stroke:url(#g);stroke-width:11;fill:none;stroke-linecap:round;filter:drop-shadow(0 0 8px rgba(47,224,255,.6))}
+ .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+ .val b{font-size:38px;line-height:1}.val span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice);opacity:.7;margin-top:4px}
+ .curve{position:relative}
+ .curve svg{width:100%;height:120px}
+ .curve .cap{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--cyan);margin-bottom:6px}
+ .mark{fill:var(--ice);filter:drop-shadow(0 0 6px rgba(47,224,255,.9))}
+</style></head>
+<body class="demo"><div class="demo-name">f · score ring + percentile</div>
+<div class="stage">
+  <div class="ring">
+    <svg class="r" width="160" height="160" viewBox="0 0 160 160"><circle class="track" cx="80" cy="80" r="66"/><circle class="prog" id="pr" cx="80" cy="80" r="66"/></svg>
+    <div class="val"><b class="glow" id="v">0</b><span>OVERALL</span></div>
+  </div>
+  <div class="curve">
+    <div class="cap">TOP 8% OF INSTALLS</div>
+    <svg viewBox="0 0 300 120" id="cv"><path id="bell" fill="none" stroke="var(--line2)" stroke-width="2"/><path id="fillp" fill="rgba(47,224,255,.12)"/><circle id="dot" class="mark" r="5"/></svg>
+  </div>
+</div>
+<svg width="0" height="0"><defs><linearGradient id="g"><stop offset="0" stop-color="#2fe0ff"/><stop offset="1" stop-color="#39d3c9"/></linearGradient></defs></svg>
+<script>
+const R=66,C=2*Math.PI*R,pr=document.getElementById('pr'),v=document.getElementById('v');const TARGET=92;
+// bell curve path
+let d='M0,118';for(let x=0;x<=300;x+=4){const y=118-100*Math.exp(-Math.pow((x-150)/48,2));d+=` L${x},${y.toFixed(1)}`;}
+document.getElementById('bell').setAttribute('d',d);
+const mx=150+ (TARGET-50)/50*90; // marker x for percentile
+const my=118-100*Math.exp(-Math.pow((mx-150)/48,2));
+document.getElementById('dot').setAttribute('cx',mx);document.getElementById('dot').setAttribute('cy',my);
+document.getElementById('fillp').setAttribute('d',d+` L300,118 Z`);
+function ease(t){return 1-Math.pow(1-t,3);}
+function run(){pr.style.strokeDasharray=C;const t0=performance.now(),dur=1600;
+ (function s(now){const p=Math.min(1,(now-t0)/dur),e=ease(p);pr.style.strokeDashoffset=C*(1-TARGET/100*e);v.textContent=Math.round(TARGET*e);if(p<1)requestAnimationFrame(s);})(t0);}
+run();setInterval(run,3800);
+</script></body></html>

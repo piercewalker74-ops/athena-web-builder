@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>stagger-group-reveal</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .head{display:flex;align-items:center;justify-content:space-between}
+ .modes{display:flex;gap:6px}
+ .modes button{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--ice2);background:var(--glass);
+   border:1px solid var(--line);border-radius:999px;padding:5px 11px;cursor:pointer;text-transform:uppercase}
+ .modes button.on{color:#04121e;background:linear-gradient(120deg,var(--cyan),var(--ice));border-color:transparent}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ .item{padding:14px;border-radius:12px;opacity:0;transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
+ .item .filler{height:56px;margin-bottom:9px}
+ .item b{font-size:13px}.item p{font-size:10px;color:var(--ice);opacity:.7;margin-top:2px}
+ .grid.rise .item{transform:translateY(26px)}
+ .grid.fade .item{transform:none}
+ .grid.dock .item{transform:translateY(-22px) scale(.9)}
+ .grid.in .item{opacity:1;transform:none}
+</style></head>
+<body class="demo"><div class="demo-name">f · stagger-group-reveal</div>
+<div class="stage">
+  <div class="head"><div class="eyebrow">STAGGERED GROUP · ONE OBSERVER</div>
+    <div class="modes" id="modes">
+      <button data-m="rise" class="on">rise</button><button data-m="fade">fade</button><button data-m="dock">dock</button>
+    </div></div>
+  <div class="grid rise" id="g"></div>
+</div>
+<script>
+const g=document.getElementById('g');
+const data=[['Warranty','15-year'],['Drainage','32/hr'],['Pile','45mm'],['UV Lock','yes'],['Pet Safe','certified'],['Infill','antimicro']];
+data.forEach((d,i)=>{const c=document.createElement('div');c.className='item frost';
+ c.style.transitionDelay=(i*90)+'ms';
+ c.innerHTML=`<div class="filler ${i%2?'eel':''}"><span class="tag">0${i+1}</span></div><b>${d[0]}</b><p>${d[1]}</p>`;g.appendChild(c);});
+const items=[...g.children];let mode='rise';
+function play(){g.classList.remove('in');
+ // force reflow so the per-child animation-delay cascade replays as one group
+ void g.offsetWidth;requestAnimationFrame(()=>g.classList.add('in'));}
+const modes=document.getElementById('modes');
+modes.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ [...modes.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');
+ mode=b.dataset.m;g.className='grid '+mode;play();});
+play();setInterval(play,4200);
+</script></body></html>

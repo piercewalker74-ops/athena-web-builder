@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>diagonal-stripe-divider</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:0;border-radius:16px;overflow:hidden}
+ .band{padding:22px 20px}
+ .top{background:linear-gradient(160deg,#0c2f45,#0a2236)}
+ .bot{background:linear-gradient(160deg,#0a2236,#0e3a4e)}
+ .top .big,.bot .big{font-size:20px}
+ /* the decorative diagonal stripe divider — pure repeating-linear-gradient, zero images */
+ .divider{height:46px;position:relative;overflow:hidden;
+   background:repeating-linear-gradient(115deg,
+     rgba(47,224,255,.16) 0 14px, transparent 14px 28px, rgba(57,211,201,.16) 28px 42px, transparent 42px 56px);
+   background-size:200% 100%;animation:slide 6s linear infinite;
+   border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+ @keyframes slide{to{background-position:112px 0}}
+ .divider .glint{position:absolute;top:0;bottom:0;width:80px;
+   background:linear-gradient(115deg,transparent,rgba(234,246,255,.5),transparent);
+   filter:blur(4px);animation:sweep 4.5s ease-in-out infinite}
+ @keyframes sweep{0%{left:-15%}55%,100%{left:115%}}
+</style></head>
+<body class="demo"><div class="demo-name">f · diagonal-stripe-divider</div>
+<div class="stage frost">
+  <div class="band top">
+    <div class="eyebrow">SECTION ONE</div>
+    <h2 class="big glow" style="margin-top:6px">What we do</h2>
+    <p class="sub" style="margin-top:6px">A texture break sits below — no image, just gradient stripes.</p>
+  </div>
+  <div class="divider"><div class="glint"></div></div>
+  <div class="band bot">
+    <div class="eyebrow">SECTION TWO</div>
+    <h2 class="big glow" style="margin-top:6px">How it feels</h2>
+    <p class="sub" style="margin-top:6px">The angled stripes drift and a light glint sweeps across on a loop.</p>
+  </div>
+</div>
+</body></html>

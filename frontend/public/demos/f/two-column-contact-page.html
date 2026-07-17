@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>two-column-contact-page</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .strip{padding:16px 18px;border-radius:12px;background:linear-gradient(120deg,#071e30,#0a2a40)}
+ .strip h1{font-size:clamp(20px,4vw,30px)}
+ .cols{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+ .rv{opacity:0;transform:translateY(24px);filter:blur(5px);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none;filter:none}
+ .fld{height:30px;border-radius:8px;border:1px solid var(--line);background:var(--glass);margin-bottom:9px;position:relative}
+ .fld.ta{height:56px}
+ .fld span{position:absolute;left:10px;top:8px;font-size:11px;color:var(--ice);opacity:.55;font-family:var(--mono);letter-spacing:.06em}
+ .side h3{font-size:13px;margin-bottom:3px}
+ .side .row{padding:9px 0;border-bottom:1px solid var(--line)}
+ .side .row:last-child{border:none}
+ .side .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--cyan);opacity:.8}
+ .side .val{font-size:12px;color:var(--ice2);margin-top:2px}
+ .go{width:100%;justify-content:center;margin-top:4px}
+</style></head>
+<body class="demo"><div class="demo-name">f · two-column-contact-page</div>
+<div class="stage">
+  <div class="strip rv"><div class="eyebrow">GET IN TOUCH</div><h1 class="glow">Let's talk turf.</h1></div>
+  <div class="cols">
+    <div class="frost rv" style="padding:14px">
+      <div class="fld"><span>Full name</span></div>
+      <div class="fld"><span>Email address</span></div>
+      <div class="fld ta"><span>Your message…</span></div>
+      <button class="btn go">Send message →</button>
+    </div>
+    <div class="side frost rv" style="padding:14px">
+      <h3>Direct lines</h3>
+      <div class="row"><div class="lbl">NORTH SHORE</div><div class="val">(206) 555-0142</div></div>
+      <div class="row"><div class="lbl">HARBOR POINT</div><div class="val">(206) 555-0188</div></div>
+      <div class="row"><div class="lbl">EMAIL US</div><div class="val">hello@iglo.co</div></div>
+    </div>
+  </div>
+</div>
+<script>
+const els=[...document.querySelectorAll('.rv')];
+function run(){els.forEach(e=>e.classList.remove('in'));els.forEach((e,i)=>setTimeout(()=>e.classList.add('in'),180+i*220));}
+run();setInterval(run,4800);
+</script></body></html>

@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>footer.statement</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:20px;padding:26px 22px;text-align:left}
+ .top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px}
+ .top .eyebrow{opacity:.9}
+ .top .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:var(--glow);animation:pulse 2.4s infinite}
+ @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+ .clip{overflow:hidden;padding:3px 0}
+ .clip span{display:inline-block;transform:translateY(115%);transition:transform .85s cubic-bezier(.2,.85,.2,1)}
+ .clip.in span{transform:none}
+ .lead{font-size:clamp(15px,2.6vw,20px);color:var(--ice);opacity:.85;max-width:80%}
+ .mail{font-size:clamp(30px,8vw,64px);font-weight:700;letter-spacing:-.02em;line-height:1;
+   background:linear-gradient(110deg,var(--frost),var(--cyan) 55%,var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent;
+   display:inline-block;position:relative;cursor:pointer;transition:letter-spacing .4s}
+ .mail:hover{letter-spacing:.01em}
+ .mail::after{content:'';position:absolute;left:0;bottom:-6px;height:2px;width:0;background:linear-gradient(90deg,var(--cyan),var(--teal));transition:width .5s}
+ .mail.in::after{width:100%}
+ .foot{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+ .links{display:flex;gap:14px;flex-wrap:wrap}
+ .links a{font-family:var(--mono);font-size:11px;color:var(--ice2);text-decoration:none;opacity:.75;transition:color .2s}
+ .links a:hover{color:var(--cyan)}
+ .cred{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.5;letter-spacing:.12em}
+</style></head>
+<body class="demo"><div class="demo-name">f · footer.statement</div>
+<div class="stage frost">
+  <div class="top"><div class="eyebrow">FIELD & FROST STUDIO</div><div class="dot"></div></div>
+  <div class="clip" id="c0"><span class="lead">Got a project that deserves better than a template?</span></div>
+  <div class="clip" id="c1"><a class="mail glow" id="mail">let's&nbsp;talk&nbsp;→</a></div>
+  <div class="clip" id="c2"><span class="lead" style="opacity:.6">hello@fieldandfrost.studio</span></div>
+  <div class="foot">
+    <div class="links"><a>Work</a><a>Studio</a><a>Journal</a><a>Instagram</a><a>LinkedIn</a></div>
+    <div class="cred">© 2026 · MADE ON THE ICE</div>
+  </div>
+</div>
+<script>
+const parts=[document.getElementById('c0'),document.getElementById('c1'),document.getElementById('c2')];
+const mail=document.getElementById('mail');
+function run(){
+  parts.forEach(p=>p.classList.remove('in'));mail.classList.remove('in');
+  parts.forEach((p,i)=>setTimeout(()=>{p.classList.add('in');if(p.id==='c1')mail.classList.add('in');},300+i*300));
+}
+run();setInterval(run,5200);
+</script></body></html>

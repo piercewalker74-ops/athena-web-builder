@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>accordion</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:8px}
+ .eyebrow{margin-bottom:6px}
+ .item{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--glass)}
+ .q{display:flex;justify-content:space-between;align-items:center;padding:15px 16px;cursor:pointer;font-size:14px;font-weight:600}
+ .q .plus{font-family:var(--mono);color:var(--cyan);transition:transform .3s}
+ .item.on .q .plus{transform:rotate(45deg)}
+ .a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.3,.8,.3,1)}
+ .a p{padding:0 16px 15px;font-size:12px;color:var(--ice);opacity:.75;line-height:1.55}
+ .item.on{border-color:var(--line2);box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">m · accordion</div>
+<div class="stage">
+  <div class="eyebrow">FAQ ACCORDION</div>
+  <div id="wrap"></div>
+</div>
+<script>
+const F=[['How long does tint last?','Our ceramic film carries a lifetime warranty — no purple fade, no bubbling.'],
+ ['Is it legal in my state?','We match your local VLT limits and note anything above spec before install.'],
+ ['How long is the install?','Most vehicles are done same-day in 2–4 hours.']];
+const wrap=document.getElementById('wrap');
+F.forEach(f=>{const d=document.createElement('div');d.className='item';
+ d.innerHTML=`<div class="q">${f[0]}<span class="plus">+</span></div><div class="a"><p>${f[1]}</p></div>`;
+ d.querySelector('.q').onclick=()=>open(d);wrap.appendChild(d);});
+const items=[...wrap.children];let cur=-1;
+function open(d){items.forEach(x=>{const on=x===d&&!x.classList.contains('on');x.classList.toggle('on',on);x.querySelector('.a').style.maxHeight=on?x.querySelector('.a').scrollHeight+'px':0;});}
+function cycle(){cur=(cur+1)%items.length;open(items[cur]);}
+cycle();setInterval(cycle,2600);
+</script></body></html>

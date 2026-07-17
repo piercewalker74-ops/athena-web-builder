@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>reveal</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .rv{opacity:0;transform:translateY(26px);filter:blur(6px);transition:all .9s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none;filter:none}
+ .row{display:flex;gap:12px}.filler{height:120px;flex:1}
+ .line{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--ice),transparent)}
+</style></head>
+<body class="demo"><div class="demo-name">m · reveal</div>
+<div class="stage">
+  <div class="eyebrow rv" data-d="0">SCROLL REVEAL</div>
+  <h1 class="big rv glow" data-d="1">Content surfaces<br>as you arrive.</h1>
+  <div class="line rv" data-d="2" style="width:60%"></div>
+  <div class="row"><div class="filler rv" data-d="3"><span class="tag">IMG</span></div><div class="filler rv" data-d="4"><span class="tag">IMG</span></div></div>
+</div>
+<script>
+const els=[...document.querySelectorAll('.rv')];
+function run(){els.forEach(e=>e.classList.remove('in'));els.forEach((e,i)=>setTimeout(()=>e.classList.add('in'),200+i*260));}
+run();setInterval(run,4200);
+</script></body></html>

@@ -1,0 +1,60 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>faceted-filter-catalog</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:560px;display:grid;grid-template-columns:150px 1fr;gap:14px}
+ .side{align-self:start;position:sticky;top:0}
+ .side .grp{margin-bottom:12px}
+ .side h4{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase;margin-bottom:6px}
+ .fac{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ice);padding:4px 0;cursor:pointer}
+ .box{width:14px;height:14px;border-radius:4px;border:1px solid var(--line2);flex:0 0 auto;display:grid;place-items:center;transition:all .2s}
+ .fac.on .box{background:linear-gradient(120deg,var(--cyan),var(--ice));border-color:transparent}
+ .box svg{width:9px;opacity:0}.fac.on .box svg{opacity:1}
+ .fac.on{color:var(--frost)}
+ .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;min-height:24px}
+ .fchip{font-family:var(--mono);font-size:10px;color:var(--ice2);border:1px solid var(--line2);border-radius:999px;padding:3px 9px;background:var(--glass);cursor:pointer}
+ .fchip .x{color:var(--cyan);margin-left:4px}
+ .clr{font-family:var(--mono);font-size:10px;color:var(--cyan);background:none;border:none;cursor:pointer}
+ .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ .c{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--glass);opacity:0;transform:translateY(14px);transition:all .5s}
+ .c.in{opacity:1;transform:none}
+ .c .filler{height:56px;border-radius:0}
+ .c .m{padding:8px 10px}.c b{font-size:12px}.c span{font-size:9px;font-family:var(--mono);color:var(--ice);opacity:.6;display:block;margin-top:2px}
+</style></head>
+<body class="demo"><div class="demo-name">f · faceted-filter-catalog</div>
+<div class="stage">
+ <div class="side">
+  <div class="grp"><h4>Use</h4><div id="fUse"></div></div>
+  <div class="grp"><h4>Pile</h4><div id="fPile"></div></div>
+ </div>
+ <div>
+  <div class="chips" id="chips"></div>
+  <div class="cards" id="cards"></div>
+ </div>
+</div>
+<script>
+const CK='<svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-6" fill="none" stroke="#04121e" stroke-width="2"/></svg>';
+const PROD=[['Emerald Ridge','pet','tall'],['K9 ProFlow','pet','short'],['Putt Pro','sport','short'],
+ ['Meadow Blend','landscape','tall'],['Fairway 40','sport','tall'],['Terrace Fine','landscape','short']];
+const facets={Use:['pet','landscape','sport'],Pile:['short','tall']};
+const active=new Set();
+function build(id,list){const box=document.getElementById(id);list.forEach(v=>{const f=document.createElement('div');f.className='fac';
+ f.innerHTML=`<span class="box">${CK}</span>${v}`;f.onclick=()=>{active.has(v)?active.delete(v):active.add(v);f.classList.toggle('on');render();};box.appendChild(f);});}
+build('fUse',facets.Use);build('fPile',facets.Pile);
+const chips=document.getElementById('chips'),cards=document.getElementById('cards');
+function render(){
+ chips.innerHTML='';active.forEach(v=>{const c=document.createElement('span');c.className='fchip';c.innerHTML=v+' <span class="x">×</span>';
+  c.onclick=()=>{active.delete(v);[...document.querySelectorAll('.fac')].forEach(f=>{if(f.textContent.trim()===v)f.classList.remove('on');});render();};chips.appendChild(c);});
+ if(active.size){const b=document.createElement('button');b.className='clr';b.textContent='clear all';
+  b.onclick=()=>{active.clear();document.querySelectorAll('.fac').forEach(f=>f.classList.remove('on'));render();};chips.appendChild(b);}
+ const list=PROD.filter(p=>[...active].every(a=>p.includes(a)));
+ cards.innerHTML='';list.forEach((p,i)=>{const c=document.createElement('div');c.className='c';
+  c.innerHTML=`<div class="filler"></div><div class="m"><b>${p[0]}</b><span>${p[1]} · ${p[2]} pile</span></div>`;
+  cards.appendChild(c);setTimeout(()=>c.classList.add('in'),60+i*70);});}
+render();
+// auto demo
+const seq=['pet','tall','pet','landscape',null];let s=0;
+function demo(){const v=seq[s%seq.length];s++;
+ if(v===null){active.clear();document.querySelectorAll('.fac').forEach(f=>f.classList.remove('on'));render();}
+ else{const f=[...document.querySelectorAll('.fac')].find(f=>f.textContent.trim()===v);if(f)f.click();}}
+setInterval(demo,1500);
+</script></body></html>

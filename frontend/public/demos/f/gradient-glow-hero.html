@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gradient-glow-hero</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;border-radius:20px;position:relative;overflow:hidden;display:flex;align-items:center}
+ .base{position:absolute;inset:0;background:linear-gradient(135deg,#03101c 0%,#072338 45%,#0a3350 100%)}
+ .glow1{position:absolute;width:70%;height:80%;top:-20%;right:-10%;border-radius:50%;filter:blur(60px);
+   background:radial-gradient(circle,rgba(47,224,255,.55),transparent 62%);animation:drift 14s ease-in-out infinite alternate}
+ .glow2{position:absolute;width:55%;height:60%;bottom:-18%;left:-8%;border-radius:50%;filter:blur(60px);
+   background:radial-gradient(circle,rgba(57,211,201,.4),transparent 62%);animation:drift2 17s ease-in-out infinite alternate}
+ @keyframes drift{to{transform:translate(-40px,30px) scale(1.15)}}
+ @keyframes drift2{to{transform:translate(50px,-24px) scale(1.2)}}
+ .grain{position:absolute;inset:0;opacity:.4;background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.15) 2px 3px)}
+ .content{position:relative;padding:0 34px;max-width:520px}
+ .content .eyebrow{opacity:0;transform:translateY(10px);transition:all .7s}
+ .headline{font-family:Georgia,'Times New Roman',serif;font-size:clamp(30px,7vw,58px);font-weight:600;line-height:1.04;letter-spacing:-.01em;margin:12px 0}
+ .clip{overflow:hidden;padding:2px 0}
+ .clip span{display:inline-block;transform:translateY(115%);transition:transform .9s cubic-bezier(.2,.85,.2,1)}
+ .clip.in span{transform:none}
+ .content .sub{max-width:380px;opacity:0;transform:translateY(10px);transition:all .7s;transition-delay:.5s}
+ .content .cta{margin-top:20px;opacity:0;transform:translateY(10px);transition:all .7s;transition-delay:.7s;display:inline-flex}
+ .in-e{opacity:1!important;transform:none!important}
+</style></head>
+<body class="demo"><div class="demo-name">f · gradient-glow-hero</div>
+<div class="stage frost">
+  <div class="base"></div><div class="glow1"></div><div class="glow2"></div><div class="grain"></div>
+  <div class="content">
+    <div class="eyebrow" id="eb">STUDIO NOROD · ARCHITECTURE</div>
+    <div class="headline glow">
+      <div class="clip" id="l1"><span>Buildings that</span></div>
+      <div class="clip" id="l2"><span>hold the light.</span></div>
+    </div>
+    <div class="sub" id="sub">No stock photo, no wait — a pure gradient hero that renders the instant the page opens.</div>
+    <div class="cta" id="cta"><span class="btn">Start a project ↗</span></div>
+  </div>
+</div>
+<script>
+const eb=document.getElementById('eb'),sub=document.getElementById('sub'),cta=document.getElementById('cta'),
+ clips=[document.getElementById('l1'),document.getElementById('l2')];
+function run(){[eb,sub,cta].forEach(e=>e.classList.remove('in-e'));clips.forEach(c=>c.classList.remove('in'));
+ setTimeout(()=>eb.classList.add('in-e'),150);
+ clips.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),350+i*230));
+ setTimeout(()=>{sub.classList.add('in-e');cta.classList.add('in-e');},900);}
+run();setInterval(run,5000);
+</script></body></html>

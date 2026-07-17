@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>restaurant-menu-ledger</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:22px}
+ .sec+.sec{margin-top:20px}
+ .sh{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+ .sh h2{font-size:15px;font-family:var(--mono);letter-spacing:.2em;color:var(--cyan);text-transform:uppercase}
+ .sh .ln{flex:1;height:1px;background:var(--line2)}
+ .row{display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-items:baseline;padding:9px 2px;
+   border-bottom:1px dashed var(--line);opacity:0;transform:translateX(-12px);transition:all .5s}
+ .row.in{opacity:1;transform:none}
+ .nm{font-size:15px;font-weight:600}
+ .tag2{font-family:var(--mono);font-size:8px;letter-spacing:.1em;padding:2px 7px;border-radius:5px;margin-left:8px;
+   border:1px solid var(--line2);color:var(--ice2);vertical-align:middle}
+ .tag2.fav{color:#04121e;background:linear-gradient(120deg,var(--cyan),var(--ice));border:none}
+ .tag2.spicy{color:#ffcaca;border-color:rgba(255,150,150,.5)}
+ .ds{grid-column:1;font-size:11px;color:var(--ice);opacity:.6;margin-top:2px}
+ .pr{font-family:var(--mono);font-size:15px;color:var(--cyan)}
+</style></head>
+<body class="demo"><div class="demo-name">f · restaurant-menu-ledger</div>
+<div class="stage frost">
+  <div class="eyebrow" style="text-align:center;margin-bottom:6px">GLACIER KITCHEN · DINNER</div>
+  <div id="menu"></div>
+</div>
+<script>
+const menu=[
+ ['Small Plates',[
+   ['Frost Oyster Trio','yuzu mignonette, sea ice',18,'fav'],
+   ['Charred Leek','cyan crème, toasted hazelnut',14,''],
+   ['Ember Wings','ghost-chili glaze',13,'spicy']]],
+ ['Mains',[
+   ['Glacier Cod','fennel, saffron broth',31,'fav'],
+   ['Dry-Aged Ribeye','bone marrow butter',46,''],
+   ['Volcano Ramen','black garlic, chili oil',22,'spicy']]]
+];
+const wrap=document.getElementById('menu');const rows=[];
+menu.forEach(sec=>{
+  const h=document.createElement('div');h.className='sh';
+  h.innerHTML=`<h2>${sec[0]}</h2><div class="ln"></div>`;
+  const s=document.createElement('div');s.className='sec';s.appendChild(h);
+  sec[1].forEach(it=>{const r=document.createElement('div');r.className='row';
+    const t=it[3]?`<span class="tag2 ${it[3]}">${it[3]==='fav'?'FAN FAVORITE':'SPICY'}</span>`:'';
+    r.innerHTML=`<div class="nm">${it[0]}${t}</div><div class="pr">$${it[2]}</div><div class="ds">${it[1]}</div>`;
+    s.appendChild(r);rows.push(r);});
+  wrap.appendChild(s);
+});
+function run(){rows.forEach(r=>r.classList.remove('in'));rows.forEach((r,i)=>setTimeout(()=>r.classList.add('in'),160+i*120));}
+run();setInterval(run,5200);
+</script></body></html>

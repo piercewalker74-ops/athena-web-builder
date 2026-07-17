@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>icon-feature-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ @media(max-width:480px){.grid{grid-template-columns:1fr 1fr}.grid>:nth-child(n+5){display:none}}
+ .card{padding:18px 14px;border-radius:12px;opacity:0;transform:translateY(20px) scale(.96);
+   transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .card.in{opacity:1;transform:none}
+ .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:10px;
+   background:var(--glass2);border:1px solid var(--line2)}
+ .ic svg{width:22px;height:22px;stroke:var(--cyan);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;
+   filter:drop-shadow(0 0 6px rgba(47,224,255,.5))}
+ .card b{font-size:14px}.card p{font-size:11px;color:var(--ice);opacity:.7;margin-top:4px;line-height:1.4}
+</style></head>
+<body class="demo"><div class="demo-name">f · icon-feature-grid</div>
+<div class="stage">
+  <div class="eyebrow">WHAT WE DO</div>
+  <div class="grid" id="g"></div>
+</div>
+<script>
+const F=[
+ ['Same-Day Service','Book before noon, done by dusk.','<path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/>'],
+ ['Fully Insured','Licensed, bonded, guaranteed.','<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>'],
+ ['Eco Products','Pet & kid-safe, always.','<path d="M6 20c8 0 12-5 12-13-8 0-12 5-12 13z"/><path d="M6 20c2-4 5-6 8-7"/>'],
+ ['Upfront Pricing','No surprises on the invoice.','<path d="M4 7h16v10H4z"/><path d="M8 12h4"/><circle cx="16" cy="12" r="1"/>'],
+ ['Local Crew','Neighbors, not a call center.','<circle cx="12" cy="8" r="3"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/>'],
+ ['5-Star Rated','Reviewed by 1,200+ homes.','<path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/>']];
+const g=document.getElementById('g');
+F.forEach(f=>{const c=document.createElement('div');c.className='card frost';
+ c.innerHTML=`<div class="ic"><svg viewBox="0 0 24 24">${f[2]}</svg></div><b>${f[0]}</b><p>${f[1]}</p>`;g.appendChild(c);});
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),120+i*110));}
+run();setInterval(run,4600);
+</script></body></html>

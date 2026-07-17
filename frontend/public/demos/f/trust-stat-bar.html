@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>trust-stat-bar</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .bar{display:flex;align-items:stretch;padding:6px 4px}
+ .cell{flex:1;text-align:center;padding:14px 10px;position:relative}
+ .cell+.cell:before{content:'';position:absolute;left:0;top:18%;height:64%;width:1px;background:var(--line2)}
+ .ic{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:.1em}
+ .num{font-size:clamp(24px,5vw,40px);font-weight:700;letter-spacing:-.02em;line-height:1;margin:4px 0 2px}
+ .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ice);opacity:.7}
+ @media(max-width:480px){.bar{flex-wrap:wrap}.cell{flex:1 0 50%}.cell:nth-child(3):before{display:none}}
+</style></head>
+<body class="demo"><div class="demo-name">f · trust-stat-bar</div>
+<div class="stage">
+  <div class="eyebrow" style="text-align:center">TRUSTED BY THE NEIGHBORHOOD</div>
+  <div class="bar frost">
+    <div class="cell"><div class="ic">★ RATED</div><div class="num glow"><span data-t="4.9" data-dec="1">0</span></div><div class="lbl">GOOGLE STARS</div></div>
+    <div class="cell"><div class="ic">◇ REVIEWS</div><div class="num glow"><span data-t="1280" data-s="+">0</span></div><div class="lbl">VERIFIED</div></div>
+    <div class="cell"><div class="ic">✓ LICENSED</div><div class="num glow"><span data-t="18" data-s="yr">0</span></div><div class="lbl">IN BUSINESS</div></div>
+    <div class="cell"><div class="ic">⌂ SERVED</div><div class="num glow"><span data-t="6400" data-s="+">0</span></div><div class="lbl">LOCAL HOMES</div></div>
+  </div>
+</div>
+<script>
+const ns=[...document.querySelectorAll('.num span')];
+function ease(t){return 1-Math.pow(1-t,3);}
+function run(){const dur=1600,s=performance.now();
+ (function step(now){const p=Math.min(1,(now-s)/dur);ns.forEach(n=>{const t=+n.dataset.t,dec=+n.dataset.dec||0,suf=n.dataset.s||'';
+   let v=ease(p)*t;v=dec?v.toFixed(dec):Math.round(v).toLocaleString();n.textContent=v+suf;});if(p<1)requestAnimationFrame(step);})(s);}
+run();setInterval(run,4000);
+</script></body></html>

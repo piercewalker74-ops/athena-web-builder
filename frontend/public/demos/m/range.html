@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>range</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:20px}
+ .preview{height:180px;border-radius:16px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:14px}
+ .glass{position:absolute;inset:0;background:#0a2740;transition:background .1s}
+ .preview .lbl{position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--frost);z-index:1;background:rgba(4,18,30,.5);padding:4px 10px;border-radius:6px}
+ .ctrl{display:flex;flex-direction:column;gap:8px}
+ .ctrl .top{display:flex;justify-content:space-between;font-size:13px}.ctrl .top b{font-family:var(--mono);color:var(--cyan)}
+ input[type=range]{-webkit-appearance:none;height:6px;border-radius:999px;background:var(--line);outline:none}
+ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">m · range slider</div>
+<div class="stage frost" style="padding:20px">
+  <div class="eyebrow">TINT-SHADE VISUALIZER</div>
+  <div class="preview"><div class="glass" id="g"></div><span class="lbl" id="pl">50% VLT</span></div>
+  <div class="ctrl">
+    <div class="top"><span>Film darkness</span><b id="v">50% VLT</b></div>
+    <input type="range" min="5" max="90" value="50" id="r">
+  </div>
+</div>
+<script>
+const r=document.getElementById('r'),g=document.getElementById('g'),v=document.getElementById('v'),pl=document.getElementById('pl');
+function upd(){const vlt=+r.value;const dark=1-(vlt-5)/85;g.style.background=`rgba(6,20,32,${0.15+dark*0.8})`;v.textContent=vlt+'% VLT';pl.textContent=vlt+'% VLT';}
+r.addEventListener('input',upd);upd();
+// idle sweep
+let a=0;setInterval(()=>{if(document.activeElement!==r){a+=.04;r.value=48+Math.sin(a)*40;upd();}},50);
+</script></body></html>

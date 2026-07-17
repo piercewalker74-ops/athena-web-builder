@@ -1,0 +1,62 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>state.drawer</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;justify-content:center;align-items:center}
+ .phone{position:relative;width:270px;height:340px;border-radius:26px;border:1px solid var(--line2);overflow:hidden;
+   background:linear-gradient(160deg,#061a2a,#04121e)}
+ .bar{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+ .bar .logo{font-weight:700;font-size:15px}
+ .burger{width:24px;height:16px;position:relative;cursor:pointer}
+ .burger i{position:absolute;left:0;right:0;height:2px;background:var(--ice2);border-radius:2px;transition:.35s}
+ .burger i:nth-child(1){top:0}.burger i:nth-child(2){top:7px}.burger i:nth-child(3){top:14px}
+ .phone.open .burger i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+ .phone.open .burger i:nth-child(2){opacity:0}
+ .phone.open .burger i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+ .body{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+ .body .filler{height:80px}
+ .body .l{height:9px;border-radius:5px;background:linear-gradient(90deg,var(--ice),transparent);opacity:.4}
+ .scrim{position:absolute;inset:0;background:rgba(2,10,18,.55);opacity:0;pointer-events:none;transition:opacity .4s}
+ .phone.open .scrim{opacity:1}
+ .drawer{position:absolute;top:0;right:0;bottom:0;width:72%;padding:20px 18px;
+   background:linear-gradient(200deg,#0a2740,#061826);border-left:1px solid var(--line2);
+   transform:translateX(101%);transition:transform .42s cubic-bezier(.4,1.1,.35,1);box-shadow:-16px 0 40px rgba(0,0,0,.5)}
+ .phone.open .drawer{transform:none}
+ .drawer .eyebrow{margin-bottom:14px}
+ .link{font-size:16px;font-weight:600;color:var(--ice2);padding:11px 0;border-bottom:1px solid var(--line);
+   opacity:0;transform:translateX(18px);transition:opacity .4s,transform .4s}
+ .phone.open .link{opacity:1;transform:none}
+ .phone.open .link:nth-child(2){transition-delay:.1s}
+ .phone.open .link:nth-child(3){transition-delay:.16s}
+ .phone.open .link:nth-child(4){transition-delay:.22s}
+ .phone.open .link:nth-child(5){transition-delay:.28s}
+ .drawer .btn{width:100%;justify-content:center;margin-top:16px}
+ .hint{position:fixed;bottom:12px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.5;letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">f · state.drawer</div>
+<div class="stage">
+  <div class="phone frost" id="phone">
+    <div class="bar"><span class="logo glow">Glacier&nbsp;Co</span>
+      <div class="burger" id="burger"><i></i><i></i><i></i></div></div>
+    <div class="body">
+      <div class="filler"><span class="tag">HERO</span></div>
+      <div class="l" style="width:80%"></div><div class="l" style="width:60%"></div><div class="l" style="width:70%"></div>
+    </div>
+    <div class="scrim" id="scrim"></div>
+    <div class="drawer">
+      <div class="eyebrow">MENU</div>
+      <div class="link">Shop turf</div><div class="link">Install</div><div class="link">Gallery</div><div class="link">Locations</div><div class="link">Contact</div>
+      <button class="btn">Get a quote →</button>
+    </div>
+  </div>
+</div>
+<div class="hint">tap the menu · drawer slides from the edge, links cascade in</div>
+<script>
+const phone=document.getElementById('phone'),burger=document.getElementById('burger'),scrim=document.getElementById('scrim');
+let manual=false;
+function toggle(){phone.classList.toggle('open');}
+burger.addEventListener('click',()=>{manual=true;toggle();});
+scrim.addEventListener('click',()=>{manual=true;phone.classList.remove('open');});
+// auto open/close loop until user takes over
+let open=false;setInterval(()=>{if(manual)return;open=!open;phone.classList.toggle('open',open);},2800);
+setTimeout(()=>{if(!manual){open=true;phone.classList.add('open');}},700);
+</script></body></html>

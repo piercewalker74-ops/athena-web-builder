@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>floating-polaroids-ambient</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;border-radius:16px;overflow:hidden;position:relative}
+ .field{position:absolute;inset:0}
+ .pola{position:absolute;width:110px;padding:8px 8px 26px;border-radius:5px;background:rgba(234,246,255,.92);
+   box-shadow:0 14px 34px rgba(0,0,0,.45);will-change:transform}
+ .pola .filler{height:82px;width:100%;border-radius:2px}
+ .pola .cap{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-family:var(--mono);font-size:8px;
+   letter-spacing:.1em;color:#0a2436}
+ .cap-over{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+   text-align:center;pointer-events:none;z-index:5}
+ .cap-over .b{font-size:clamp(24px,5vw,38px);font-weight:700}
+ .veil{position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,transparent 30%,rgba(4,18,30,.55));z-index:2}
+</style></head>
+<body class="demo"><div class="demo-name">f · floating-polaroids-ambient</div>
+<div class="stage frost">
+  <div class="field" id="field"></div>
+  <div class="veil"></div>
+  <div class="cap-over"><div class="eyebrow">EVERY MOMENT, DRIFTING BY</div><div class="b glow">Our Story</div></div>
+</div>
+<script>
+const field=document.getElementById('field'),caps=['jun ’24','the coast','first snow','sunday','golden hr','us','the trip','home'];
+const W=()=>field.clientWidth,H=()=>field.clientHeight;const cards=[];
+for(let i=0;i<9;i++){const el=document.createElement('div');el.className='pola';
+ el.innerHTML=`<div class="filler eel"></div><div class="cap">${caps[i%caps.length]}</div>`;field.appendChild(el);
+ cards.push({el,x:Math.random(),y:Math.random()*1.3,vy:.00018+Math.random()*.00022,
+  rot:(Math.random()-.5)*26,rv:(Math.random()-.5)*.02,ph:Math.random()*6,sc:.75+Math.random()*.5});}
+let t=0;
+function loop(){t+=1;const w=W(),h=H();
+ for(const c of cards){c.y-=c.vy;if(c.y<-.25)c.y=1.25;c.rot+=c.rv;
+  const sway=Math.sin(t*.008+c.ph)*14;
+  c.el.style.transform=`translate(${c.x*(w-90)+sway}px,${c.y*h}px) rotate(${c.rot}deg) scale(${c.sc})`;
+  c.el.style.zIndex=Math.round(c.sc*10);c.el.style.opacity=.55+c.sc*.4;}
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

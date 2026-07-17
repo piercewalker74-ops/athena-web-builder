@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>location-cards-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+ .loc{padding:14px;border-radius:12px;opacity:0;transform:translateY(22px) scale(.97);
+   transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .loc.in{opacity:1;transform:none}
+ .loc h3{font-size:15px;font-weight:650;display:flex;align-items:center;gap:6px}
+ .loc .addr{font-size:11px;color:var(--ice);opacity:.75;margin-top:4px;line-height:1.5}
+ .meta{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}
+ .hrs{font-family:var(--mono);font-size:10px;color:var(--ice2);opacity:.8;letter-spacing:.06em}
+ .dir{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--cyan);margin-top:8px;font-weight:600}
+ .pin{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">f · location-cards-grid</div>
+<div class="stage">
+  <div class="eyebrow">OUR BRANCHES · 4 LOCATIONS</div>
+  <div class="grid" id="g"></div>
+</div>
+<script>
+const branches=[
+ {c:'North Shore',a:'1420 Glacier Ave · Suite 3',p:'(206) 555-0142',m:'Dana Okafor',h:'Mon–Sat · 8a–6p'},
+ {c:'Harbor Point',a:'88 Frost Landing Rd',p:'(206) 555-0188',m:'Luis Reyes',h:'Mon–Fri · 9a–5p'},
+ {c:'Cedar Falls',a:'510 Timberline Way',p:'(509) 555-0261',m:'Priya Nair',h:'Tue–Sun · 8a–7p'},
+ {c:'Summit West',a:'2200 Ridgecrest Blvd',p:'(509) 555-0333',m:'Erik Hansen',h:'Mon–Sat · 7a–6p'}];
+const g=document.getElementById('g');
+branches.forEach(b=>{const c=document.createElement('div');c.className='loc frost';
+ c.innerHTML=`<h3><span class="pin"></span>${b.c}</h3>
+ <div class="addr">${b.a}</div>
+ <div class="meta"><span class="chip">${b.p}</span><span class="chip">Mgr · ${b.m}</span></div>
+ <div class="hrs">${b.h}</div>
+ <span class="dir">Directions →</span>`;g.appendChild(c);});
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),160+i*140));}
+run();setInterval(run,4600);
+</script></body></html>

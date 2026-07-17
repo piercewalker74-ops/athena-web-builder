@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>badges</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:20px;align-items:center;text-align:center}
+ .row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+ .bg{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 20px;border-radius:14px;min-width:110px;
+   opacity:0;transform:scale(.7);transition:all .5s cubic-bezier(.3,1.4,.5,1)}
+ .bg.in{opacity:1;transform:none}
+ .bg .ic{font-size:26px;filter:drop-shadow(0 0 8px rgba(47,224,255,.5))}
+ .bg .v{font-size:20px;font-weight:700}
+ .bg .l{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--ice);opacity:.7}
+ .stars{color:var(--cyan);letter-spacing:2px}
+</style></head>
+<body class="demo"><div class="demo-name">m · badges</div>
+<div class="stage">
+  <div class="eyebrow">TRUST BADGES</div>
+  <div class="row" id="r">
+    <div class="bg frost"><div class="ic">★</div><div class="v"><span class="stars">4.9</span></div><div class="l">GOOGLE RATING</div></div>
+    <div class="bg frost"><div class="ic">✓</div><div class="v glow">Certified</div><div class="l">INSTALLER</div></div>
+    <div class="bg frost"><div class="ic">🛡</div><div class="v glow">Lifetime</div><div class="l">WARRANTY</div></div>
+    <div class="bg frost"><div class="ic">⚡</div><div class="v glow">Same-Day</div><div class="l">SERVICE</div></div>
+  </div>
+</div>
+<script>
+const b=[...document.querySelectorAll('.bg')];
+function run(){b.forEach(x=>x.classList.remove('in'));b.forEach((x,i)=>setTimeout(()=>x.classList.add('in'),200+i*140));}
+run();setInterval(run,4200);
+</script></body></html>

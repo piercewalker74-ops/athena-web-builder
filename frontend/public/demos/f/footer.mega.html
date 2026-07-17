@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>footer.mega</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:0}
+ .foot{border-radius:14px;padding:22px 20px}
+ .top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+ @media(max-width:460px){.top{grid-template-columns:1fr 1fr}}
+ .brandcol .brand{font-size:20px;font-weight:800}
+ .brandcol p{font-size:11px;color:var(--ice);opacity:.6;margin-top:6px;max-width:180px}
+ .news{display:flex;gap:6px;margin-top:12px}
+ .news input{flex:1;background:var(--glass);border:1px solid var(--line);border-radius:8px;color:var(--frost);font-size:11px;padding:8px 10px;outline:none}
+ .news button{border:none;border-radius:8px;background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;font-size:11px;font-weight:700;padding:0 12px;cursor:pointer}
+ .col h4{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase;margin-bottom:10px}
+ .col a{display:block;font-size:12px;color:var(--ice2);padding:4px 0;opacity:0;transform:translateY(8px);transition:all .45s}
+ .col a.in{opacity:1;transform:none}
+ .bottom{display:flex;justify-content:space-between;align-items:center;padding-top:14px;font-size:10px;color:var(--ice);opacity:.55;font-family:var(--mono);letter-spacing:.08em}
+ .socials{display:flex;gap:8px}.socials span{width:24px;height:24px;border:1px solid var(--line2);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--ice2);font-size:11px}
+</style></head>
+<body class="demo"><div class="demo-name">f · footer.mega</div>
+<div class="stage">
+  <div class="foot frost">
+    <div class="top">
+      <div class="brandcol">
+        <div class="brand glow">Verdant Turf</div>
+        <p>Water-free lawns, installed and warrantied across the state.</p>
+        <div class="news"><input placeholder="Get seasonal deals" aria-label="email"><button id="sub">Join</button></div>
+      </div>
+      <div class="col"><h4>Products</h4><a>Landscape</a><a>Sports</a><a>Putting</a><a>Rooftop</a></div>
+      <div class="col"><h4>Company</h4><a>About</a><a>Careers</a><a>Warranty</a><a>Reviews</a></div>
+      <div class="col"><h4>Contact</h4><a>(555) 200-8890</a><a>Book a visit</a><a>Find a branch</a><a>Support</a></div>
+    </div>
+    <div class="bottom">
+      <span>© 2026 VERDANT TURF CO.</span>
+      <div class="socials"><span>in</span><span>ig</span><span>f</span><span>yt</span></div>
+    </div>
+  </div>
+</div>
+<script>
+const links=[...document.querySelectorAll('.col a')];
+function run(){links.forEach(a=>a.classList.remove('in'));links.forEach((a,i)=>setTimeout(()=>a.classList.add('in'),120+i*70));}
+run();setInterval(run,5200);
+const sub=document.getElementById('sub');
+sub.addEventListener('click',()=>{sub.textContent='✓ Sent';sub.style.background='var(--teal)';setTimeout(()=>{sub.textContent='Join';sub.style.background='';},1600);});
+</script></body></html>

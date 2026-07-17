@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>css-masonry-gallery</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .hd{text-align:center}
+ /* pure CSS columns masonry — no JS layout */
+ .wall{columns:3;column-gap:10px}
+ @media(max-width:520px){.wall{columns:2}}
+ @media(max-width:340px){.wall{columns:1}}
+ .t{break-inside:avoid;margin-bottom:10px;border-radius:10px;overflow:hidden;
+    opacity:0;transform:translateY(16px);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .t.in{opacity:1;transform:none}
+ .t .filler{border-radius:0}
+ .t .lab{position:absolute;left:8px;bottom:8px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--frost)}
+</style></head>
+<body class="demo"><div class="demo-name">f · css-masonry-gallery</div>
+<div class="stage">
+  <div class="hd"><div class="eyebrow">THE SCRAPBOOK</div>
+    <h2 class="big glow" style="font-size:22px;margin-top:4px">Moments, uncropped.</h2></div>
+  <div class="wall" id="wall"></div>
+</div>
+<script>
+const shots=[['Backyard',150],['Rooftop',95],['Putting green',180],['Poolside',110],['Dog run',130],
+ ['Courtyard',85],['Balcony',160],['Play area',105],['Front lawn',140]];
+const wall=document.getElementById('wall');
+shots.forEach(s=>{const d=document.createElement('div');d.className='t frost';
+ d.innerHTML=`<div class="filler eel" style="height:${s[1]}px"><span class="lab">${s[0]}</span></div>`;wall.appendChild(d);});
+const ts=[...wall.children];
+function run(){ts.forEach(t=>t.classList.remove('in'));ts.forEach((t,i)=>setTimeout(()=>t.classList.add('in'),80+i*80));}
+run();setInterval(run,5400);
+</script></body></html>

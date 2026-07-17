@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>webgl-particle-hero</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;position:relative;border-radius:18px;overflow:hidden}
+ .stage .filler{position:absolute;inset:0;border-radius:18px;height:100%}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .veil{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 40%,transparent 30%,rgba(4,18,30,.85) 100%)}
+ .cap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;padding:20px}
+ .cap .big{font-size:clamp(28px,6vw,50px)}
+ .hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ice);opacity:.6}
+</style></head>
+<body class="demo"><div class="demo-name">f · webgl-particle-hero</div>
+<div class="stage frost">
+  <div class="filler eel"><span class="tag">PHOTO</span></div>
+  <canvas id="c"></canvas><div class="veil"></div>
+  <div class="cap"><div class="eyebrow">2,400-POINT PARTICLE FIELD</div><h1 class="big glow">A living<br>atmosphere</h1></div>
+  <div class="hint">MOVE TO REPEL</div>
+</div>
+<script>
+// Canvas 2D emulation of a WebGL2 point-cloud (self-contained, no GL context needed for preview)
+const cv=document.getElementById('c'),ctx=cv.getContext('2d'),dpr=Math.min(devicePixelRatio||1,2);
+let W,H,P=[],mx=-999,my=-999;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+size();addEventListener('resize',size);
+const N=Math.min(2400,Math.floor(W*H/240)+700);
+for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:0,vy:0,z:Math.random()*.8+.2});
+cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;});
+cv.addEventListener('pointerleave',()=>{mx=-999;my=-999;});
+let t=0;
+function loop(){t+=.006;ctx.clearRect(0,0,W,H);
+ for(const p of P){
+  p.x+=Math.sin(t+p.y*.01)*.2*p.z;p.y+=Math.cos(t+p.x*.01)*.2*p.z;
+  const dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;
+  if(d2<8000){const d=Math.sqrt(d2)||1,f=(1-d/90)*2.4*p.z;p.vx+=dx/d*f;p.vy+=dy/d*f;}
+  p.x+=p.vx;p.y+=p.vy;p.vx*=.9;p.vy*=.9;
+  if(p.x<0)p.x+=W;if(p.x>W)p.x-=W;if(p.y<0)p.y+=H;if(p.y>H)p.y-=H;
+  const a=.25+p.z*.55;ctx.fillStyle=`rgba(${143+p.z*40|0},${230},255,${a})`;
+  ctx.fillRect(p.x,p.y,p.z*1.8+.4,p.z*1.8+.4);}
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

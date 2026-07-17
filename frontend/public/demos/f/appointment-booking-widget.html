@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>appointment-booking-widget</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .staff{display:flex;gap:7px;flex-wrap:wrap}
+ .sc{cursor:pointer}.sc.on{border-color:var(--cyan);color:var(--frost);background:rgba(47,224,255,.1)}
+ .body{display:flex;gap:14px;flex-wrap:wrap}
+ .cal{padding:14px;border-radius:14px;flex:1;min-width:200px}
+ .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:12px;font-weight:600}
+ .ch span:first-child,.ch span:last-child{cursor:pointer;color:var(--ice2);padding:0 6px}
+ .cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+ .dow{font-family:var(--mono);font-size:7px;color:var(--ice);opacity:.5;text-align:center}
+ .d{aspect-ratio:1;display:grid;place-items:center;font-size:11px;border-radius:7px;color:var(--ice2);transition:all .2s}
+ .d.off{opacity:.22}.d.free{border:1px solid var(--line);cursor:pointer}.d.free:hover{background:var(--glass2)}
+ .d.sel{background:var(--cyan);color:#04121e;box-shadow:var(--glow);border:none}
+ .right{flex:1;min-width:150px;display:flex;flex-direction:column;gap:8px}
+ .slots{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+ .slot{padding:8px;border-radius:9px;border:1px solid var(--line);font-family:var(--mono);font-size:11px;text-align:center;cursor:pointer;transition:all .2s}
+ .slot.taken{opacity:.3;text-decoration:line-through;cursor:not-allowed}
+ .slot:not(.taken):hover,.slot.on{border-color:var(--cyan);background:rgba(47,224,255,.08);color:var(--frost)}
+ .sum{padding:11px;border-radius:11px;font-size:12px;line-height:1.5}
+ .sum b{color:var(--frost)}.sum .muted{color:var(--ice);opacity:.7}
+ .cf{margin-top:2px}
+</style></head>
+<body class="demo"><div class="demo-name">f · appointment-booking-widget</div>
+<div class="stage">
+  <div class="eyebrow">BOOK A FREE MEASURE</div>
+  <div class="staff" id="staff"></div>
+  <div class="body">
+    <div class="cal frost">
+      <div class="ch"><span id="pm">◀</span><span class="glow" id="mon">July 2026</span><span id="nm">▶</span></div>
+      <div class="cg" id="cg"></div>
+    </div>
+    <div class="right">
+      <div class="eyebrow">TIME SLOTS</div>
+      <div class="slots" id="slots"></div>
+      <div class="sum frost" id="sum"><span class="muted">Pick a staff, day &amp; time…</span></div>
+    </div>
+  </div>
+</div>
+<script>
+const staffNames=['Marcus','Dana','Ivy'];const staffEl=document.getElementById('staff');
+let staff=0,day=null,time=null;
+staffNames.forEach((n,i)=>{const c=document.createElement('div');c.className='chip sc'+(i===0?' on':'');c.textContent=n;
+ c.onclick=()=>{staff=i;[...staffEl.children].forEach((x,j)=>x.classList.toggle('on',j===i));update();};staffEl.appendChild(c);});
+const cg=document.getElementById('cg');
+['S','M','T','W','T','F','S'].forEach(d=>{const e=document.createElement('div');e.className='dow';e.textContent=d;cg.appendChild(e);});
+const free=[7,8,10,14,15,17,21,22,24,28,29];
+for(let i=0;i<35;i++){const dn=i-2;const e=document.createElement('div');
+ if(dn<1||dn>31){e.className='d off';}else{const f=free.includes(dn);e.className='d '+(f?'free':'off');e.textContent=dn;
+  if(f)e.onclick=()=>{day=dn;[...cg.querySelectorAll('.d')].forEach(x=>x.classList.remove('sel'));e.classList.add('sel');drawSlots();update();};}
+ cg.appendChild(e);}
+const times=['9:00','10:30','1:00','2:30','4:00','5:30'];const takenSet=[1,4];
+const slots=document.getElementById('slots');
+function drawSlots(){slots.innerHTML='';times.forEach((t,i)=>{const s=document.createElement('div');
+ const taken=takenSet.includes((i+ (day||0))%6);s.className='slot'+(taken?' taken':'');s.textContent=t+(i<2?'am':'pm');
+ if(!taken)s.onclick=()=>{time=t;[...slots.children].forEach(x=>x.classList.remove('on'));s.classList.add('on');update();};
+ slots.appendChild(s);});}
+function update(){const sum=document.getElementById('sum');
+ if(day&&time)sum.innerHTML=`<b>Confirmed →</b> ${staffNames[staff]} · Jul ${day} · ${time} <span class="muted">· at your address</span>`;
+ else sum.innerHTML=`<span class="muted">${staffNames[staff]} — choose a day &amp; time…</span>`;}
+// autoplay demo
+const seq=[[0,7,0],[1,15,2],[2,24,4]];let k=0;
+function auto(){const[st,dn,ti]=seq[k%seq.length];staff=st;
+ [...staffEl.children].forEach((x,j)=>x.classList.toggle('on',j===st));
+ const dc=[...cg.querySelectorAll('.d.free')].find(x=>+x.textContent===dn);
+ if(dc){[...cg.querySelectorAll('.d')].forEach(x=>x.classList.remove('sel'));dc.classList.add('sel');day=dn;drawSlots();
+  setTimeout(()=>{const sc=[...slots.children].find(x=>!x.classList.contains('taken'));time=times[ti]||times[0];
+   [...slots.children].forEach(x=>x.classList.remove('on'));(slots.children[ti]&&!slots.children[ti].classList.contains('taken')?slots.children[ti]:sc).classList.add('on');
+   update();},600);}
+ k++;}
+auto();setInterval(auto,3200);
+</script></body></html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>services-image-card-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+ .card{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--glass);
+   opacity:0;transform:translateY(24px);filter:blur(6px);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .card.in{opacity:1;transform:none;filter:none}
+ .card:hover .cover{transform:scale(1.06)}
+ .cover{height:96px;transition:transform .5s;border-radius:0}
+ .body{padding:11px 12px 14px}
+ .body h2{font-size:14px}
+ .body p{font-size:11px;color:var(--ice);opacity:.75;line-height:1.45;margin-top:4px}
+ .cta{display:flex;justify-content:center;margin-top:2px}
+ @media(max-width:520px){.grid{grid-template-columns:1fr 1fr}}
+</style></head>
+<body class="demo"><div class="demo-name">f · services-image-card-grid</div>
+<div class="stage">
+  <div class="eyebrow">WHAT WE DO</div>
+  <h1 class="big glow" style="font-size:clamp(22px,4vw,34px)">Full-service turf.</h1>
+  <div class="grid" id="g"></div>
+  <div class="cta"><button class="btn ghost">View all services →</button></div>
+</div>
+<script>
+const S=[
+ ['Residential Lawns','Pet-safe, drought-proof turf for backyards and play areas.'],
+ ['Putting Greens','Tour-grade rolls with true ball speed and custom cup layout.'],
+ ['Rooftop & Decks','Lightweight systems with drainage rated for any grade.'],
+ ['Playgrounds','ASTM fall-height padding under vivid, cleanable blades.'],
+ ['Pet Runs','Antimicrobial infill and a rinse-clean base for kennels.'],
+ ['Commercial','Storefront medians and office courtyards, installed fast.']];
+const g=document.getElementById('g');
+g.innerHTML=S.map(s=>`<div class="card"><div class="filler cover"><span class="tag">IMG</span></div><div class="body"><h2 class="glow">${s[0]}</h2><p>${s[1]}</p></div></div>`).join('');
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),200+i*130));}
+run();setInterval(run,4800);
+</script></body></html>

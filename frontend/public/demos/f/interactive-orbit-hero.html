@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>interactive-orbit-hero</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;display:flex;align-items:center;justify-content:center;position:relative}
+ .field{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform .3s ease-out}
+ .eyebrow{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:3}
+ .core{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;text-align:center;font-family:var(--mono);font-size:11px;color:#04121e;
+   background:radial-gradient(circle at 40% 35%,var(--ice),var(--cyan));box-shadow:var(--glow),0 0 60px rgba(47,224,255,.5);position:relative;z-index:2;letter-spacing:.06em;line-height:1.1;font-weight:700}
+ .core:after{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid var(--line2);animation:pulse 3s ease-out infinite}
+ @keyframes pulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.9);opacity:0}}
+ .ring{position:absolute;border:1px dashed var(--line);border-radius:50%}
+ .orb{position:absolute;top:50%;left:50%;transform-origin:0 0}
+ .node{position:absolute;transform:translate(-50%,-50%);padding:8px 13px;border-radius:999px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;
+   color:var(--ice2);background:var(--glass2);border:1px solid var(--line2);backdrop-filter:blur(4px);white-space:nowrap;cursor:pointer;transition:transform .2s,box-shadow .2s;text-decoration:none;display:flex;align-items:center;gap:6px}
+ .node:before{content:'';width:6px;height:6px;border-radius:50%;background:var(--d)}
+ .node:hover{transform:translate(-50%,-50%) scale(1.15);box-shadow:var(--glow);color:var(--frost)}
+</style></head>
+<body class="demo"><div class="demo-name">f · interactive-orbit-hero</div>
+<div class="stage" id="st">
+  <div class="eyebrow">SYSTEM HUB · EXPLORE EACH DOMAIN</div>
+  <div class="field" id="field">
+    <div class="ring" style="width:190px;height:190px"></div>
+    <div class="ring" style="width:310px;height:310px"></div>
+    <div class="core glow">HEALTH<br>CORE</div>
+  </div>
+</div>
+<script>
+const st=document.getElementById('st'),field=document.getElementById('field');
+const inner=[['Sleep','#a98bff'],['Nutrition','#5bff9d'],['Cardio','#ff5b7a']];
+const outer=[['Hormones','#ffcf5b'],['Recovery','#39d3c9'],['Metabolic','#8fe6ff'],['Stress','#ff8f5b'],['Longevity','#2fe0ff']];
+function ring(items,rad,speed,dir){items.forEach(([t,c],i)=>{const o=document.createElement('div');o.className='orb';
+ o.dataset.a=(i/items.length)*2*Math.PI;o.dataset.r=rad;o.dataset.s=speed*dir;
+ o.innerHTML=`<a class="node" href="#" style="--d:${c}">${t}</a>`;field.appendChild(o);});}
+ring(inner,95,0.28,1);ring(outer,155,0.18,-1);
+const orbs=[...field.querySelectorAll('.orb')];let tm=0;
+function loop(){tm+=0.016;orbs.forEach(o=>{const a=+o.dataset.a+tm*+o.dataset.s,r=+o.dataset.r;
+ o.style.transform=`translate(${Math.cos(a)*r}px,${Math.sin(a)*r}px)`;});requestAnimationFrame(loop);}
+loop();
+st.addEventListener('pointermove',e=>{const r=st.getBoundingClientRect();const dx=(e.clientX-r.left)/r.width-.5,dy=(e.clientY-r.top)/r.height-.5;
+ field.style.transform=`translate(${dx*22}px,${dy*22}px)`;});
+st.addEventListener('pointerleave',()=>field.style.transform='');
+</script></body></html>

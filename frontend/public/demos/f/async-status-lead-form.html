@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>async-status-lead-form</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px;max-width:420px;margin:auto}
+ .card{padding:18px;border-radius:14px}
+ .fld{height:32px;border-radius:8px;border:1px solid var(--line);background:var(--glass);margin-bottom:10px;position:relative}
+ .fld span{position:absolute;left:11px;top:9px;font-size:11px;color:var(--ice);opacity:.55;font-family:var(--mono);letter-spacing:.06em}
+ .fld.ok{border-color:var(--line2)}
+ .fld.ok:after{content:'✓';position:absolute;right:11px;top:7px;color:var(--teal);font-size:13px}
+ .go{width:100%;justify-content:center;transition:opacity .3s}
+ .go[disabled]{opacity:.6;cursor:default}
+ .spin{width:13px;height:13px;border:2px solid rgba(4,18,30,.4);border-top-color:#04121e;border-radius:50%;animation:sp .7s linear infinite}
+ @keyframes sp{to{transform:rotate(360deg)}}
+ .done{text-align:center;padding:14px 8px;opacity:0;transform:scale(.9);transition:all .5s cubic-bezier(.2,.8,.2,1)}
+ .done.in{opacity:1;transform:none}
+ .check{width:46px;height:46px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(120deg,var(--cyan),var(--teal));
+   display:grid;place-items:center;font-size:24px;color:#04121e;box-shadow:var(--glow)}
+ .hide{display:none}
+</style></head>
+<body class="demo"><div class="demo-name">f · async-status-lead-form</div>
+<div class="stage">
+  <div class="eyebrow">REQUEST A QUOTE</div>
+  <div class="card frost" id="card">
+    <form id="form">
+      <div class="fld ok"><span>Jordan Ellis</span></div>
+      <div class="fld ok"><span>jordan@fairway.co</span></div>
+      <div class="fld ok"><span>Backyard · ~600 sq ft</span></div>
+      <input type="text" name="website" class="hide" tabindex="-1" autocomplete="off">
+      <button class="btn go" id="go" type="submit"><span id="lbl">Send request →</span></button>
+    </form>
+    <div class="done hide" id="done">
+      <div class="check">✓</div>
+      <b>Request received.</b>
+      <p class="sub" style="margin-top:5px">We'll email your estimate within one business day.</p>
+    </div>
+  </div>
+</div>
+<script>
+const form=document.getElementById('form'),go=document.getElementById('go'),lbl=document.getElementById('lbl'),done=document.getElementById('done');
+function submit(){
+ go.disabled=true;lbl.innerHTML='<span class="spin"></span> Sending…';
+ setTimeout(()=>{
+  form.classList.add('hide');done.classList.remove('hide');
+  requestAnimationFrame(()=>done.classList.add('in'));
+ },1400);
+}
+form.addEventListener('submit',e=>{e.preventDefault();submit();});
+// auto-loop for preview
+function cycle(){submit();setTimeout(reset,3600);}
+function reset(){form.classList.remove('hide');done.classList.add('hide');done.classList.remove('in');go.disabled=false;lbl.textContent='Send request →';}
+setTimeout(function loop(){cycle();setTimeout(loop,5600);},1200);
+</script></body></html>

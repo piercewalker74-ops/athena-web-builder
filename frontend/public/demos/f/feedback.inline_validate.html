@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>feedback.inline_validate</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .form{padding:22px;display:flex;flex-direction:column;gap:16px}
+ .field{position:relative}
+ .field label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ice);opacity:.7}
+ .box{margin-top:6px;display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:9px;
+   border:1px solid var(--line);background:rgba(4,18,30,.5);transition:border-color .3s,box-shadow .3s}
+ .box .val{flex:1;font-size:14px;color:var(--frost)}
+ .box .val.ph{color:var(--ice);opacity:.4}
+ .mark{width:20px;height:20px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:12px;
+   font-weight:700;opacity:0;transform:scale(.5);transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+ .field.ok .box{border-color:var(--teal);box-shadow:0 0 0 1px rgba(57,211,201,.4)}
+ .field.ok .mark{opacity:1;transform:none;background:var(--teal);color:#04121e}
+ .field.err .box{border-color:#ff8b8b;box-shadow:0 0 0 1px rgba(255,139,139,.35)}
+ .field.err .mark{opacity:1;transform:none;background:#ff8b8b;color:#04121e}
+ .msg{font-size:11px;margin-top:6px;height:14px;opacity:0;transform:translateY(-4px);transition:all .3s}
+ .field.ok .msg{opacity:1;transform:none;color:var(--teal)}
+ .field.err .msg{opacity:1;transform:none;color:#ffb4b4}
+ .caret{display:inline-block;width:1px;height:15px;background:var(--cyan);vertical-align:-2px;margin-left:1px;animation:bl 1s steps(1) infinite}
+ @keyframes bl{50%{opacity:0}}
+</style></head>
+<body class="demo"><div class="demo-name">f · feedback.inline_validate</div>
+<div class="stage">
+  <div class="eyebrow">INLINE VALIDATION · validates on blur</div>
+  <div class="form frost">
+    <div class="field" id="f0"><label>Email</label>
+      <div class="box"><span class="val ph" id="v0">you@glacier.io</span><span class="mark" id="m0"></span></div>
+      <div class="msg" id="s0"></div></div>
+    <div class="field" id="f1"><label>Postal code</label>
+      <div class="box"><span class="val ph" id="v1">A1A 1A1</span><span class="mark" id="m1"></span></div>
+      <div class="msg" id="s1"></div></div>
+  </div>
+</div>
+<script>
+const fields=[
+ {seq:[{txt:'ari@frost',ok:false,msg:'Add a domain like .com'},{txt:'ari@frost.io',ok:true,msg:'Looks good'}]},
+ {seq:[{txt:'99',ok:false,msg:'Postal codes are 6 characters'},{txt:'K1A 0B1',ok:true,msg:'Verified'}]}];
+function typeInto(i,cb){const v=document.getElementById('v'+i),f=fields[i].seq[fields[i].step];
+ document.getElementById('f'+i).className='field';v.classList.remove('ph');v.innerHTML='';
+ let j=0;const timer=setInterval(()=>{
+   if(j<=f.txt.length){v.innerHTML=f.txt.slice(0,j)+'<span class="caret"></span>';j++;}
+   else{clearInterval(timer);v.textContent=f.txt;setTimeout(cb,450);}
+ },70);}
+function validate(i){const f=fields[i].seq[fields[i].step];
+ document.getElementById('f'+i).className='field '+(f.ok?'ok':'err');
+ document.getElementById('m'+i).textContent=f.ok?'✓':'!';
+ document.getElementById('s'+i).textContent=f.msg;}
+fields.forEach(f=>f.step=0);
+let cur=0;
+function cycle(){const i=cur;typeInto(i,()=>{validate(i);
+   fields[i].step=(fields[i].step+1)%fields[i].seq.length;cur=(cur+1)%fields.length;
+   setTimeout(cycle,1900);});}
+cycle();
+</script></body></html>

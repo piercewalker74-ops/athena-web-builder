@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>video-testimonial-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ @media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr)}}
+ .vc{position:relative;border-radius:12px;overflow:hidden;cursor:pointer}
+ .vc .filler{height:140px;border-radius:0;transition:transform .5s}
+ .vc:hover .filler{transform:scale(1.05)}
+ .badge{position:absolute;top:8px;left:8px;font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--ice2);
+   background:rgba(4,18,30,.7);border:1px solid var(--line);border-radius:5px;padding:2px 7px;z-index:3}
+ .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+ .play .btn2{width:44px;height:44px;border-radius:50%;background:rgba(4,18,30,.55);border:1px solid var(--line2);
+   display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:transform .3s}
+ .vc:hover .btn2{transform:scale(1.12)}
+ .play .tri{width:0;height:0;border-left:12px solid var(--cyan);border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:3px}
+ .cap{position:absolute;left:0;right:0;bottom:0;padding:20px 10px 8px;z-index:2;
+   background:linear-gradient(transparent,rgba(4,18,30,.9));font-family:var(--mono);font-size:9px;color:var(--frost)}
+ .soon{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:8px;color:var(--teal);z-index:3}
+ .vc.playing .play,.vc.playing .soon{opacity:0}
+ .vc.playing .filler:before{animation:flick 1.2s steps(6) infinite}
+ @keyframes flick{50%{opacity:.7}}
+ .vc.playing .live{opacity:1}
+ .live{position:absolute;top:8px;right:8px;z-index:3;font-family:var(--mono);font-size:8px;color:#04121e;
+   background:var(--cyan);border-radius:4px;padding:2px 6px;opacity:0;display:flex;align-items:center;gap:4px}
+ .live .dot{width:5px;height:5px;border-radius:50%;background:#04121e;animation:bl .9s infinite}
+ @keyframes bl{50%{opacity:.3}}
+</style></head>
+<body class="demo"><div class="demo-name">f · video-testimonial-grid</div>
+<div class="stage">
+  <div class="eyebrow">CLICK ANY CLIP TO PLAY WITH SOUND</div>
+  <h2 class="big" style="font-size:22px">Real turf, real yards</h2>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const V=[['Dana · homeowner','CLIENT'],['Vista Landscapes','PARTNER'],['Marcus · homeowner','CLIENT'],
+['GreenScape Co','PARTNER'],['Priya · homeowner','CLIENT'],['Elena · homeowner','CLIENT']];
+const grid=document.getElementById('grid');
+V.forEach(([name,tag])=>{
+  const d=document.createElement('div');d.className='vc frost';
+  d.innerHTML=`<span class="badge">${tag}</span><span class="soon">▶ coming soon</span><span class="live"><span class="dot"></span>LIVE</span>
+    <div class="filler eel"></div><div class="play"><div class="btn2"><div class="tri"></div></div></div><div class="cap">${name}</div>`;
+  d.onclick=()=>{[...grid.children].forEach(c=>c.classList.remove('playing'));d.classList.add('playing');};
+  grid.appendChild(d);
+});
+// auto-demo: cycle which clip is "playing"
+let i=0;setInterval(()=>{[...grid.children].forEach(c=>c.classList.remove('playing'));grid.children[i%V.length].classList.add('playing');i++;},2600);
+</script></body></html>

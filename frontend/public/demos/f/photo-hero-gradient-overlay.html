@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>photo-hero-gradient-overlay</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:360px;border-radius:18px;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+ .photo{position:absolute;inset:0;border-radius:0}
+ .photo:after{content:'';position:absolute;left:8px;bottom:6px}
+ /* three-stop dark gradient overlay */
+ .veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(3,10,18,.92) 0%,rgba(4,18,30,.55) 45%,rgba(4,18,30,.15) 100%)}
+ .kicker{position:absolute;top:16px;left:20px}
+ .cap{position:relative;padding:24px 24px 26px;max-width:80%}
+ .cap .big{font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:clamp(26px,5.6vw,44px)}
+ .ctas{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+ .pan{position:absolute;inset:0;animation:pan 14s ease-in-out infinite alternate}
+ @keyframes pan{to{transform:scale(1.08) translateX(-3%)}}
+</style></head>
+<body class="demo"><div class="demo-name">f · photo-hero-gradient-overlay</div>
+<div class="stage">
+  <div class="pan"><div class="photo filler eel" style="height:100%"><span class="tag">SUBJECT</span></div></div>
+  <div class="veil"></div>
+  <div class="kicker eyebrow">SEASON MENU · WINTER</div>
+  <div class="cap">
+    <h1 class="big glow">Warmth, served<br>by candlelight.</h1>
+    <div class="ctas"><button class="btn">Reserve a table</button><button class="btn ghost">View the menu</button></div>
+  </div>
+</div>
+</body></html>

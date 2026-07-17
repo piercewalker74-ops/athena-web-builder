@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>hero.minimal_type</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:18px;align-items:flex-start;padding:14px 6px}
+ .clip{overflow:hidden;padding:4px 0}
+ .clip span{display:inline-block;transform:translateY(115%);transition:transform .85s cubic-bezier(.2,.85,.2,1)}
+ .clip.in span{transform:none}
+ .big{font-size:clamp(34px,8vw,66px);font-weight:700;line-height:.98}
+ .eyebrow.clip span{transform:translateY(140%)}
+ .sub.clip span{transform:translateY(140%)}
+ .cta{opacity:0;transform:translateY(14px);transition:all .7s .1s}
+ .cta.in{opacity:1;transform:none}
+ .rule{width:44px;height:2px;background:var(--cyan);box-shadow:var(--glow);transform:scaleX(0);transform-origin:left;transition:transform .7s}
+ .rule.in{transform:scaleX(1)}
+</style></head>
+<body class="demo"><div class="demo-name">f · hero.minimal_type</div>
+<div class="stage">
+  <div class="clip eyebrow" id="e"><span>EST. 2014 · BROOKLYN</span></div>
+  <div>
+    <div class="clip" id="l1"><span class="big glow">Nothing to</span></div>
+    <div class="clip" id="l2"><span class="big glow">hide behind.</span></div>
+  </div>
+  <div class="rule" id="r"></div>
+  <div class="clip sub" id="s"><span>A studio built on clarity — pure type, no filler, loads before you blink.</span></div>
+  <button class="btn cta" id="c">See the work →</button>
+</div>
+<script>
+const seq=['e','l1','l2','r','s','c'].map(id=>document.getElementById(id));
+function run(){seq.forEach(p=>p.classList.remove('in'));seq.forEach((p,i)=>setTimeout(()=>p.classList.add('in'),260+i*220));}
+run();setInterval(run,5200);
+</script></body></html>

@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>leaflet-store-locator</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:1.4fr 1fr;gap:12px}
+ @media(max-width:520px){.stage{grid-template-columns:1fr}}
+ .map{position:relative;border-radius:14px;overflow:hidden;height:300px}
+ .map svg{position:absolute;inset:0;width:100%;height:100%}
+ .grid line{stroke:var(--line);stroke-width:.5}
+ .pin{cursor:pointer;transform-box:fill-box;transform-origin:center bottom}
+ .pin .drop{opacity:0;animation:drop .5s cubic-bezier(.3,1.4,.5,1) forwards}
+ @keyframes drop{from{opacity:0;transform:translateY(-24px) scale(.4)}to{opacity:1;transform:none}}
+ .pin.near .head{fill:var(--cyan)}.pin .head{fill:var(--teal)}
+ .pin circle.pulse{fill:none;stroke:var(--cyan);animation:pl 2.2s ease-out infinite}
+ @keyframes pl{0%{r:3px;opacity:.8}100%{r:22px;opacity:0}}
+ .search{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:6px}
+ .search input{flex:1;background:rgba(4,18,30,.75);border:1px solid var(--line2);border-radius:8px;color:var(--frost);
+   font-family:var(--mono);font-size:11px;padding:8px 10px;outline:none}
+ .search button{border:none;border-radius:8px;background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;font-weight:700;font-size:11px;padding:0 12px;cursor:pointer}
+ .cards{display:flex;flex-direction:column;gap:8px;overflow:hidden}
+ .branch{padding:10px 12px;border-radius:10px;transition:transform .4s,border-color .3s;cursor:pointer}
+ .branch.top{border-color:var(--line2);box-shadow:var(--glow)}
+ .branch b{font-size:13px}.branch .m{font-family:var(--mono);font-size:10px;color:var(--ice);opacity:.7;margin-top:3px}
+ .branch .dist{float:right;font-family:var(--mono);font-size:11px;color:var(--cyan)}
+</style></head>
+<body class="demo"><div class="demo-name">f · leaflet-store-locator</div>
+<div class="stage">
+  <div class="map frost" id="map">
+    <svg viewBox="0 0 400 300" id="svg"><g class="grid" id="g"></g></svg>
+    <div class="search"><input id="q" value="92501" placeholder="ZIP or city"><button id="go">Find</button></div>
+  </div>
+  <div class="cards" id="cards"></div>
+</div>
+<script>
+const g=document.getElementById('g'),svg=document.getElementById('svg'),map=document.getElementById('map'),cards=document.getElementById('cards');
+for(let i=0;i<=400;i+=28)g.innerHTML+=`<line x1="${i}" y1="0" x2="${i}" y2="300"/>`;
+for(let i=0;i<=300;i+=28)g.innerHTML+=`<line x1="0" y1="${i}" x2="400" y2="${i}"/>`;
+const B=[['Riverside Turf Yard',120,190,'8am–6pm · (951) 555-0182'],['Fontana Showroom',210,110,'8am–5pm · (909) 555-0147'],
+['Ontario Depot',300,170,'9am–6pm · (909) 555-0193'],['Corona Warehouse',160,240,'8am–4pm · (951) 555-0126']];
+const ns='http://www.w3.org/2000/svg';
+function render(originX,originY){
+  cards.innerHTML='';[...svg.querySelectorAll('.pin')].forEach(p=>p.remove());
+  const list=B.map((b,i)=>({b,i,d:Math.hypot(b[1]-originX,b[2]-originY)})).sort((a,z)=>a.d-z.d);
+  list.forEach((it,idx)=>{
+    const [name,x,y,meta]=it.b;const grp=document.createElementNS(ns,'g');
+    grp.setAttribute('class','pin'+(idx===0?' near':''));
+    grp.innerHTML=`${idx===0?`<circle class="pulse" cx="${x}" cy="${y}"/>`:''}<g class="drop" style="animation-delay:${idx*.14}s"><path class="head" d="M${x},${y} l-6,-13 a6,6 0 1,1 12,0 z"/><circle cx="${x}" cy="${y-13}" r="2.5" fill="#04121e"/></g>`;
+    svg.appendChild(grp);
+    const c=document.createElement('div');c.className='branch frost'+(idx===0?' top':'');
+    c.innerHTML=`<span class="dist">${(it.d/22).toFixed(1)} mi</span><b>${name}</b><div class="m">${meta}</div>`;
+    cards.appendChild(c);
+  });
+}
+const ZIP={'92501':[120,190],'92335':[210,110],'91761':[300,170],'92879':[160,240]};
+function search(){const q=document.getElementById('q').value.trim();const o=ZIP[q]||[Math.random()*300+50,Math.random()*200+50];render(o[0],o[1]);}
+document.getElementById('go').onclick=search;
+document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')search();});
+render(120,190);
+let auto=0;setInterval(()=>{auto++;const keys=Object.keys(ZIP);document.getElementById('q').value=keys[auto%keys.length];search();},4200);
+</script></body></html>

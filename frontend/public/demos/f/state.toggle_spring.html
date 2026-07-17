@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>state.toggle_spring</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .panel{padding:20px}
+ .row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 4px;border-bottom:1px solid var(--line)}
+ .row:last-child{border-bottom:none}
+ .lbl b{font-size:14px;display:block}.lbl span{font-size:11px;color:var(--ice);opacity:.65}
+ .sw{position:relative;width:56px;height:30px;border-radius:999px;flex:none;cursor:pointer;
+   border:1px solid var(--line2);background:rgba(4,18,30,.6);transition:background .35s,box-shadow .35s}
+ .sw.on{background:linear-gradient(120deg,var(--cyan),var(--teal));box-shadow:var(--glow)}
+ .knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
+   background:var(--frost);box-shadow:0 2px 8px rgba(0,0,0,.5);
+   transition:left .5s cubic-bezier(.34,1.56,.64,1),width .18s}
+ .sw.on .knob{left:29px}
+ .sw:active .knob{width:30px}
+ .sw.on:active .knob{left:23px}
+</style></head>
+<body class="demo"><div class="demo-name">f · state.toggle_spring</div>
+<div class="stage">
+  <div class="eyebrow">SPRING TOGGLE · micro-interaction</div>
+  <div class="panel frost">
+    <div class="row"><div class="lbl"><b>Frost shielding</b><span>Overnight glacier caching</span></div><div class="sw" data-i="0"><div class="knob"></div></div></div>
+    <div class="row"><div class="lbl"><b>Push notifications</b><span>Alert on thaw events</span></div><div class="sw on" data-i="1"><div class="knob"></div></div></div>
+    <div class="row"><div class="lbl"><b>Auto-sync signals</b><span>Live telemetry stream</span></div><div class="sw" data-i="2"><div class="knob"></div></div></div>
+    <div class="row"><div class="lbl"><b>Reduced motion</b><span>Honor system preference</span></div><div class="sw on" data-i="3"><div class="knob"></div></div></div>
+  </div>
+</div>
+<script>
+const sws=[...document.querySelectorAll('.sw')];
+sws.forEach(s=>s.addEventListener('click',()=>s.classList.toggle('on')));
+// auto-demo the springy knob on a gentle loop
+let k=0;
+setInterval(()=>{const s=sws[k%sws.length];s.classList.toggle('on');k++;},1500);
+</script></body></html>

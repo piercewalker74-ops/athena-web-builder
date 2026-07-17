@@ -1,0 +1,2564 @@
+[
+{
+"id": "grass-visualizer-3d",
+"name": "3D Blade Grass Visualizer",
+"scope": "section-variant",
+"folder": "WebGL",
+"sectionTypes": [
+"A",
+"E"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Canvas-projected 3D turf field you orbit and zoom, with live sliders for pile height, density, wind, blade shape, color and weather that reshape the grass and surface a live product match.",
+"viz": "particles",
+"source": "demo GrassVisualizer3D"
+},
+{
+"id": "mower-reveal",
+"name": "Push-Mower Scroll Reveal",
+"scope": "enhancement",
+"folder": "Signature",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "On scroll an SVG push-mower drives left→right clipping away an uncut-turf overlay to reveal the cards behind it, wheels spinning and cut-grass flecks trailing; fires once, static under reduced motion.",
+"viz": "mower",
+"source": "demo CatalogMowerReveal"
+},
+{
+"id": "mouse-gradient-wash",
+"name": "Pointer-Reactive Gradient Wash",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A soft neon radial glow that eases toward the cursor behind the content, rAF-throttled via CSS vars with a fixed counter-glow for depth; static under reduced motion and touch.",
+"viz": "cursor",
+"source": "demo MouseGradient"
+},
+{
+"id": "tilt-card",
+"name": "3D Tilt Card with Glare",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "either",
+"canStock": true
+},
+"description": "Each card tilts in 3D toward the pointer with a restrained max angle and a light-glare highlight tracking across its face; GPU-composited, flat on touch and reduced motion.",
+"viz": "tilt",
+"source": "demo TiltCard"
+},
+{
+"id": "cinematic-video-overture-hero",
+"name": "Cinematic Video Overture Hero",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "video",
+"canStock": true
+},
+"description": "A full-bleed muted aerial video plays on load; when it ends the wordmark flies to the corner, headline lines rise in sequence and a photo crossfades in behind, with a Skip control.",
+"viz": "mask",
+"source": "demo Hero"
+},
+{
+"id": "embla-series-carousel",
+"name": "Draggable Product Row Carousel",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Horizontal snap carousel of product cards (Embla) with drag/touch and keyboard arrow buttons that dim and disable at each end; ~1.2/2/3/4 cards across breakpoints.",
+"viz": "slider",
+"source": "demo SeriesScrollRow"
+},
+{
+"id": "typewriter-caret",
+"name": "Green-Caret Typewriter",
+"scope": "enhancement",
+"folder": "Text",
+"sectionTypes": [
+"A",
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "JS typewriter that types a string character-by-character with a blinking caret, retypes cleanly on new text; full text instant with no caret under reduced motion.",
+"viz": "typewriter",
+"source": "demo Typewriter"
+},
+{
+"id": "scroll-reveal",
+"name": "IntersectionObserver Scroll Reveal",
+"scope": "enhancement",
+"folder": "Reveal",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Lightweight reveal-on-scroll wrapper toggling transform/opacity with up/left/right/fade directions and optional delay/repeat; cheap for dozens of elements, instant under reduced motion.",
+"viz": "reveal",
+"source": "demo ScrollReveal"
+},
+{
+"id": "mask-text-rise",
+"name": "Heading Mask-Rise",
+"scope": "enhancement",
+"folder": "Text",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A heading rises from translateY(110%) inside an overflow clip so the words sweep up out of a mask on view or mount; the signature title entrance used across sections.",
+"viz": "mask",
+"source": "demo Reveal"
+},
+{
+"id": "stagger-group-reveal",
+"name": "Staggered Group Reveal",
+"scope": "enhancement",
+"folder": "Reveal",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Wraps a group of children so they enter with one observer and a per-child animation-delay cascade (rise/fade/dock); one coherent motion signature for grids and lists.",
+"viz": "stagger",
+"source": "demo Reveal"
+},
+{
+"id": "turfmatch-quiz-wizard",
+"name": "Product-Match Quiz Wizard",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Six-step guided quiz of emoji option-cards (use, traffic, climate, pets, priority, sqft) with a progress bar and fade transitions that resolves to a tailored recommendation.",
+"viz": "stagger",
+"source": "demo TurfMatchWizard"
+},
+{
+"id": "leaflet-store-locator",
+"name": "Interactive Store Locator",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"J"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Leaflet map with keyless light tiles and staggered pin drops; a ZIP/city search geocodes and reorders branch cards nearest-first, flying to the closest pin, degrading gracefully if geocoding is down.",
+"viz": "map",
+"source": "demo StoreLocator"
+},
+{
+"id": "aurora-marquee-testimonials",
+"name": "Aurora Marquee Testimonials",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Two frosted-glass review rows auto-scroll in opposite directions over drifting aurora blobs, with a cursor spotlight and blob parallax; hovered row pauses, static grid under reduced motion.",
+"viz": "marquee",
+"source": "demo Testimonials"
+},
+{
+"id": "video-testimonial-grid",
+"name": "Click-to-Play Video Testimonials",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H"
+],
+"media": {
+"needs": "video",
+"canStock": true
+},
+"description": "Grid of testimonial cards that play with sound on click, each swapping an honest 'coming soon' face for the real clip, with client/partner badges and optional quote captions.",
+"viz": "reveal",
+"source": "demo VideoTestimonials"
+},
+{
+"id": "video-reel-strip",
+"name": "Autoplay Video Reel Strip",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D",
+"C"
+],
+"media": {
+"needs": "video",
+"canStock": true
+},
+"description": "A horizontal snap strip of vertical 9:16 clips that autoplay muted on scroll; a single mute toggle per card ensures only one audio track plays, tap-to-play under reduced motion.",
+"viz": "slider",
+"source": "demo VideoShowcase"
+},
+{
+"id": "floating-cutout-parallax",
+"name": "Floating Cutout Parallax",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"A",
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A transparent product cutout drifts gently on scroll via a rAF CSS translate with a soft drop shadow so it reads as floating; static under reduced motion.",
+"viz": "parallax",
+"source": "demo FloatingCutout"
+},
+{
+"id": "delivery-estimate-tool",
+"name": "Delivery Estimate + Installer Tool",
+"scope": "section-variant",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Product + ZIP + quantity form that posts to an API and returns an estimated-delivery card with zone/rolls/freight stats plus recommended local installer cards; spinner/timeout/error fallbacks.",
+"viz": "counter",
+"source": "demo DeliveryIQ"
+},
+{
+"id": "spec-count-up",
+"name": "Animated Spec Count-Up Cards",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Large numeric spec cards that ease-count from zero on scroll, preserving units and decimals and shrinking for non-numeric strings; snaps to final under reduced motion.",
+"viz": "counter",
+"source": "demo ProductDetailLandscape"
+},
+{
+"id": "product-detail-landscape-page",
+"name": "Landscape Product Detail Page",
+"scope": "page",
+"folder": "Pages",
+"sectionTypes": [
+"A",
+"G",
+"D"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Full product template: parallax floating-cutout hero with type/color chips, animated 4-up spec grid, side-profile bleed, backing-material split band, spec ledger and hover-zoom gallery, torn-edge dividers.",
+"viz": "parallax",
+"source": "demo ProductDetailLandscape"
+},
+{
+"id": "category-border-sweep",
+"name": "Border-Draw Category Cards",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Large near-square category cards where a green hairline border draws itself (SVG pathLength) staggered left→right, then image and content fade in; redraws once on hover.",
+"viz": "borderdraw",
+"source": "demo ShopByCategory"
+},
+{
+"id": "streaming-ai-chat-widget",
+"name": "Streaming AI Chat Widget",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A floating launcher opens a chat panel with quick-question chips that streams assistant tokens over SSE into growing bubbles, auto-scrolls, and falls back to a phone number if the stream fails.",
+"viz": "chat",
+"source": "demo DemoAssistant"
+},
+{
+"id": "warranty-claim-form",
+"name": "Warranty Claim Form + Photo Upload",
+"scope": "section-variant",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Structured claim form with grouped product select, a client-side image compressor and multi-photo upload (min 3, thumbnails, remove), full inline validation, honeypot and a success state.",
+"viz": "upload",
+"source": "demo WarrantyClaimForm"
+},
+{
+"id": "typed-manifesto-section",
+"name": "Typed-Eyebrow Manifesto",
+"scope": "section-variant",
+"folder": "Text",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A mission block whose eyebrow types in with a green caret, heading mask-rises, and paragraphs stagger up; a home pull-line variant and a full-statement variant share the motion.",
+"viz": "typewriter",
+"source": "demo Mission"
+},
+{
+"id": "faq-accordion",
+"name": "Plus/Minus FAQ Accordion",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"I"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Categorized FAQ where rows expand via a 0fr→1fr grid animation (no measuring) with an animated plus→minus toggle, correct heading levels and ARIA; groups toggle independently.",
+"viz": "accordion",
+"source": "demo FAQ"
+},
+{
+"id": "backing-cross-section-cards",
+"name": "Backing Cross-Section Diagrams",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"L",
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Data-driven cards each render an SVG cutaway of the product's construction — blades over stacked colored backing layers with drainage perforations — plus a legend and 'found on' chips.",
+"viz": "diagram",
+"source": "demo BackingSystems"
+},
+{
+"id": "sticky-quote-tray",
+"name": "Sticky Selection Quote Tray",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A persistent tray that appears once items are added to a shared selection — full-width bar on mobile, corner pill on desktop — showing the count with View-quote and clear actions.",
+"viz": "tray",
+"source": "demo QuoteTray"
+},
+{
+"id": "lenis-smooth-scroll",
+"name": "Lenis + GSAP Smooth Scroll",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "App-wide smooth scrolling via Lenis bridged to GSAP's ticker as the single RAF driver so scroll-scrub effects share one timeline; disabled for reduced-motion.",
+"viz": "parallax",
+"source": "demo SmoothScrollProvider"
+},
+{
+"id": "editorial-collage-bento",
+"name": "Editorial Collage Bento",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A flagship collage: one large feature tile, two stacked, then a row of smaller tiles, images fading up staggered, name-tags stamping in with overshoot, a green glint running once along a rule.",
+"viz": "bento",
+"source": "demo HottestProducts"
+},
+{
+"id": "faceted-filter-catalog",
+"name": "Faceted-Filter Catalog",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"D"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Sticky sidebar of checkbox facets built from the live data, with active-filter chips, clear-all and a body-locking mobile drawer; products regroup by series as filters change.",
+"viz": "reveal",
+"source": "demo ProductsExplorer"
+},
+{
+"id": "add-to-quote-variant-cards",
+"name": "Add-to-Quote Variant Cards",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Accessory cards with size/variant chip selectors and an add/remove-to-quote toggle wired to a shared store, a green border-draw on hover, and an honest 'photo coming soon' placeholder.",
+"viz": "borderdraw",
+"source": "demo AccessoriesExplorer"
+},
+{
+"id": "install-kit-calculator",
+"name": "Install Materials Calculator",
+"scope": "section-variant",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A takeoff calculator: infill and seam choice tiles feed an API that returns an itemized materials list with quantities, units and per-line reasons; an on-brand result ledger.",
+"viz": "ledger",
+"source": "demo InstallKitWizard"
+},
+{
+"id": "click-to-load-pdf-embed",
+"name": "Click-to-Load PDF Preview",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A catalog/document preview that mounts its iframe only after the visitor clicks a framed 'Load preview' button, keeping heavy PDFs off first paint.",
+"viz": "reveal",
+"source": "demo CatalogPreview"
+},
+{
+"id": "location-cards-grid",
+"name": "Branch Location Cards Grid",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"J"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A staggered grid of branch cards showing address, per-branch phone and manager, hours and a Directions link, driven from a locations config and reusable across pages.",
+"viz": "stagger",
+"source": "demo LocationCards"
+},
+{
+"id": "two-column-contact-page",
+"name": "Two-Column Contact Page",
+"scope": "page",
+"folder": "Pages",
+"sectionTypes": [
+"K",
+"J"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Contact template with a dark headline strip then a two-column layout — message form with dock-in reveals left, direct per-store contact right — followed by a location-cards grid.",
+"viz": "reveal",
+"source": "demo contact/page"
+},
+{
+"id": "async-status-lead-form",
+"name": "Async Lead Form + Inline Status",
+"scope": "enhancement",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A lead form that validates inline, posts via fetch, disables and swaps to 'Sending…', then replaces itself with a success or error block plus a honeypot guard.",
+"viz": "reveal",
+"source": "demo ContactMessageForm"
+},
+{
+"id": "scroll-scrub-pinned-hero",
+"name": "Pinned Scroll-Scrub Hero",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A",
+"E"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A GSAP ScrollTrigger-pinned hero that scrubs a mini timeline as you scroll — background parallaxes, a 'pour' still crossfades to 'lit', copy rises — static on mobile and reduced motion.",
+"viz": "scrub",
+"source": "ember-and-oak HeroPour"
+},
+{
+"id": "craft-story-columns",
+"name": "Three-Column Craft Story",
+"scope": "section-variant",
+"folder": "Text",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A three-column editorial story block, each column led by a thin accent rule over a serif heading and body, revealing with a staggered scroll fade and a closing 'meet the maker' link.",
+"viz": "reveal",
+"source": "ember-and-oak CraftStory"
+},
+{
+"id": "count-up-on-view",
+"name": "Count-Up on Scroll",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"G",
+"H"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Numbers ease-count from zero to a data target with prefix/suffix/decimals when scrolled into view via IntersectionObserver; snaps to final value under reduced motion.",
+"viz": "counter",
+"source": "library"
+},
+{
+"id": "stock-badge-collection-grid",
+"name": "Stock-Badge Collection Grid",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "either",
+"canStock": true
+},
+"description": "Product cards carrying In Stock / Selling Out / Sold Out badges, tasting-note copy and hover accent border, where sold-out items swap the CTA for an inline expand-to-email 'notify me' form.",
+"viz": "stagger",
+"source": "ember-and-oak CollectionGrid"
+},
+{
+"id": "waitlist-capture",
+"name": "Batch Waitlist Capture",
+"scope": "section-variant",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A centered 'get first access' email capture with an optional which-scent field that swaps to an inline confirmation on submit; scarcity-framed drop/restock signup.",
+"viz": "reveal",
+"source": "ember-and-oak WaitlistSection"
+},
+{
+"id": "themed-reviews-on-photo",
+"name": "Themed Reviews Over Photo",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A reviews band over a darkened full-bleed photo: an aggregate star score + count header above a grid of themed 5-star cards summarizing review patterns without fabricated quotes.",
+"viz": "reveal",
+"source": "ember-and-oak ReviewsSection"
+},
+{
+"id": "split-feature-with-pills",
+"name": "Split Image Feature + Pill Facts",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A two-column feature: rounded cover image one side, eyebrow + heading + paragraph and a row of pill 'fact' chips (duration, price, location) plus CTA the other; reveals staggered.",
+"viz": "reveal",
+"source": "ember-and-oak WorkshopsSection"
+},
+{
+"id": "inline-credential-strip",
+"name": "Inline Credential Trust Strip",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A slim band of pipe-divided credibility signals (rating · location · materials, or license/insured/BBB/years) sitting right under the hero for instant trust.",
+"viz": "badges",
+"source": "ember-and-oak TrustStrip"
+},
+{
+"id": "commission-intake-form",
+"name": "Custom Commission Intake Form",
+"scope": "section-variant",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A bespoke-inquiry form pairing structured selects (event type, quantity, target date) with an open 'describe it in your own words' textarea and contact fields, resolving to a personal confirmation.",
+"viz": "reveal",
+"source": "ember-and-oak CustomIntakeForm"
+},
+{
+"id": "restaurant-menu-ledger",
+"name": "Restaurant Menu Ledger",
+"scope": "section-variant",
+"folder": "Text",
+"sectionTypes": [
+"I"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A typographic price-list menu grouped into sections, each item a divided row with name + description left and price right, plus inline highlight tags (Fan Favorite, Spicy).",
+"viz": "ledger",
+"source": "joes-tacos menu"
+},
+{
+"id": "featured-menu-card-grid",
+"name": "Menu Card Grid with Feature",
+"scope": "section-variant",
+"folder": "Text",
+"sectionTypes": [
+"I"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Menu presented as a grid of cards (name + price + tasting note) where one specialty card gets an accent border and a 'House Specialty' ribbon; boutique, curated feel.",
+"viz": "ledger",
+"source": "acme-coffee"
+},
+{
+"id": "full-menu-page-template",
+"name": "Full Menu Page Template",
+"scope": "page",
+"folder": "Pages",
+"sectionTypes": [
+"I"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Standalone menu route: cream page-header intro, multiple ledger categories, an allergy note and a closing order CTA banner; a complete drop-in menu page.",
+"viz": "ledger",
+"source": "joes-tacos menu"
+},
+{
+"id": "photo-hero-gradient-overlay",
+"name": "Photo Hero + Gradient Overlay",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Edge-to-edge lifestyle photo behind a three-stop dark gradient overlay, with an eyebrow label, oversized serif headline and dual pill CTAs; warm and appetite-forward.",
+"viz": "gradient",
+"source": "joes-tacos"
+},
+{
+"id": "css-masonry-gallery",
+"name": "Pure-CSS Masonry Gallery",
+"scope": "enhancement",
+"folder": "Gallery",
+"sectionTypes": [
+"D"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A column-based masonry photo wall using CSS columns + break-inside (no JS), collapsing 3→2→1 columns responsively; casual, scrapbook feel.",
+"viz": "masonry",
+"source": "joes-tacos"
+},
+{
+"id": "lightbox-masonry-gallery",
+"name": "Masonry Gallery + Lightbox",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D"
+],
+"media": {
+"needs": "photos",
+"canStock": false
+},
+"description": "A multi-column grid with col-span feature tiles and gradient-to-caption overlays that opens a full-screen modal lightbox with prev/next arrows and keyboard dismiss.",
+"viz": "lightbox",
+"source": "moe-smoke-shop ProofGallery"
+},
+{
+"id": "diagonal-stripe-divider",
+"name": "Diagonal Stripe Divider",
+"scope": "enhancement",
+"folder": "Signature",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A decorative full-width band between sections built from a repeating-linear-gradient stripe pattern; a lightweight texture break with zero images.",
+"viz": "pattern",
+"source": "acme-coffee"
+},
+{
+"id": "sticky-mobile-call-bar",
+"name": "Mobile Sticky Call Bar",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A fixed bottom-of-viewport tap-to-call CTA bar shown only on mobile for local-service businesses, keeping the phone action always in reach.",
+"viz": "reveal",
+"source": "rx-outdoor-living"
+},
+{
+"id": "quote-mark-review-cards",
+"name": "Oversized Quote-Mark Reviews",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Testimonial cards each opened by a giant serif quotation glyph, an italic quote and an uppercase location/author footer with small stars; editorial and warm.",
+"viz": "reveal",
+"source": "rx-outdoor-living reviews"
+},
+{
+"id": "services-image-card-grid",
+"name": "Services Image-Card Grid",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A responsive grid of service cards, each a cover photo over a title + benefit blurb, closing with a 'view all' CTA row; the core offering showcase for a trades site.",
+"viz": "reveal",
+"source": "rx-outdoor-living"
+},
+{
+"id": "local-business-site-shell",
+"name": "Local Business Multi-Page Shell",
+"scope": "page",
+"folder": "Pages",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A full local-service site shell: sticky header + hamburger drawer, image hero, trust strip, service/gallery grids, review snippet, CTA band, service-area footer and mobile call bar.",
+"viz": "reveal",
+"source": "rx-outdoor-living"
+},
+{
+"id": "webgl-vapor-hero",
+"name": "WebGL Cursor-Reactive Vapor Hero",
+"scope": "section-variant",
+"folder": "WebGL",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A full-screen GLSL fragment-shader smoke/vapor field (layered fbm noise, warm-on-charcoal ramp, vignette) that distorts toward the cursor, with a CSS-gradient fallback.",
+"viz": "shader",
+"source": "moe-smoke-shop VaporCanvas"
+},
+{
+"id": "scroll-linked-pill-reveal",
+"name": "Scroll-Linked Pill Reveal",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A row of hero category pills whose opacity and translateY are driven directly by scroll progress mapped to a viewport fraction, fading up as the user begins scrolling.",
+"viz": "parallax",
+"source": "moe-smoke-shop Hero"
+},
+{
+"id": "sticky-filter-tab-catalog",
+"name": "Sticky Filter-Tab Catalog",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"D",
+"I"
+],
+"media": {
+"needs": "either",
+"canStock": true
+},
+"description": "A horizontally-scrollable sticky tab bar (All + categories) with an underline-active state that filters which category sections render below; a client-side catalog browser.",
+"viz": "tabs",
+"source": "moe-smoke-shop ProductsClient"
+},
+{
+"id": "alternating-image-text-rows",
+"name": "Alternating Image/Text Rows",
+"scope": "section-variant",
+"folder": "Text",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "either",
+"canStock": true
+},
+"description": "Two-column rows pairing a category writeup + brand chip cloud + inline call link with a cover photo, degrading to a dashed 'photos coming soon' placeholder when no image exists.",
+"viz": "reveal",
+"source": "moe-smoke-shop ProductsClient"
+},
+{
+"id": "icon-stat-trust-strip",
+"name": "Icon Stat Trust Strip",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "An auto-fit row of divided stat cells, each an SVG icon beside a bold value, uppercase label and small sub-line (rating/hours/locations); a compact credibility band.",
+"viz": "badges",
+"source": "moe-smoke-shop TrustStrip"
+},
+{
+"id": "multi-location-map-cards",
+"name": "Multi-Location Map Cards",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"J"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A grid of location cards, each a color-filtered embedded Google Map over address, per-day hours with a highlighted late-night row, phone and directions; primary gets a 'Main' badge.",
+"viz": "map",
+"source": "moe-smoke-shop Locations"
+},
+{
+"id": "google-reviews-aggregate-trio",
+"name": "Google Reviews Aggregate Trio",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A three-card review block combining one real attributed quote, an aggregate-rating summary (score + count + read-on-Google link) and a numeric teaser linking to a full reviews page.",
+"viz": "reveal",
+"source": "moe-smoke-shop Reviews"
+},
+{
+"id": "viewport-gated-canvas-framework",
+"name": "Viewport-Gated Canvas Framework",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A tiny vanilla-JS registry where each data-anim canvas gets a per-frame draw(ctx,w,h,t), runs only while on-screen via IntersectionObserver, DPR-scales, reads brand colors from CSS vars.",
+"viz": "canvas",
+"source": "library"
+},
+{
+"id": "live-signal-canvas-set",
+"name": "Domain Live-Signal Canvas Set",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A themed family of looping canvas 'live signals' — ECG sweep, glucose curve, orbiting molecules, sleep breathing, firing neuron network, VO2 ring — each tinted to its domain accent.",
+"viz": "particles",
+"source": "library"
+},
+{
+"id": "interactive-orbit-hero",
+"name": "Interactive SVG Orbit Hero",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A hero of a glowing 'core' with color-coded system nodes on orbit rings, each a link, with slow rotation and a subtle pointer-parallax lift of the group on desktop; a navigable hub diagram.",
+"viz": "orbit",
+"source": "library"
+},
+{
+"id": "biomarker-range-cards",
+"name": "Biomarker Range-Bar Cards",
+"scope": "section-variant",
+"folder": "Reveal",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A grid of metric cards showing a value + unit, an optimal/normal band track and a status marker that animates to its data target on scroll, plus optimal/watch/alert badges; clinical aesthetic.",
+"viz": "range",
+"source": "library"
+},
+{
+"id": "score-ring-percentile",
+"name": "Score Ring + Percentile Curve",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A composite dataviz panel: an SVG circular gauge that fills via stroke-dashoffset on view around a big central score, beside a bell-curve marking 'you vs peers' percentile.",
+"viz": "ring",
+"source": "library"
+},
+{
+"id": "multi-step-assessment-quiz",
+"name": "Multi-Step Assessment Quiz",
+"scope": "page",
+"folder": "Forms",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A multi-step wizard with a numbered progress rail + fill bar, chip/segment choice controls, per-step validation, localStorage persistence, a live slider readout and a success confirmation.",
+"viz": "stepper",
+"source": "library"
+},
+{
+"id": "condition-domain-page-template",
+"name": "Condition / Domain Page Template",
+"scope": "page",
+"folder": "Pages",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A repeatable per-topic page — accent-themed domain hero with its own live-signal canvas, a narrow intro and a biomarker range-card grid — a content system driven by one accent per page.",
+"viz": "reveal",
+"source": "library"
+},
+{
+"id": "password-strength-signup",
+"name": "Signup + Password-Strength Meter",
+"scope": "enhancement",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "An account form with a live password-strength bar scored on length/number/symbol/case with a word label, full inline validation and an in-place success confirmation.",
+"viz": "meter",
+"source": "library"
+},
+{
+"id": "scent-family-filter-catalog",
+"name": "Scent-Family Filter Catalog",
+"scope": "page",
+"folder": "Interactive",
+"sectionTypes": [
+"D"
+],
+"media": {
+"needs": "either",
+"canStock": true
+},
+"description": "A shop page with rounded filter-pill tabs that filter product cards by category, each carrying a stock badge and sold-out notify form, capped by a which-scent waitlist band.",
+"viz": "tabs",
+"source": "ember-and-oak ShopClient"
+},
+{
+"id": "webgl-particle-hero",
+"name": "WebGL2 Interactive Particle Hero",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "either",
+"canStock": true
+},
+"description": "Raw WebGL2 point-cloud of 700-2400 particles that drift and repel from the cursor over a dimmed photo + vignette; a living atmospheric field.",
+"viz": "particles",
+"source": "blue-dragon HeroCanvas"
+},
+{
+"id": "frosted-glass-cta-card",
+"name": "Frosted-Glass CTA Card",
+"scope": "enhancement",
+"folder": "Hero",
+"sectionTypes": [
+"A",
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Centered glass card over a busy background: eyebrow, headline, sub-line, call/directions buttons. Premium, legible over motion.",
+"viz": "mask",
+"source": "blue-dragon Hero"
+},
+{
+"id": "gradient-text-headline",
+"name": "Gradient Clipped-Text Headline",
+"scope": "enhancement",
+"folder": "Text",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Headline words painted with a background-clip gradient so key phrases glow against dark type. Instant emphasis, no extra markup.",
+"viz": "gradient",
+"source": "blue-dragon Hero"
+},
+{
+"id": "animated-scroll-hint",
+"name": "Animated Scroll-Down Indicator",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A mouse glyph pinned to the hero bottom with a bouncing dot + Scroll label; a quiet nudge to keep going.",
+"viz": "reveal",
+"source": "blue-dragon Hero"
+},
+{
+"id": "scroll-reveal-system",
+"name": "Auto-Wiring Reveal System",
+"scope": "enhancement",
+"folder": "Reveal",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Drop-in engine: any .reveal element fades/slides in on scroll, with reveal-delay-N stagger and a MutationObserver auto-wiring newly added nodes.",
+"viz": "stagger",
+"source": "blue-dragon ScrollRevealInit"
+},
+{
+"id": "ambient-glow-orbs",
+"name": "Ambient Radial Glow Orbs",
+"scope": "enhancement",
+"folder": "Signature",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Large off-canvas radial-gradient blobs bled into section corners to add depth + color temperature to flat dark backgrounds.",
+"viz": "gradient",
+"source": "blue-dragon Mission"
+},
+{
+"id": "trust-stat-band",
+"name": "Icon Trust / Stat Band",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Bordered grid of stat tiles (icon chip + big value + label + sub-line), one tile tap-to-call; a compact credibility strip.",
+"viz": "counter",
+"source": "blue-dragon TrustStrip"
+},
+{
+"id": "review-theme-cards",
+"name": "Verified Quote + Theme Cards",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "One hero verbatim star-rated quote paired with smaller recurring-theme icon cards + a source-link chip. Honest proof, no invented quotes.",
+"viz": "reveal",
+"source": "blue-dragon Reviews"
+},
+{
+"id": "category-teaser-grid",
+"name": "Category Card Grid + Featured Photos",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Auto-fill grid of icon category cards + browse-all link, then a two-up featured-photo row and accent callout; a what-we-carry teaser.",
+"viz": "bento",
+"source": "blue-dragon ProductsTeaser"
+},
+{
+"id": "split-story-with-badge",
+"name": "Split Text/Image + Overlay Badge",
+"scope": "section-variant",
+"folder": "Text",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Two-column narrative: staggered-reveal copy beside a framed photo with a blurred glass caption badge; a warm story block.",
+"viz": "reveal",
+"source": "blue-dragon Mission"
+},
+{
+"id": "location-hours-map-block",
+"name": "Address / Hours / Map Block",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"J"
+],
+"media": {
+"needs": "either",
+"canStock": true
+},
+"description": "Find-us section: address, tap-to-call, hours list and a storefront photo beside a tall embedded map. Everything a walk-in needs.",
+"viz": "map",
+"source": "blue-dragon Location"
+},
+{
+"id": "dark-mode-map-embed",
+"name": "Dark-Mode Google Maps Embed",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"J"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "CSS-only trick that dark-themes any embedded Google Map (invert + hue-rotate) so it matches a dark site with no API key.",
+"viz": "map",
+"source": "blue-dragon Location"
+},
+{
+"id": "glow-tap-call-cta",
+"name": "Glowing Tap-to-Call Closing CTA",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "either",
+"canStock": true
+},
+"description": "Closing CTA band over a faint photo + radial glow: eyebrow, headline, an oversized glowing phone button, hours/address reminders.",
+"viz": "gradient",
+"source": "blue-dragon FinalCTA"
+},
+{
+"id": "volumetric-3d-hero-scene",
+"name": "Cinematic Volumetric 3D Scene",
+"scope": "section-variant",
+"folder": "WebGL",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "three.js hero: a slow-spinning fresnel-glass DNA helix with a radiation break, transmission crystals, GPGPU dust, ACES + bloom.",
+"viz": "particles",
+"source": "biolab-atlas-3d"
+},
+{
+"id": "gpgpu-curl-dust",
+"name": "GPGPU Curl-Noise Particle Dust",
+"scope": "enhancement",
+"folder": "WebGL",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "25k GPU points advected by divergence-free curl noise in a ping-ponged float texture, pulled to an attractor, drawn additively.",
+"viz": "particles",
+"source": "biolab-atlas-3d"
+},
+{
+"id": "parametric-helix-primitive",
+"name": "Parametric Double-Helix Geometry",
+"scope": "enhancement",
+"folder": "WebGL",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Code-defined DNA double helix (turns/rise/radius params) from CatmullRom tubes, colored rungs, phosphate nodes and a Gaussian break.",
+"viz": "reveal",
+"source": "biolab-atlas-3d"
+},
+{
+"id": "cinematic-composite-depth",
+"name": "Three-Band Composite Depth",
+"scope": "enhancement",
+"folder": "Signature",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "either",
+"canStock": false
+},
+"description": "Depth from three layers at different rates: far parallax backdrop, mid 3D scene, near screen-blended bokeh parallaxed to the pointer.",
+"viz": "parallax",
+"source": "biolab-atlas-3d"
+},
+{
+"id": "postfx-grade-stack",
+"name": "Cinematic Post-FX Grade Stack",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "EffectComposer chain — ACES tone map, threshold UnrealBloom, then radial chromatic aberration + vignette + lift; the filmic grade.",
+"viz": "gradient",
+"source": "biolab-atlas-3d"
+},
+{
+"id": "film-grain-vignette-overlay",
+"name": "Film Grain + Vignette Overlay",
+"scope": "enhancement",
+"folder": "Signature",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Two fixed pointer-through layers — an SVG fractal-noise grain and a radial vignette — over any page for cheap analog-film atmosphere.",
+"viz": "cursor",
+"source": "biolab-atlas-3d"
+},
+{
+"id": "playful-proposal-page",
+"name": "Multi-Screen Journey Page",
+"scope": "page",
+"folder": "Pages",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Single-page multi-screen experience: ask → mini-game → pick → quiz → confirm, with rise transitions, step dots and persistent state.",
+"viz": "reveal",
+"source": "aiden-date"
+},
+{
+"id": "evasive-no-magnetic-yes",
+"name": "Evasive No + Magnetic Yes Buttons",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "The No button sprouts legs and flees the cursor while Yes grows, sprouts wings, magnetically leans in and fills a power meter.",
+"viz": "magnetic",
+"source": "aiden-date"
+},
+{
+"id": "flip-card-grid",
+"name": "3D Flip-Card Grid",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "none",
+"canStock": true
+},
+"description": "Auto-fill grid of cards that rotateY-flip on hover to a back face (emoji, place, link), with selected/flash state + touch fallback.",
+"viz": "tilt",
+"source": "aiden-date"
+},
+{
+"id": "chip-filter-running-budget",
+"name": "Chip Filter + Live Budget Total",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"D",
+"I"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Pill/chip category filter over a card list, wired to a running cost pill that live-sums selected items and swaps copy as picks change.",
+"viz": "ledger",
+"source": "aiden-date"
+},
+{
+"id": "spin-the-wheel-roulette",
+"name": "Canvas Spin-the-Wheel Picker",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A modal canvas roulette of colored segments that spins with easing to randomly land on and select an option; a gamified decision.",
+"viz": "slider",
+"source": "aiden-date"
+},
+{
+"id": "canvas-dodge-minigame",
+"name": "Cursor-Steered Mini-Game",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A themed canvas dodge game (steer with mouse/touch, evade N hazards to unlock the next screen) with hit anims and a win gate.",
+"viz": "cursor",
+"source": "aiden-date"
+},
+{
+"id": "procedural-webaudio-score",
+"name": "Procedural WebAudio SFX + Score",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A no-asset audio layer: synthesized clicks/chimes/whooshes + a looping lo-fi bed whose filter and detune intensify with a danger value.",
+"viz": "marquee",
+"source": "aiden-date"
+},
+{
+"id": "confetti-heart-cannon",
+"name": "Confetti / Heart Particle Cannon",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Full-screen canvas FX firing gravity-driven confetti and heart bursts from screen edges on celebration moments; reward feedback.",
+"viz": "particles",
+"source": "aiden-date"
+},
+{
+"id": "blackhole-swallow-countdown",
+"name": "Black-Hole Swallow + Countdown",
+"scope": "enhancement",
+"folder": "Transitions",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A finale that scale-spins the whole stage into a canvas black hole, then fades to a glowing ring countdown to the saved date.",
+"viz": "counter",
+"source": "aiden-date"
+},
+{
+"id": "typewriter-love-note",
+"name": "Typewriter Multi-Line Note",
+"scope": "enhancement",
+"folder": "Text",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A blinking-cursor typewriter that types a scripted sequence of lines with randomized timing + a rotating reason-#N ticker.",
+"viz": "stagger",
+"source": "aiden-date"
+},
+{
+"id": "confirmation-ticket-ics",
+"name": "Ticket Confirmation + Calendar/SMS",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A boarding-pass confirmation card (gradient stub, punched edge, detail rows) with .ics download, SMS share and maps link.",
+"viz": "reveal",
+"source": "aiden-date"
+},
+{
+"id": "floating-polaroids-ambient",
+"name": "Floating Polaroids Ambient Layer",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "A fixed background of CSS polaroid cards drifting slowly upward and rotating on randomized loops; a warm in-motion atmosphere.",
+"viz": "parallax",
+"source": "aiden-date"
+},
+{
+"id": "charm-preloader",
+"name": "Themed Fake-Progress Preloader",
+"scope": "enhancement",
+"folder": "Transitions",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "An intro overlay with a randomized fake progress bar, an equalizer animation and icon swaps, that fades out and starts the page.",
+"viz": "counter",
+"source": "aiden-date"
+},
+{
+"id": "photo-overlay-hero-pills",
+"name": "Photo Hero + Floating Meta Pills",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Full-bleed photo under a dark gradient overlay, eyebrow + headline + dual CTAs, and a row of glassy info pills (hours, walk-ins, address) pinned to the hero base.",
+"viz": "mask",
+"source": "hairflix"
+},
+{
+"id": "gradient-glow-hero",
+"name": "Gradient Hero with Radial Glow",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "No-photo dark hero from a diagonal brand gradient plus an off-center radial glow; serif headline feels premium and loads instantly.",
+"viz": "gradient",
+"source": "bellas-salon"
+},
+{
+"id": "mascot-illustration-hero",
+"name": "Illustrated SVG Mascot Hero",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Split hero pairing copy with a hand-built inline-SVG character (water-drop mascot with sun rays, glow, shine, blush) — friendly, brandable, zero image assets.",
+"viz": "mascot",
+"source": "pristine-pool"
+},
+{
+"id": "parallax-plate-hero",
+"name": "Parallax Split-Plate Hero",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "GSAP hero: copy left, an image plate right with independently parallaxing bg + defocused fg layers and staggered headline lines that fade up on load.",
+"viz": "parallax",
+"source": "rose-plumbing Hero"
+},
+{
+"id": "trust-stat-bar",
+"name": "Trust / Stat Bar Strip",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Proof strip under the hero — rating, review count, credential stats as big-number + label pairs separated by thin dividers; icon-prefixed variant too.",
+"viz": "counter",
+"source": "sun-city-tattoo"
+},
+{
+"id": "rating-summary-card",
+"name": "Rating Summary Hero Card",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"G",
+"H"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Centerpiece card leading a reviews section: oversized rating number, a filled star row, and the review-count sub-line — anchors proof before the quotes.",
+"viz": "counter",
+"source": "north-phoenix-detail"
+},
+{
+"id": "review-card-grid",
+"name": "Testimonial Card Grid",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Responsive grid of review cards, each with a star row, quote and author/service meta; a decorative oversized open-quote glyph is a variant accent.",
+"viz": "stagger",
+"source": "north-phoenix-detail"
+},
+{
+"id": "empty-state-reviews",
+"name": "Honest Empty-State Reviews",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Reviews section for brand-new businesses: a giant serif quote mark, a candid 'we are gathering reviews' paragraph, and a call-us CTA instead of fabricated testimonials.",
+"viz": "reveal",
+"source": "rose-plumbing Reviews"
+},
+{
+"id": "icon-feature-grid",
+"name": "SVG Icon Feature / Services Grid",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Grid of cards each led by a custom inline-SVG line icon (or emoji), a heading and a short blurb; services, differentiators, what-we-do.",
+"viz": "stagger",
+"source": "sun-city-tattoo"
+},
+{
+"id": "price-ledger",
+"name": "Two-Column Price Ledger",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"I"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Menu-style services + pricing: name flush-left, 'from $XX' flush-right in accent serif, each row a hairline border — reads like a spa/salon price sheet.",
+"viz": "ledger",
+"source": "bellas-salon"
+},
+{
+"id": "pain-point-cards",
+"name": "Problem / Pain-Point Card Grid",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Cards that name a customer problem as the headline (Selling your car?, Green cloudy water) with an icon and an empathetic solution paragraph — converts by mirroring intent.",
+"viz": "stagger",
+"source": "north-phoenix-detail"
+},
+{
+"id": "alternating-image-split",
+"name": "Alternating Image/Text Split + Bullets",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Photo-and-copy split rows that flip left/right on alternate sections, each with eyebrow, headline, checklist and CTA; reveals on scroll.",
+"viz": "reveal",
+"source": "hairflix"
+},
+{
+"id": "floating-photo-badge",
+"name": "Floating Stat Badge on Photo",
+"scope": "enhancement",
+"folder": "Signature",
+"sectionTypes": [
+"L",
+"G"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "An overlapping accent badge (big number + label, e.g. 332 5-Star Reviews) pinned to a portrait photo corner to add proof without a separate section.",
+"viz": "reveal",
+"source": "sun-city-tattoo"
+},
+{
+"id": "lightbox-gallery",
+"name": "Accessible Lightbox Gallery",
+"scope": "enhancement",
+"folder": "Gallery",
+"sectionTypes": [
+"D"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Click/keyboard gallery grid with hover captions; opens a full-screen lightbox with prev/next, Esc/arrows, focus restore and scroll lock — pure JS.",
+"viz": "slider",
+"source": "sun-city-tattoo portfolio"
+},
+{
+"id": "masonry-columns-gallery",
+"name": "Masonry CSS-Columns Gallery",
+"scope": "section-variant",
+"folder": "Gallery",
+"sectionTypes": [
+"D"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Pinterest-style masonry using CSS columns with break-inside tiles of varying heights, collapsing 3-2-1; works with photos or gradient placeholders.",
+"viz": "masonry",
+"source": "bellas-salon"
+},
+{
+"id": "team-card-grid",
+"name": "Team / Staff Card Grid",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Grid of staff cards (photo or gradient avatar) with name, role and one-line specialty; graceful placeholder-initial fallback when a headshot is missing.",
+"viz": "stagger",
+"source": "hairflix"
+},
+{
+"id": "appointment-booking-widget",
+"name": "Appointment Booking Widget",
+"scope": "page",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Self-contained booking flow: staff-picker chips, a month-navigable calendar (past disabled), a time-slot grid with taken slots greyed, a live summary and confirm/success — all client-side.",
+"viz": "calendar",
+"source": "hairflix main.js"
+},
+{
+"id": "image-dropzone-request-form",
+"name": "Booking Form + Image Dropzone",
+"scope": "page",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Two-column contact + request page whose standout is a drag-and-drop reference-photo dropzone with FileReader preview, filename and remove, plus an animated success panel.",
+"viz": "dropzone",
+"source": "sun-city-tattoo book"
+},
+{
+"id": "contact-form-success-state",
+"name": "Contact Form + Live Status States",
+"scope": "enhancement",
+"folder": "Forms",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Split contact section that POSTs to an API and swaps idle to sending to sent (checkmark) to error inline.",
+"viz": "reveal",
+"source": "rose-plumbing CTAForm"
+},
+{
+"id": "sticky-mobile-cta-bar",
+"name": "Sticky Mobile Call/Book Bar",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Thumb-reachable fixed bottom bar on mobile with a single high-intent action (Call / Book); a variant reveals only once the hero scrolls out.",
+"viz": "reveal",
+"source": "sun-city-tattoo"
+},
+{
+"id": "scroll-aware-nav",
+"name": "Transparent-to-Solid Scroll Nav",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Fixed nav that starts transparent over the hero and swaps to solid/shadowed past a threshold, plus an animated hamburger drawer that locks scroll and auto-closes.",
+"viz": "reveal",
+"source": "bellas-salon"
+},
+{
+"id": "cta-band",
+"name": "Full-Width CTA Band",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Bold accent/dark closing band with a headline, sub, and a large phone or book action (often a big tappable phone number) — the recurring conversion closer above the footer.",
+"viz": "reveal",
+"source": "pristine-pool"
+},
+{
+"id": "nav.sticky_bar",
+"name": "Sticky Nav Bar",
+"scope": "global",
+"folder": "Nav",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Persistent wayfinding and an always-reachable CTA.",
+"viz": "reveal",
+"source": "block-registry",
+"kind": "global",
+"priority": "essential",
+"perf": "low"
+},
+{
+"id": "nav.mega_menu",
+"name": "Mega Menu",
+"scope": "global",
+"folder": "Nav",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Exposes deep information architecture without deep clicking. Merchandising surface.",
+"viz": "stagger",
+"source": "block-registry",
+"kind": "global",
+"priority": "recommended",
+"perf": "low"
+},
+{
+"id": "nav.command_palette",
+"name": "Command Palette (Cmd+K)",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Keyboard-summoned search and actions. Signals 'built for pros'.",
+"viz": "stagger",
+"source": "block-registry",
+"kind": "overlay",
+"priority": "advanced",
+"perf": "low"
+},
+{
+"id": "hero.minimal_type",
+"name": "Minimal Typographic Hero",
+"scope": "section-variant",
+"folder": "Hero",
+"sectionTypes": [
+"A"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Confidence signal. Nothing to hide behind. Loads instantly.",
+"viz": "mask",
+"source": "block-registry",
+"kind": "block",
+"priority": "recommended",
+"perf": "low"
+},
+{
+"id": "proof.results_cards",
+"name": "Case Study / Results Cards",
+"scope": "section-variant",
+"folder": "Proof",
+"sectionTypes": [
+"H",
+"L",
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Numbers convert. '3x booked jobs' beats 'great to work with' every time.",
+"viz": "counter",
+"source": "block-registry",
+"kind": "block",
+"priority": "essential",
+"perf": "low"
+},
+{
+"id": "features.comparison_slider",
+"name": "Before / After Slider",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"F"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Instantly legible proof of transformation. Tactile and unarguable.",
+"viz": "slider",
+"source": "block-registry",
+"kind": "block",
+"priority": "recommended",
+"perf": "low"
+},
+{
+"id": "features.hotspots",
+"name": "Interactive Hotspots",
+"scope": "section-variant",
+"folder": "Interactive",
+"sectionTypes": [
+"D",
+"L"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Tappable points on a product reveal detail. Rewards curiosity, explains spatially.",
+"viz": "tilt",
+"source": "block-registry",
+"kind": "block",
+"priority": "advanced",
+"perf": "low"
+},
+{
+"id": "features.spec_table",
+"name": "Specifications / Comparison Table",
+"scope": "section-variant",
+"folder": "Text",
+"sectionTypes": [
+"I"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Hard data for the evaluating buyer. The rational close.",
+"viz": "ledger",
+"source": "block-registry",
+"kind": "block",
+"priority": "recommended",
+"perf": "low"
+},
+{
+"id": "stats.timeline",
+"name": "Timeline",
+"scope": "section-variant",
+"folder": "Signature",
+"sectionTypes": [
+"G"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Milestones along a drawn line. Story, roadmap, or process.",
+"viz": "counter",
+"source": "block-registry",
+"kind": "block",
+"priority": "recommended",
+"perf": "low"
+},
+{
+"id": "pricing.tiered_cards",
+"name": "Tiered Pricing Cards",
+"scope": "section-variant",
+"folder": "Pricing",
+"sectionTypes": [
+"L"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Anchoring plus the compromise effect. Three options make the middle feel safe.",
+"viz": "bento",
+"source": "block-registry",
+"kind": "block",
+"priority": "essential",
+"perf": "low"
+},
+{
+"id": "pricing.calculator",
+"name": "Pricing / ROI Calculator",
+"scope": "section-variant",
+"folder": "Pricing",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "The user talks themselves into the number. Reframes price as investment.",
+"viz": "counter",
+"source": "block-registry",
+"kind": "block",
+"priority": "advanced",
+"perf": "low"
+},
+{
+"id": "footer.mega",
+"name": "Mega Footer",
+"scope": "global",
+"folder": "Footer",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "photos",
+"canStock": true
+},
+"description": "Wayfinding, trust, SEO internal linking, and last-chance conversion. Not a dumping ground.",
+"viz": "ledger",
+"source": "block-registry",
+"kind": "global",
+"priority": "essential",
+"perf": "low"
+},
+{
+"id": "footer.statement",
+"name": "Oversized Statement Footer",
+"scope": "global",
+"folder": "Footer",
+"sectionTypes": [
+"K"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Ends on personality. The giant 'let's talk' email link is the agency signature.",
+"viz": "mask",
+"source": "block-registry",
+"kind": "global",
+"priority": "recommended",
+"perf": "low"
+},
+{
+"id": "reveal.blur_in",
+"name": "Blur In",
+"scope": "enhancement",
+"folder": "Reveal",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Soft focus-pull entrance. Modern, calm.",
+"viz": "reveal",
+"source": "block-registry",
+"reduced_motion": "opacity only",
+"perf": "medium"
+},
+{
+"id": "reveal.line_by_line",
+"name": "Line-by-Line Text Reveal",
+"scope": "enhancement",
+"folder": "Reveal",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Headline lines slide up from behind a mask, staggered. The premium editorial signature.",
+"viz": "reveal",
+"source": "block-registry",
+"reduced_motion": "opacity fade, no split",
+"perf": "low"
+},
+{
+"id": "scroll.horizontal_track",
+"name": "Horizontal Scroll Track",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Vertical scroll input drives horizontal movement of a child track.",
+"viz": "parallax",
+"source": "block-registry",
+"reduced_motion": "track becomes a normal vertical stack or a swipeable carousel",
+"perf": "medium"
+},
+{
+"id": "scroll.progress_bar",
+"name": "Scroll Progress Indicator",
+"scope": "enhancement",
+"folder": "Motion",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Shows read position. Reduces abandonment on long pages.",
+"viz": "parallax",
+"source": "block-registry",
+"reduced_motion": "static or hidden; no motion required",
+"perf": "low"
+},
+{
+"id": "hover.fill_sweep",
+"name": "Button Fill Sweep",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Background fills across the button. Button feels like it charges up.",
+"viz": "tilt",
+"source": "block-registry",
+"reduced_motion": "instant color swap",
+"perf": "low"
+},
+{
+"id": "hover.text_roll",
+"name": "Text Roll Swap",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Label rolls up and a duplicate rolls in behind it. Playful, crisp.",
+"viz": "tilt",
+"source": "block-registry",
+"reduced_motion": "color change only",
+"perf": "low"
+},
+{
+"id": "hover.shine_sweep",
+"name": "Shine Sweep",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A skewed highlight travels across the surface. Premium product gloss.",
+"viz": "tilt",
+"source": "block-registry",
+"reduced_motion": "disabled",
+"perf": "low"
+},
+{
+"id": "cursor.blend",
+"name": "Blend-Mode Cursor",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Cursor inverts whatever is under it. Striking on high-contrast layouts.",
+"viz": "cursor",
+"source": "block-registry",
+"reduced_motion": "native cursor",
+"perf": "low"
+},
+{
+"id": "state.tab_switch",
+"name": "Tab Switch",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Swaps panel content with a sliding active indicator.",
+"viz": "stagger",
+"source": "block-registry",
+"reduced_motion": "instant swap, no slide",
+"perf": "low"
+},
+{
+"id": "state.drawer",
+"name": "Drawer / Overlay Menu",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Panel slides in from an edge or expands full-screen. Mobile nav and filter panels.",
+"viz": "stagger",
+"source": "block-registry",
+"reduced_motion": "instant appear, no stagger",
+"perf": "low"
+},
+{
+"id": "state.toggle_spring",
+"name": "Spring Toggle",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Switch knob springs to its new position. The most-felt micro-interaction on a page.",
+"viz": "stagger",
+"source": "block-registry",
+"reduced_motion": "instant state change",
+"perf": "low"
+},
+{
+"id": "state.carousel",
+"name": "Carousel / Slider",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Horizontally paged content with drag and momentum.",
+"viz": "stagger",
+"source": "block-registry",
+"reduced_motion": "autoplay disabled, no inertia",
+"perf": "low"
+},
+{
+"id": "state.page_transition",
+"name": "Page Transition Curtain",
+"scope": "enhancement",
+"folder": "Interactive",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "A panel wipes across between routes; the new page reveals behind it. Hides load, adds continuity.",
+"viz": "stagger",
+"source": "block-registry",
+"reduced_motion": "instant route change or short fade",
+"perf": "low"
+},
+{
+"id": "feedback.inline_validate",
+"name": "Inline Validation",
+"scope": "enhancement",
+"folder": "Forms",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Field validates on blur with a specific, kind error or a satisfying check.",
+"viz": "reveal",
+"source": "block-registry",
+"reduced_motion": "instant appearance",
+"perf": "low"
+},
+{
+"id": "feedback.success_state",
+"name": "Success State",
+"scope": "enhancement",
+"folder": "Forms",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Confident confirmation after submit. Closes the loop and kills post-submit anxiety.",
+"viz": "reveal",
+"source": "block-registry",
+"reduced_motion": "static check + message",
+"perf": "low"
+},
+{
+"id": "feedback.copy_confirm",
+"name": "Copy Confirmation",
+"scope": "enhancement",
+"folder": "Forms",
+"sectionTypes": [
+"ALL"
+],
+"media": {
+"needs": "none",
+"canStock": false
+},
+"description": "Button flips to 'Copied' on click.",
+"viz": "reveal",
+"source": "block-registry",
+"reduced_motion": "instant label swap",
+"perf": "low"
+}
+]

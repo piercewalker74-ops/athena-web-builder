@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scroll-reveal-system</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .reveal{opacity:0;transform:translateY(24px);filter:blur(5px);transition:all .7s cubic-bezier(.2,.8,.2,1)}
+ .reveal.in{opacity:1;transform:none;filter:none}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+ .card{padding:14px;border-radius:12px}
+ .card .filler{height:52px;margin-bottom:8px}
+ .card b{font-size:13px}.card p{font-size:10px;color:var(--ice);opacity:.7;margin-top:3px}
+ .tagline{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--teal);opacity:.75}
+</style></head>
+<body class="demo"><div class="demo-name">f · scroll-reveal-system</div>
+<div class="stage">
+  <div class="eyebrow reveal" data-d="0">DROP-IN REVEAL ENGINE</div>
+  <h1 class="big glow reveal" data-d="1">Any <code>.reveal</code> node<br>wires itself in.</h1>
+  <div class="tagline reveal" data-d="2">// MutationObserver auto-binds nodes added at runtime ↓</div>
+  <div class="grid" id="g"></div>
+</div>
+<script>
+const names=[['Auto-wire','new nodes bind'],['Stagger','delay-N cascade'],['Cheap','one observer'],['Slide','y + blur in'],['Repeat','re-arms on view'],['Zero cfg','just add class']];
+const io={inview(e){e.classList.add('in');}};
+function bind(el){el.classList.add('reveal');requestAnimationFrame(()=>{});}
+const g=document.getElementById('g');
+// simulate the MutationObserver auto-wiring: append cards over time
+const base=[...document.querySelectorAll('.reveal')];
+function build(){
+  g.innerHTML='';
+  names.forEach((n,i)=>{const c=document.createElement('div');c.className='card frost reveal';c.dataset.d=3+i;
+    c.innerHTML=`<div class="filler"><span class="tag">0${i+1}</span></div><b>${n[0]}</b><p>${n[1]}</p>`;g.appendChild(c);});
+}
+function run(){
+  build();
+  const all=[...document.querySelectorAll('.reveal')];
+  all.forEach(e=>e.classList.remove('in'));
+  all.forEach(e=>setTimeout(()=>e.classList.add('in'),160+ (+e.dataset.d)*140));
+}
+run();setInterval(run,4800);
+</script></body></html>

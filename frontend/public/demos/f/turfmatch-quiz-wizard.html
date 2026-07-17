@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product-Match Quiz</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:440px}
+ .card{border-radius:18px;padding:22px;min-height:270px;display:flex;flex-direction:column}
+ .prog{display:flex;gap:6px;margin-bottom:18px}
+ .prog i{flex:1;height:4px;border-radius:999px;background:var(--line);transition:background .3s}
+ .prog i.on{background:var(--cyan);box-shadow:var(--glow)}
+ .step{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--ice);opacity:.6}
+ h2{font-size:21px;margin:8px 0 18px}
+ .opts{display:flex;flex-direction:column;gap:10px}
+ .opt{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:12px;border:1px solid var(--line);cursor:pointer;transition:all .2s;
+   opacity:0;transform:translateY(10px);animation:si .4s forwards}
+ @keyframes si{to{opacity:1;transform:none}}
+ .opt:hover,.opt.pick{border-color:var(--cyan);background:rgba(47,224,255,.07)}
+ .opt .ic{font-size:20px}.opt b{font-size:14px}
+ .result{text-align:center;margin:auto}
+ .result .rimg{width:120px;height:90px;margin:0 auto 14px}
+ .result h3{font-size:22px}.result p{font-size:12px;color:var(--ice);opacity:.75;margin-top:6px}
+</style></head>
+<body class="demo"><div class="demo-name">f · quiz wizard</div>
+<div class="stage"><div class="card frost" id="card"></div></div>
+<script>
+const Q=[['What are we protecting?',[['🚗','Daily driver'],['🏎','Weekend build'],['🚙','Family SUV']]],
+ ['Biggest concern?',[['☀','Heat & UV'],['🌫','Glare'],['✨','Looks / privacy']]],
+ ['Budget range?',[['$','Essential'],['$$','Premium'],['$$$','Show-quality']]]];
+const card=document.getElementById('card');let step=0;
+function bars(){return '<div class="prog">'+Q.map((_,i)=>`<i class="${i<=step?'on':''}"></i>`).join('')+'</div>';}
+function render(){if(step>=Q.length){card.innerHTML=bars()+`<div class="result"><div class="rimg filler"><span class="tag">MATCH</span></div>
+  <h3 class="glow">Ceramic IR Pro</h3><p>99% UV · 86% heat rejection · lifetime warranty — your best fit.</p></div>`;
+  setTimeout(()=>{step=0;render();},2600);return;}
+ const q=Q[step];
+ card.innerHTML=bars()+`<div class="step">STEP ${step+1} / ${Q.length}</div><h2 class="glow">${q[0]}</h2><div class="opts">`+
+  q[1].map((o,i)=>`<div class="opt" data-i="${i}" style="animation-delay:${i*80}ms"><span class="ic">${o[0]}</span><b>${o[1]}</b></div>`).join('')+'</div>';
+ [...card.querySelectorAll('.opt')].forEach(o=>o.onclick=()=>{o.classList.add('pick');setTimeout(()=>{step++;render();},350);});}
+render();
+// auto-advance
+setInterval(()=>{const o=card.querySelector('.opt:not(.pick)');if(o)o.click();},1500);
+</script></body></html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>postfx-grade-stack</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;border-radius:18px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+ .mesh{position:absolute;inset:-40%;filter:blur(28px);
+   background:radial-gradient(circle at 32% 34%,#2fe0ff,transparent 40%),radial-gradient(circle at 70% 42%,#39d3c9,transparent 42%),radial-gradient(circle at 52% 76%,#8fe6ff,transparent 45%);
+   animation:swirl 14s linear infinite}
+ @keyframes swirl{to{transform:rotate(360deg) scale(1.1)}}
+ /* UnrealBloom-style overexposed core */
+ .bloom{position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5),rgba(47,224,255,.25) 40%,transparent 68%);mix-blend-mode:screen;animation:pulse 3.2s ease-in-out infinite}
+ @keyframes pulse{50%{transform:scale(1.25);opacity:.8}}
+ /* radial chromatic aberration + vignette */
+ .ab{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(120% 100% at 50% 50%,transparent 55%,rgba(255,40,80,.14) 80%,rgba(40,120,255,.14))}
+ .vig{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 140px 40px rgba(4,18,30,.9)}
+ .cap{position:relative;text-align:center}
+ .cap .big{font-size:clamp(24px,5vw,44px);position:relative}
+ .cap .big:before,.cap .big:after{content:attr(data-t);position:absolute;left:0;top:0;width:100%;opacity:.5;mix-blend-mode:screen}
+ .cap .big:before{color:#ff2b55;animation:ax 3s ease-in-out infinite}
+ .cap .big:after{color:#2b7bff;animation:ax 3s ease-in-out infinite reverse}
+ @keyframes ax{0%,100%{transform:translate(0,0)}50%{transform:translate(2px,-1px)}}
+ .stack{position:absolute;left:14px;bottom:14px;display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--ice)}
+ .stack span{opacity:0;animation:sf .5s forwards}
+ @keyframes sf{to{opacity:.85}}
+</style></head>
+<body class="demo"><div class="demo-name">f · postfx-grade-stack</div>
+<div class="stage">
+ <div class="mesh"></div><div class="bloom"></div>
+ <div class="cap"><div class="eyebrow">EFFECTCOMPOSER</div><h1 class="big glow" data-t="Filmic grade">Filmic grade</h1></div>
+ <div class="ab"></div><div class="vig"></div>
+ <div class="stack" id="stack"></div>
+</div>
+<script>
+const passes=['▸ ACES tone map','▸ threshold bloom','▸ chromatic aberration','▸ vignette + lift'];
+const S=document.getElementById('stack');
+function run(){S.innerHTML='';passes.forEach((p,i)=>{const el=document.createElement('span');el.textContent=p;el.style.animationDelay=(i*0.35)+'s';S.appendChild(el);});}
+run();setInterval(run,4800);
+</script></body></html>

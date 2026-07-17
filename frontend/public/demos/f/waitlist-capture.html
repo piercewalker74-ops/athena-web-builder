@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>waitlist-capture</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;justify-content:center}
+ .card{max-width:400px;width:100%;padding:26px 22px;border-radius:16px;text-align:center;position:relative;overflow:hidden}
+ .scar{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:#ffd27a;
+   border:1px solid rgba(255,193,64,.4);border-radius:999px;padding:4px 11px;display:inline-block;margin-bottom:14px}
+ .card h1{font-size:clamp(22px,4.5vw,32px);margin-bottom:8px}
+ .form{margin-top:16px}
+ .fld{height:36px;border-radius:9px;border:1px solid var(--line);background:var(--glass);
+   color:var(--frost);font-size:13px;padding:0 12px;width:100%;margin-bottom:9px}
+ .fld::placeholder{color:rgba(234,246,255,.4)}
+ .go{width:100%;justify-content:center}
+ .confirm{position:absolute;inset:0;background:var(--glass);backdrop-filter:blur(6px);
+   display:grid;place-items:center;padding:24px;opacity:0;transform:scale(1.04);pointer-events:none;transition:all .5s cubic-bezier(.2,.8,.2,1)}
+ .confirm.in{opacity:1;transform:none}
+ .ring{width:52px;height:52px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:26px;color:#04121e;
+   background:linear-gradient(120deg,var(--cyan),var(--teal));box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">f · waitlist-capture</div>
+<div class="stage">
+  <div class="card frost">
+    <span class="scar">◈ SPRING DROP · LIMITED ROLLS</span>
+    <h1 class="glow">Get first access.</h1>
+    <p class="sub">Join the waitlist and we'll notify you the moment the next batch is milled.</p>
+    <div class="form">
+      <input class="fld" placeholder="you@email.com" readonly>
+      <select class="fld" style="appearance:none"><option>Which style? — Fairway 40</option><option>Pet Turf Pro</option><option>Putt Master</option></select>
+      <button class="btn go" id="go">Notify me →</button>
+    </div>
+    <div class="confirm" id="cf">
+      <div><div class="ring">✓</div><b>You're on the list.</b>
+      <p class="sub" style="margin-top:6px">We'll email you before the public drop.</p></div>
+    </div>
+  </div>
+</div>
+<script>
+const go=document.getElementById('go'),cf=document.getElementById('cf');
+function join(){cf.classList.add('in');}
+function reset(){cf.classList.remove('in');}
+go.addEventListener('click',join);
+setTimeout(function loop(){join();setTimeout(()=>{reset();setTimeout(loop,2600);},2800);},1400);
+</script></body></html>

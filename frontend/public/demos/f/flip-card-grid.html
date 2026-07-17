@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>flip-card-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+ .card{height:150px;perspective:700px;cursor:pointer}
+ .inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+ .card:hover .inner,.card.flip .inner{transform:rotateY(180deg)}
+ .face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;text-align:center}
+ .front{background:linear-gradient(140deg,#0c2f45,#0a2236 60%,#0e3a4e);border:1px solid var(--line)}
+ .front .em{font-size:34px}
+ .front .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ice2)}
+ .back{transform:rotateY(180deg);background:var(--glass2);border:1px solid var(--line2);box-shadow:var(--glow)}
+ .back .pl{font-size:15px;font-weight:650}
+ .back .lk{font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.1em}
+ .card.sel .front{outline:1px solid var(--cyan)}
+</style></head>
+<body class="demo"><div class="demo-name">f · flip-card-grid</div>
+<div class="stage">
+ <div class="eyebrow">HOVER OR TAP TO FLIP</div>
+ <div class="grid" id="grid"></div>
+</div>
+<script>
+const data=[['🗼','Paris','France · 3 days'],['🏝️','Bali','Indonesia · 7 days'],['🗻','Kyoto','Japan · 5 days'],['🏔️','Banff','Canada · 4 days'],['🌆','Lisbon','Portugal · 6 days'],['🏜️','Petra','Jordan · 2 days']];
+const grid=document.getElementById('grid');
+data.forEach(([em,pl,lk])=>{const c=document.createElement('div');c.className='card';
+ c.innerHTML=`<div class="inner"><div class="face front"><div class="em">${em}</div><div class="lbl">${pl.toUpperCase()}</div></div>
+ <div class="face back"><div class="pl">${pl}</div><div class="lk">${lk} →</div></div></div>`;
+ c.addEventListener('click',()=>{grid.querySelectorAll('.card').forEach(x=>x.classList.remove('sel'));c.classList.add('sel','flip');setTimeout(()=>c.classList.remove('flip'),1200);});
+ grid.appendChild(c);});
+// auto-flip a random card on a loop so it looks alive (touch fallback)
+const cards=[...grid.children];
+setInterval(()=>{const c=cards[Math.floor(Math.random()*cards.length)];c.classList.add('flip');setTimeout(()=>c.classList.remove('flip'),1400);},2200);
+</script></body></html>

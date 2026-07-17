@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>reveal.blur_in</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+ .bl{opacity:0;filter:blur(16px);transform:scale(1.04);transition:opacity 1s ease,filter 1s ease,transform 1s ease}
+ .bl.in{opacity:1;filter:blur(0);transform:none}
+ .big{font-size:clamp(28px,6vw,52px)}
+ .row{display:flex;gap:12px;width:100%}
+ .filler{height:110px;flex:1}
+ .cap{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--ice);opacity:.6}
+ .meter{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:9px;color:var(--cyan);letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">f · reveal.blur_in</div>
+<div class="stage">
+  <div class="meter" id="m">focus ▸ 0.00</div>
+  <div class="eyebrow bl" data-d="0">SOFT FOCUS-PULL ENTRANCE</div>
+  <h1 class="big glow bl" data-d="1">It arrives<br>in focus.</h1>
+  <div class="sub bl" data-d="2" style="max-width:340px">Each element resolves from a blur — calm, modern, cinematic — the way a lens settles onto its subject.</div>
+  <div class="row"><div class="filler bl" data-d="3"><span class="tag">01</span></div><div class="filler bl" data-d="4"><span class="tag">02</span></div><div class="filler bl" data-d="5"><span class="tag">03</span></div></div>
+</div>
+<script>
+const els=[...document.querySelectorAll('.bl')],m=document.getElementById('m');
+function run(){
+  els.forEach(e=>e.classList.remove('in'));
+  els.forEach((e,i)=>setTimeout(()=>e.classList.add('in'),200+i*240));
+}
+run();setInterval(run,4600);
+// live focus readout eases 0→1 over the reveal
+let f=0,dir=1;setInterval(()=>{f+=0.04*dir;if(f>=1){f=1;dir=-1;setTimeout(()=>dir=1,600);}if(f<=0){f=0;}m.textContent='focus ▸ '+f.toFixed(2);},70);
+</script></body></html>

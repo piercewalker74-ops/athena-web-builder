@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>icon-stat-trust-strip</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px;align-items:center}
+ .strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));width:100%;
+   border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--glass)}
+ .cell{display:flex;gap:11px;align-items:center;padding:16px 14px;border-right:1px solid var(--line);
+   opacity:0;transform:scale(.8);transition:all .5s cubic-bezier(.3,1.4,.5,1)}
+ .cell:last-child{border-right:none}
+ .cell.in{opacity:1;transform:none}
+ .ic{flex:0 0 auto;width:34px;height:34px;display:grid;place-items:center;border-radius:9px;background:var(--glass2);
+   border:1px solid var(--line2)}
+ .ic svg{width:20px;height:20px;stroke:var(--cyan);fill:none;stroke-width:1.6;filter:drop-shadow(0 0 6px rgba(47,224,255,.6))}
+ .v{font-size:19px;font-weight:700;line-height:1}
+ .l{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--ice);opacity:.8;text-transform:uppercase;margin-top:3px}
+ .s{font-size:9px;color:var(--ice);opacity:.55;margin-top:2px}
+</style></head>
+<body class="demo"><div class="demo-name">f · icon-stat-trust-strip</div>
+<div class="stage">
+  <div class="eyebrow">WHY HOMEOWNERS PICK US</div>
+  <div class="strip" id="strip"></div>
+</div>
+<script>
+const IC={
+ star:'<path d="M12 3l2.6 5.6L20 9.4l-4 4 1 6-5-2.9L7 20l1-6-4-4 5.4-.8z"/>',
+ pin:'<path d="M12 21s-6-5.3-6-10a6 6 0 1112 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2"/>',
+ shield:'<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+ clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>'};
+const S=[
+ [IC.star,'4.9','Google Rating','412 reviews'],
+ [IC.pin,'6','Cities Served','same-day quotes'],
+ [IC.shield,'Lifetime','Warranty','parts + labor'],
+ [IC.clock,'15 yrs','In Business','licensed & insured']];
+const strip=document.getElementById('strip');
+strip.innerHTML=S.map(s=>`<div class="cell"><div class="ic"><svg viewBox="0 0 24 24">${s[0]}</svg></div>
+ <div><div class="v glow">${s[1]}</div><div class="l">${s[2]}</div><div class="s">${s[3]}</div></div></div>`).join('');
+const cells=[...strip.children];
+function run(){cells.forEach(c=>c.classList.remove('in'));cells.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),200+i*150));}
+run();setInterval(run,4600);
+</script></body></html>

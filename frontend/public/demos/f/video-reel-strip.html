@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>video-reel-strip</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .strip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 12px;scrollbar-width:none}
+ .strip::-webkit-scrollbar{display:none}
+ .reel{position:relative;flex:none;width:150px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;scroll-snap-align:center;cursor:pointer}
+ .reel .filler{position:absolute;inset:0;border-radius:0}
+ .reel .filler:before{animation:pan 6s ease-in-out infinite alternate}
+ @keyframes pan{to{transform:scale(1.12) translate(-6px,-4px)}}
+ .reel .glow2{position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 40%,rgba(47,224,255,.25),transparent 60%);transition:.4s}
+ .reel.active .glow2{opacity:1}
+ .lbl{position:absolute;left:8px;bottom:8px;z-index:2;font-family:var(--mono);font-size:9px;color:var(--frost);
+   background:rgba(4,18,30,.6);padding:3px 7px;border-radius:6px}
+ .mute{position:absolute;top:8px;right:8px;z-index:2;width:26px;height:26px;border-radius:50%;border:1px solid var(--line2);
+   background:rgba(4,18,30,.6);color:var(--ice2);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+ .mute.on{background:var(--cyan);color:#04121e}
+ .bars{position:absolute;left:8px;top:8px;z-index:2;display:flex;gap:2px;align-items:flex-end;height:12px}
+ .bars i{width:2px;background:var(--cyan);animation:eq .8s ease-in-out infinite}
+ .bars i:nth-child(2){animation-delay:.2s}.bars i:nth-child(3){animation-delay:.4s}.bars i:nth-child(4){animation-delay:.15s}
+ @keyframes eq{0%,100%{height:3px}50%{height:12px}}
+ .reel:not(.active) .bars{opacity:.35}
+</style></head>
+<body class="demo"><div class="demo-name">f · video-reel-strip</div>
+<div class="stage">
+  <div class="eyebrow">INSTALL REELS · TAP 🔊 TO UNMUTE ONE</div>
+  <div class="strip" id="strip"></div>
+</div>
+<script>
+const R=['Backyard putting green','1-day install','Rooftop deck turf','Pet run makeover','Front-yard reveal'];
+const strip=document.getElementById('strip');
+R.forEach((t,i)=>{
+  const r=document.createElement('div');r.className='reel frost'+(i===0?' active':'');
+  r.innerHTML=`<div class="filler eel"></div><div class="glow2"></div><div class="bars"><i></i><i></i><i></i><i></i></div>
+    <button class="mute" title="mute">🔇</button><div class="lbl">${t}</div>`;
+  const mute=r.querySelector('.mute');
+  mute.onclick=e=>{e.stopPropagation();
+    // only one audio track: unmute this, mute the rest
+    [...strip.querySelectorAll('.mute')].forEach(m=>{m.classList.remove('on');m.textContent='🔇';});
+    mute.classList.add('on');mute.textContent='🔊';
+    [...strip.children].forEach(c=>c.classList.remove('active'));r.classList.add('active');};
+  strip.appendChild(r);
+});
+// autoplay-on-scroll simulation: mark centered reel active as it drifts
+let n=0;setInterval(()=>{n=(n+1)%R.length;const el=strip.children[n];
+  [...strip.children].forEach(c=>c.classList.remove('active'));el.classList.add('active');
+  el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});},2800);
+</script></body></html>

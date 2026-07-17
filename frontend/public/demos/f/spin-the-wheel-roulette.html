@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spin the Wheel</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;align-items:center;gap:18px}
+ .wrap{position:relative;width:280px;height:280px}
+ canvas{width:280px;height:280px;filter:drop-shadow(0 0 20px rgba(47,224,255,.3))}
+ .ptr{position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:22px solid var(--ice);z-index:2;filter:drop-shadow(0 0 6px rgba(47,224,255,.8))}
+ .hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;
+   background:radial-gradient(circle at 40% 35%,var(--ice),var(--cyan));display:grid;place-items:center;font-family:var(--mono);font-size:10px;color:#04121e;cursor:pointer;box-shadow:var(--glow);z-index:2}
+ .res{font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:var(--cyan);min-height:18px}
+</style></head>
+<body class="demo"><div class="demo-name">f · spin-the-wheel</div>
+<div class="stage">
+  <div class="eyebrow">SPIN TO WIN</div>
+  <div class="wrap"><div class="ptr"></div><canvas id="c" width="560" height="560"></canvas><div class="hub" id="hub">SPIN</div></div>
+  <div class="res" id="res">— tap to spin —</div>
+</div>
+<script>
+const seg=['10% OFF','FREE STRIP','$25 OFF','TESLA PKG','MYSTERY','FREE QUOTE','5% OFF','VIP SLOT'];
+const cv=document.getElementById('c'),ctx=cv.getContext('2d'),hub=document.getElementById('hub'),res=document.getElementById('res');
+const cols=['#0c3a52','#124a60','#0e3247','#155a72','#0c3a52','#124a60','#0e3247','#155a72'];
+const R=280,cx=280,cy=280,N=seg.length,ang=2*Math.PI/N;let rot=0,spinning=false;
+function draw(){ctx.clearRect(0,0,560,560);
+ for(let i=0;i<N;i++){const a0=rot+i*ang;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,R-10,a0,a0+ang);ctx.closePath();
+  ctx.fillStyle=cols[i];ctx.fill();ctx.strokeStyle='rgba(143,230,255,.35)';ctx.lineWidth=2;ctx.stroke();
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(a0+ang/2);ctx.textAlign='right';ctx.fillStyle='#eaf6ff';ctx.font='600 20px Segoe UI';
+  ctx.fillText(seg[i],R-40,7);ctx.restore();}}
+function spin(){if(spinning)return;spinning=true;res.textContent='...';
+ const target=rot+Math.PI*2*(4+Math.random()*3)+Math.random()*ang;const start=rot,dur=3600,t0=performance.now();
+ (function step(now){const p=Math.min(1,(now-t0)/dur);const e=1-Math.pow(1-p,3);rot=start+(target-start)*e;draw();
+  if(p<1)requestAnimationFrame(step);else{spinning=false;
+   const norm=((-Math.PI/2-rot)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);const idx=Math.floor(norm/ang)%N;res.textContent='🎉 '+seg[idx];}})(t0);}
+hub.onclick=spin;draw();
+setTimeout(spin,900);setInterval(()=>{if(!spinning)spin();},6000);
+</script></body></html>

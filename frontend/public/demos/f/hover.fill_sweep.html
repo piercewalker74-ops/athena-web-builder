@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>hover.fill_sweep</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center}
+ .eyebrow{margin-bottom:2px}
+ .sub{max-width:320px}
+ .btns{display:flex;flex-direction:column;gap:14px;width:260px}
+ .sw{position:relative;overflow:hidden;isolation:isolate;font-weight:650;font-size:15px;cursor:pointer;
+   border-radius:999px;padding:14px 26px;border:1px solid var(--line2);color:var(--ice2);background:transparent;transition:color .3s}
+ .sw::before{content:'';position:absolute;inset:0;z-index:-1;transform:translateX(-101%);
+   background:linear-gradient(120deg,var(--cyan),var(--teal));transition:transform .45s cubic-bezier(.6,0,.2,1)}
+ .sw.on::before,.sw:hover::before{transform:translateX(0)}
+ .sw.on,.sw:hover{color:#04121e}
+ .sw.up::before{background:linear-gradient(120deg,var(--teal),var(--ice))}
+ .ghost{background:var(--glass)}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">f · hover.fill_sweep</div>
+<div class="stage">
+  <div class="eyebrow">BUTTON FILL SWEEP</div>
+  <h1 class="big glow" style="font-size:clamp(24px,5vw,40px)">It charges up.</h1>
+  <div class="sub">The background floods across on hover — the button feels like it's powering on before you commit.</div>
+  <div class="btns">
+    <button class="sw" id="b0">Get a quote →</button>
+    <button class="sw up ghost" id="b1">Book a call</button>
+    <button class="sw" id="b2">Start free trial</button>
+  </div>
+  <div class="hint">auto-demo loops · hover any button to trigger</div>
+</div>
+<script>
+const btns=[document.getElementById('b0'),document.getElementById('b1'),document.getElementById('b2')];
+let i=0;
+function tick(){
+  btns.forEach(b=>{if(!b.matches(':hover'))b.classList.remove('on');});
+  const b=btns[i%btns.length];
+  if(!b.matches(':hover')){b.classList.add('on');setTimeout(()=>b.classList.remove('on'),1100);}
+  i++;
+}
+setInterval(tick,1500);tick();
+</script></body></html>

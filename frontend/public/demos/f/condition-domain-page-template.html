@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>condition-domain-page-template</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{--accent:#a98bff;display:flex;flex-direction:column;gap:16px}
+ .rv{opacity:0;transform:translateY(24px);filter:blur(5px);transition:all .9s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none;filter:none}
+ .hero{position:relative;height:150px;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:20px;
+   background:linear-gradient(120deg,rgba(169,139,255,.18),rgba(10,36,54,.4))}
+ .hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.7}
+ .hero .h{position:relative}
+ .hero .eyebrow{color:var(--accent)}
+ .intro{max-width:420px}
+ .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ .bm{padding:12px}
+ .bm .top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:9px}
+ .bm .top b{font-family:var(--mono);font-size:16px;color:var(--frost)}
+ .track{position:relative;height:7px;border-radius:999px;background:rgba(255,255,255,.08)}
+ .track i{position:absolute;top:-3px;width:4px;height:13px;border-radius:3px;background:var(--accent);box-shadow:0 0 10px var(--accent);left:0;transition:left 1.2s cubic-bezier(.2,.8,.2,1)}
+ @media(max-width:440px){.cards{grid-template-columns:1fr}}
+</style></head>
+<body class="demo"><div class="demo-name">f · condition-domain-page-template</div>
+<div class="stage" id="stage">
+  <div class="hero rv frost" data-d="0"><canvas id="sig"></canvas>
+    <div class="h"><div class="eyebrow">DOMAIN · SLEEP &amp; RECOVERY</div><h1 class="big glow" style="font-size:clamp(24px,5vw,34px)">Deep Sleep</h1></div></div>
+  <p class="intro sub rv" data-d="1">One accent, one live signal, one page. Every domain reuses this template — swap the tint and the biomarker set, keep the rhythm.</p>
+  <div class="cards" id="cards"></div>
+</div>
+<script>
+const cv=document.getElementById('sig'),ctx=cv.getContext('2d'),dpr=Math.min(devicePixelRatio||1,2);let W,H;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+size();addEventListener('resize',size);let t=0;
+function draw(){t+=.025;ctx.clearRect(0,0,W,H);ctx.lineWidth=2;ctx.strokeStyle='#a98bff';ctx.beginPath();
+ for(let x=0;x<W;x++){const br=Math.sin(x*.018+t*.5);const y=H/2+Math.sign(br)*Math.pow(Math.abs(br),.6)*H*.3;x?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+ ctx.stroke();requestAnimationFrame(draw);}
+draw();
+const BM=[['REM latency','14 min',30],['Deep sleep','1.8 hrs',58],['Resting HR','52 bpm',40],['HRV','68 ms',72]];
+const cards=document.getElementById('cards');const mk=[];
+BM.forEach(([nm,v,p])=>{const d=document.createElement('div');d.className='bm frost rv';d.dataset.d='2';
+ d.innerHTML=`<div class="top"><span>${nm}</span><b>${v}</b></div><div class="track"><i></i></div>`;cards.appendChild(d);mk.push([d.querySelector('i'),p]);});
+const els=[...document.querySelectorAll('.rv')];
+function run(){els.forEach(e=>e.classList.remove('in'));mk.forEach(([i])=>i.style.left='0');
+ els.forEach((e,i)=>setTimeout(()=>e.classList.add('in'),200+i*180));
+ setTimeout(()=>mk.forEach(([i,p])=>i.style.left=p+'%'),900);}
+run();setInterval(run,5200);
+</script></body></html>

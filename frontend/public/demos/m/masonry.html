@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>masonry</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{columns:4;column-gap:10px}
+ .t{break-inside:avoid;margin-bottom:10px;border-radius:12px;position:relative;overflow:hidden;
+    opacity:0;transform:translateY(18px);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .t.in{opacity:1;transform:none}
+ .t .filler{border-radius:0}
+</style></head>
+<body class="demo"><div class="demo-name">m · masonry</div>
+<div class="stage" id="s"></div>
+<script>
+const H=[130,90,170,110,150,80,120,140,100,160,95,125];const s=document.getElementById('s');
+H.forEach(h=>{const d=document.createElement('div');d.className='t frost';
+ d.innerHTML=`<div class="filler" style="height:${h}px"><span class="tag">IMG</span></div>`;s.appendChild(d);});
+const ts=[...s.children];
+function run(){ts.forEach(t=>t.classList.remove('in'));ts.forEach((t,i)=>setTimeout(()=>t.classList.add('in'),80+i*70));}
+run();setInterval(run,5200);
+</script></body></html>

@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>count-up-on-view</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+ .stat{padding:20px 16px;text-align:center;opacity:0;transform:translateY(16px);transition:all .6s ease}
+ .stat.in{opacity:1;transform:none}
+ .num{font-size:clamp(30px,6vw,52px);font-weight:700;letter-spacing:-.02em;line-height:1}
+ .num .px{color:var(--ice);font-size:.6em;font-weight:600}
+ .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--ice);opacity:.7;margin-top:8px}
+</style></head>
+<body class="demo"><div class="demo-name">f · count-up-on-view</div>
+<div class="stage">
+  <div class="eyebrow">BY THE NUMBERS · IN VIEW</div>
+  <div class="grid" id="g">
+    <div class="stat frost"><div class="num glow" data-t="18500" data-p="" data-s="+" data-dec="0"></div><div class="lbl">SQ FT INSTALLED</div></div>
+    <div class="stat frost"><div class="num glow" data-t="4.9" data-p="" data-s="★" data-dec="1"></div><div class="lbl">AVG RATING</div></div>
+    <div class="stat frost"><div class="num glow" data-t="12.5" data-p="$" data-s="M" data-dec="1"></div><div class="lbl">WATER SAVED</div></div>
+    <div class="stat frost"><div class="num glow" data-t="98" data-p="" data-s="%" data-dec="0"></div><div class="lbl">WOULD REFER</div></div>
+  </div>
+</div>
+<script>
+const stats=[...document.querySelectorAll('.stat')],nums=[...document.querySelectorAll('.num')];
+function ease(t){return 1-Math.pow(1-t,3);}
+function fmt(v,dec){return dec>0?v.toFixed(dec):Math.round(v).toLocaleString();}
+function run(){
+ stats.forEach((s,i)=>{s.classList.remove('in');setTimeout(()=>s.classList.add('in'),120+i*120);});
+ const dur=1700,start=performance.now();
+ (function step(now){const p=Math.min(1,(now-start)/dur);
+  nums.forEach(n=>{const t=+n.dataset.t,v=ease(p)*t;
+   n.innerHTML=`<span class="px">${n.dataset.p}</span>${fmt(v,+n.dataset.dec)}<span class="px">${n.dataset.s}</span>`;});
+  if(p<1)requestAnimationFrame(step);})(start);
+}
+run();setInterval(run,4200);
+</script></body></html>

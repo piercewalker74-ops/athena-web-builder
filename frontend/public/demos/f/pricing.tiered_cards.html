@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pricing.tiered_cards</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;align-items:stretch}
+ .tier{padding:18px 14px;border-radius:14px;display:flex;flex-direction:column;gap:8px;text-align:left;
+   opacity:0;transform:translateY(16px);transition:all .55s cubic-bezier(.2,.8,.2,1);position:relative}
+ .tier.in{opacity:1;transform:none}
+ .tier.pop{border:1px solid var(--line2);box-shadow:0 12px 34px rgba(47,224,255,.28);transform:translateY(16px) scale(1.04)}
+ .tier.pop.in{transform:scale(1.04)}
+ .badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:8px;letter-spacing:.14em;
+   background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;padding:3px 10px;border-radius:999px}
+ .pname{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase}
+ .price{font-size:34px;font-weight:800;line-height:1}.price small{font-size:12px;color:var(--ice);opacity:.6;font-weight:400}
+ .feat{font-size:11px;color:var(--ice2);display:flex;gap:6px;align-items:baseline}
+ .feat i{color:var(--teal);font-style:normal}
+ .pick{margin-top:auto;font-size:12px;padding:9px 0;justify-content:center;width:100%}
+ .pick.ghost{background:transparent;color:var(--ice2);border:1px solid var(--line2)}
+</style></head>
+<body class="demo"><div class="demo-name">f · pricing.tiered_cards</div>
+<div class="stage">
+  <div class="eyebrow">SIMPLE, HONEST PRICING</div>
+  <div class="grid" id="g">
+    <div class="tier frost"><div class="pname">Patch</div><div class="price">$3<small>/sqft</small></div>
+      <div class="feat"><i>✓</i>DIY turf roll</div><div class="feat"><i>✓</i>Cut to size</div><div class="feat"><i>✓</i>8-yr warranty</div>
+      <button class="btn pick ghost">Choose</button></div>
+    <div class="tier frost pop"><div class="badge">MOST POPULAR</div><div class="pname glow">Installed</div><div class="price glow">$9<small>/sqft</small></div>
+      <div class="feat"><i>✓</i>Pro install crew</div><div class="feat"><i>✓</i>Base + infill</div><div class="feat"><i>✓</i>15-yr warranty</div>
+      <button class="btn pick">Choose</button></div>
+    <div class="tier frost"><div class="pname">Estate</div><div class="price">$14<small>/sqft</small></div>
+      <div class="feat"><i>✓</i>Custom grading</div><div class="feat"><i>✓</i>Drainage design</div><div class="feat"><i>✓</i>Lifetime warranty</div>
+      <button class="btn pick ghost">Choose</button></div>
+  </div>
+</div>
+<script>
+const t=[...document.querySelectorAll('.tier')];
+function run(){t.forEach(x=>x.classList.remove('in'));t.forEach((x,i)=>setTimeout(()=>x.classList.add('in'),160+i*150));}
+run();setInterval(run,4800);
+</script></body></html>

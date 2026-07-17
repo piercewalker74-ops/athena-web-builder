@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>parametric-helix-primitive</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:1fr 150px;gap:16px;align-items:center}
+ .view{height:320px;position:relative;border-radius:16px;overflow:hidden}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .params{display:flex;flex-direction:column;gap:10px}
+ .prow{opacity:0;transform:translateX(14px);transition:all .5s cubic-bezier(.2,.8,.2,1)}
+ .prow.in{opacity:1;transform:none}
+ .prow .k{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase}
+ .prow .v{font-size:19px;font-weight:650}
+ .prow .v small{font-size:11px;opacity:.6;font-weight:400}
+ @media(max-width:520px){.stage{grid-template-columns:1fr}.params{flex-direction:row;flex-wrap:wrap}}
+</style></head>
+<body class="demo"><div class="demo-name">f · parametric-helix-primitive</div>
+<div class="stage">
+ <div class="view frost"><canvas id="c"></canvas></div>
+ <div class="params" id="params"></div>
+</div>
+<script>
+const P={turns:4,rise:1.4,radius:1.0,break:'Gaussian'};
+const pl=document.getElementById('params');
+[['turns',P.turns,''],['rise',P.rise,'Å'],['radius',P.radius,'nm'],['break',P.break,'']].forEach(([k,v,u])=>{
+ const d=document.createElement('div');d.className='prow';d.innerHTML=`<div class="k">${k}</div><div class="v">${v}<small>${u}</small></div>`;pl.appendChild(d);});
+const rows=[...pl.children];
+function reveal(){rows.forEach(r=>r.classList.remove('in'));rows.forEach((r,i)=>setTimeout(()=>r.classList.add('in'),200+i*180));}
+reveal();setInterval(reveal,5200);
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');let W,H,dpr=Math.min(devicePixelRatio||1,2),t=0;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+size();addEventListener('resize',size);
+function loop(){t+=0.014;ctx.clearRect(0,0,W,H);const cx=W/2,amp=Math.min(W,H)*0.2,N=140;
+ for(let s=0;s<2;s++){ctx.beginPath();
+  for(let i=0;i<=N;i++){const u=i/N,y=H*0.08+u*H*0.84,ph=u*P.turns*Math.PI*2+t+s*Math.PI;
+   const x=cx+Math.sin(ph)*amp;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+  ctx.strokeStyle=s?'rgba(57,211,201,.85)':'rgba(47,224,255,.9)';ctx.lineWidth=2.2;ctx.stroke();}
+ // colored rungs + phosphate nodes, Gaussian break at center
+ for(let i=3;i<N;i+=5){const u=i/N,y=H*0.08+u*H*0.84,ph=u*P.turns*Math.PI*2+t;
+  const g=Math.exp(-Math.pow((u-0.5)*3.4,2));if(g>0.45&&Math.abs(u-0.5)<0.13)continue;
+  const x1=cx+Math.sin(ph)*amp,x2=cx+Math.sin(ph+Math.PI)*amp,z=Math.cos(ph);
+  ctx.globalAlpha=.35+.55*(z*.5+.5);ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);
+  ctx.strokeStyle=i%10<5?'rgba(180,236,255,.9)':'rgba(47,224,255,.6)';ctx.lineWidth=1.8;ctx.stroke();
+  [x1,x2].forEach(x=>{ctx.beginPath();ctx.arc(x,y,2.6,0,7);ctx.fillStyle='rgba(234,246,255,.95)';ctx.fill();});ctx.globalAlpha=1;}
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

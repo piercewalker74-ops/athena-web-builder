@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>quote-mark-review-cards</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+ .card{padding:20px 18px 16px;position:relative;overflow:hidden;
+   opacity:0;transform:translateY(26px);filter:blur(6px);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .card.in{opacity:1;transform:none;filter:none}
+ .qm{font-family:Georgia,serif;font-size:74px;line-height:.6;color:var(--cyan);opacity:.35;height:34px}
+ .q{font-style:italic;font-size:14px;line-height:1.5;color:var(--frost);margin:8px 0 14px}
+ .foot{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ice);opacity:.8}
+ .stars{color:var(--cyan);letter-spacing:2px;font-size:11px;margin-top:4px}
+ @media(max-width:520px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body class="demo"><div class="demo-name">f · quote-mark-review-cards</div>
+<div class="stage">
+  <div class="eyebrow">WHAT CLIENTS SAY</div>
+  <h1 class="big glow" style="font-size:clamp(22px,4vw,34px)">In their own words.</h1>
+  <div class="grid" id="g"></div>
+</div>
+<script>
+const R=[
+ ['They transformed our patchy yard into a putting-green in a single weekend.','Dana R. · Riverside','★★★★★'],
+ ['Crew showed up on time, cleaned up spotless, and the turf still looks new.','Marcus T. · Fontana','★★★★★'],
+ ['Best money we spent on the house. No more mud, no more mowing.','Priya K. · Ontario','★★★★★'],
+ ['Quote was honest, install was flawless. Warranty sealed the deal.','Leo & Sam · Corona','★★★★★']];
+const g=document.getElementById('g');
+g.innerHTML=R.map(r=>`<div class="card frost"><div class="qm">&ldquo;</div><div class="q">${r[0]}</div><div class="foot">${r[1]}</div><div class="stars">${r[2]}</div></div>`).join('');
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),200+i*220));}
+run();setInterval(run,4600);
+</script></body></html>

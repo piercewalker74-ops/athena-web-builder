@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>team-card-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ @media(max-width:480px){.grid{grid-template-columns:repeat(2,1fr)}}
+ .card{padding:14px;border-radius:14px;text-align:center;opacity:0;transform:translateY(22px) scale(.95);
+   transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .card.in{opacity:1;transform:none}
+ .av{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;overflow:hidden;position:relative}
+ .av.init{display:grid;place-items:center;font-size:22px;font-weight:700;color:#04121e;
+   background:linear-gradient(135deg,var(--cyan),var(--teal))}
+ .card b{font-size:14px;display:block}
+ .role{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;margin-top:3px}
+ .spec{font-size:11px;color:var(--ice);opacity:.72;margin-top:6px;line-height:1.35}
+</style></head>
+<body class="demo"><div class="demo-name">f · team-card-grid</div>
+<div class="stage">
+  <div class="eyebrow">MEET THE CREW</div>
+  <div class="grid" id="g"></div>
+</div>
+<script>
+const team=[
+ {n:'Marcus Field',r:'Lead Installer',s:'Seam work & complex grading',p:1},
+ {n:'Dana Ruiz',r:'Project Mgr',s:'Keeps every job on schedule',p:1},
+ {n:'Kofi Owens',r:'Base Specialist',s:'Drainage & compaction',p:0,i:'KO'},
+ {n:'Ivy Chen',r:'Design Lead',s:'Layouts & material match',p:1},
+ {n:'Sam Boyd',r:'Estimator',s:'Fast, honest takeoffs',p:0,i:'SB'},
+ {n:'Rosa Vela',r:'Client Care',s:'Warranty & follow-up',p:1}];
+const g=document.getElementById('g');
+team.forEach(m=>{const c=document.createElement('div');c.className='card frost';
+ const av=m.p?`<div class="av"><div class="filler eel" style="position:absolute;inset:0;border-radius:50%"><span class="tag" style="font-size:7px">CREW</span></div></div>`
+              :`<div class="av init">${m.i}</div>`;
+ c.innerHTML=`${av}<b>${m.n}</b><div class="role">${m.r}</div><div class="spec">${m.s}</div>`;g.appendChild(c);});
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),140+i*110));}
+run();setInterval(run,5000);
+</script></body></html>

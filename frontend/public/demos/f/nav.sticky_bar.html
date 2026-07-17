@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>nav.sticky_bar</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;justify-content:center}
+ .phone{width:100%;max-width:420px;height:340px;border-radius:18px;overflow:hidden;position:relative;border:1px solid var(--line2)}
+ .nav{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+   padding:14px 16px;transition:background .4s,box-shadow .4s,padding .4s;background:transparent}
+ .nav.solid{background:rgba(6,20,34,.86);backdrop-filter:blur(8px);box-shadow:0 6px 24px rgba(0,0,0,.4);padding:10px 16px;border-bottom:1px solid var(--line)}
+ .brand{font-weight:700;letter-spacing:.02em;font-size:15px}
+ .links{display:flex;gap:14px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--ice2);opacity:.85}
+ .links span{opacity:.7}
+ .cta{font-size:11px;padding:7px 14px}
+ .scroller{position:absolute;inset:0;overflow:hidden}
+ .doc{position:absolute;left:0;right:0;top:0;will-change:transform}
+ .heroband{height:200px;position:relative;display:flex;align-items:flex-end;padding:16px}
+ .heroband .filler{position:absolute;inset:0;border-radius:0}
+ .heroband h3{position:relative;font-size:22px;font-weight:700}
+ .blk{height:70px;margin:12px;border-radius:10px}
+ .line{height:9px;border-radius:5px;background:linear-gradient(90deg,var(--ice),transparent);margin:10px 16px}
+</style></head>
+<body class="demo"><div class="demo-name">f · nav.sticky_bar</div>
+<div class="stage">
+  <div class="phone frost">
+    <div class="nav" id="nav">
+      <div class="brand glow">Northgate</div>
+      <div class="links"><span>Work</span><span>Studio</span><span>Journal</span></div>
+      <button class="btn cta">Contact</button>
+    </div>
+    <div class="scroller"><div class="doc" id="doc">
+      <div class="heroband"><div class="filler eel"><span class="tag">HERO</span></div><h3 class="glow">Always in reach.</h3></div>
+      <div class="line" style="width:60%"></div><div class="line" style="width:78%"></div>
+      <div class="blk frost"></div><div class="line" style="width:52%"></div>
+      <div class="blk frost"></div><div class="line" style="width:70%"></div>
+      <div class="blk frost"></div><div class="line" style="width:40%"></div>
+    </div></div>
+  </div>
+</div>
+<script>
+const doc=document.getElementById('doc'),nav=document.getElementById('nav');
+let t=0,dir=1;
+function loop(){
+  t+=dir*0.9;
+  if(t>360){t=360;dir=-1;} if(t<0){t=0;dir=1;}
+  doc.style.transform='translateY('+(-t)+'px)';
+  nav.classList.toggle('solid',t>60);
+  requestAnimationFrame(loop);
+}
+loop();
+</script></body></html>

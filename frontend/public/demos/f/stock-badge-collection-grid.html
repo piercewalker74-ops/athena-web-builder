@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>stock-badge-collection-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ .card{padding:0;border-radius:12px;overflow:hidden;opacity:0;transform:translateY(20px) scale(.96);
+   transition:all .55s cubic-bezier(.2,.8,.2,1);border:1px solid var(--line)}
+ .card.in{opacity:1;transform:none}
+ .card:hover{border-color:var(--cyan);box-shadow:var(--glow)}
+ .card .filler{height:74px;border-radius:0;position:relative}
+ .badge{position:absolute;top:6px;left:6px;font-family:var(--mono);font-size:8px;letter-spacing:.1em;
+   padding:3px 7px;border-radius:5px;font-weight:600}
+ .b-in{background:rgba(57,211,201,.18);color:var(--teal);border:1px solid rgba(57,211,201,.5)}
+ .b-low{background:rgba(255,193,64,.16);color:#ffd27a;border:1px solid rgba(255,193,64,.45)}
+ .b-out{background:rgba(255,120,140,.14);color:#ff96a6;border:1px solid rgba(255,120,140,.4)}
+ .body{padding:10px}
+ .body b{font-size:13px}
+ .note{font-size:10px;color:var(--ice);opacity:.7;margin-top:3px;line-height:1.4}
+ .cta{width:100%;justify-content:center;margin-top:9px;font-size:12px;padding:8px}
+ .notify{margin-top:9px;display:flex;gap:5px}
+ .notify input{flex:1;min-width:0;height:28px;border-radius:7px;border:1px solid var(--line);background:var(--glass);
+   color:var(--frost);font-size:11px;padding:0 8px}
+ .notify button{border:none;border-radius:7px;background:var(--glass2);color:var(--ice2);font-size:11px;padding:0 9px;cursor:pointer}
+</style></head>
+<body class="demo"><div class="demo-name">f · stock-badge-collection-grid</div>
+<div class="stage">
+  <div class="eyebrow">THE COLLECTION</div>
+  <div class="grid" id="g"></div>
+</div>
+<script>
+const items=[
+ {n:'Fairway 40',t:'Soft underfoot, deep pile',s:'in'},
+ {n:'Pet Turf Pro',t:'Odor-resistant, fast drain',s:'low'},
+ {n:'Putt Master',t:'Tight nap, tournament roll',s:'out'},
+ {n:'Shade Blend',t:'Thrives with low sun',s:'in'},
+ {n:'Deck & Patio',t:'Slim base, easy trim',s:'low'},
+ {n:'Playground XT',t:'Cushioned, IPEMA rated',s:'in'}];
+const badge={in:['b-in','In Stock'],low:['b-low','Selling Out'],out:['b-out','Sold Out']};
+const g=document.getElementById('g');
+items.forEach(it=>{const c=document.createElement('div');c.className='card frost';
+ const [bc,bt]=badge[it.s];
+ const action=it.s==='out'
+  ?`<div class="notify"><input placeholder="Email me" readonly><button>Notify</button></div>`
+  :`<button class="btn cta">Add to quote</button>`;
+ c.innerHTML=`<div class="filler"><span class="badge ${bc}">${bt}</span></div>
+  <div class="body"><b>${it.n}</b><div class="note">${it.t}</div>${action}</div>`;g.appendChild(c);});
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),140+i*110));}
+run();setInterval(run,4800);
+</script></body></html>

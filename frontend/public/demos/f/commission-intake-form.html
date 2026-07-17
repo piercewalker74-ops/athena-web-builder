@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>commission-intake-form</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{padding:22px}
+ .card{padding:22px}
+ .rv{opacity:0;transform:translateY(20px);filter:blur(5px);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none;filter:none}
+ .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+ label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice);opacity:.75;margin-bottom:5px;text-transform:uppercase}
+ .fld{width:100%;background:var(--glass2);border:1px solid var(--line);border-radius:9px;color:var(--frost);
+   font-family:var(--sans);font-size:13px;padding:9px 11px;outline:none}
+ .fld:focus{border-color:var(--line2);box-shadow:var(--glow)}
+ select.fld{appearance:none;cursor:pointer}
+ textarea.fld{resize:none;height:60px;margin-top:14px}
+ .full{grid-column:1/-1}
+ .btn{margin-top:16px;width:100%;justify-content:center}
+ .done{display:none;text-align:center;padding:30px 10px}
+ .done.on{display:block;animation:pop .5s cubic-bezier(.3,1.4,.5,1)}
+ @keyframes pop{from{opacity:0;transform:scale(.85)}}
+ .done .ck{font-size:44px;color:var(--cyan);filter:drop-shadow(0 0 14px rgba(47,224,255,.6))}
+</style></head>
+<body class="demo"><div class="demo-name">f · commission-intake-form</div>
+<div class="stage frost card">
+  <form id="form">
+    <div class="eyebrow rv">CUSTOM COMMISSION</div>
+    <h2 class="big rv glow" style="font-size:24px;margin-top:6px">Tell us what to build.</h2>
+    <div class="grid2">
+      <div class="rv"><label>Event type</label>
+        <select class="fld"><option>Wedding</option><option>Corporate gift</option><option>Anniversary</option><option>Other</option></select></div>
+      <div class="rv"><label>Quantity</label>
+        <select class="fld"><option>1–10</option><option>11–50</option><option>50–200</option><option>200+</option></select></div>
+      <div class="rv full"><label>Target date</label>
+        <input class="fld" type="text" value="Sept 2026" readonly></div>
+    </div>
+    <div class="rv"><textarea class="fld full" placeholder="Describe it in your own words — colors, mood, story…">A set of etched glass keepsakes in glacier blue…</textarea></div>
+    <div class="grid2">
+      <div class="rv"><label>Name</label><input class="fld" type="text" placeholder="Your name"></div>
+      <div class="rv"><label>Email</label><input class="fld" type="text" placeholder="you@email.com"></div>
+    </div>
+    <button class="btn rv" type="submit">Send commission request →</button>
+  </form>
+  <div class="done" id="done">
+    <div class="ck">✓</div>
+    <h2 class="big glow" style="font-size:22px;margin-top:8px">Thanks, we&#39;re on it.</h2>
+    <p class="sub" style="margin-top:8px">A designer will reply personally within one working day.</p>
+  </div>
+</div>
+<script>
+const els=[...document.querySelectorAll('.rv')],form=document.getElementById('form'),done=document.getElementById('done');
+function run(){els.forEach(e=>e.classList.remove('in'));els.forEach((e,i)=>setTimeout(()=>e.classList.add('in'),200+i*140));}
+run();
+form.addEventListener('submit',e=>{e.preventDefault();form.style.display='none';done.classList.add('on');
+  setTimeout(()=>{done.classList.remove('on');form.style.display='';run();},2600);});
+// auto-demo the flow
+setInterval(()=>{if(form.style.display!=='none')form.requestSubmit();},5200);
+</script></body></html>

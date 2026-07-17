@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>animated-scroll-hint</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;border-radius:18px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+ .stage>.filler{position:absolute;inset:0;height:auto}
+ .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,18,30,.35),rgba(4,18,30,.75))}
+ .cap{position:relative;text-align:center}
+ .cap .big{font-size:clamp(24px,5vw,40px)}
+ .hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px}
+ .mouse{width:26px;height:42px;border:2px solid var(--ice2);border-radius:16px;position:relative;box-shadow:var(--glow)}
+ .dot{position:absolute;left:50%;top:8px;width:4px;height:8px;border-radius:3px;background:var(--cyan);transform:translateX(-50%);
+   animation:drop 1.6s cubic-bezier(.4,0,.2,1) infinite}
+ @keyframes drop{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translate(-50%,14px)}}
+ .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.28em;color:var(--ice2);text-transform:uppercase;animation:pulse 1.6s ease-in-out infinite}
+ @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+</style></head>
+<body class="demo"><div class="demo-name">f · animated-scroll-hint</div>
+<div class="stage frost">
+  <div class="filler"><span class="tag">HERO</span></div><div class="veil"></div>
+  <div class="cap"><div class="eyebrow">DESERT NURSERY CO.</div><h1 class="big glow">Grow something wild</h1></div>
+  <div class="hint"><div class="mouse"><div class="dot"></div></div><div class="lbl">Scroll</div></div>
+</div>
+</body></html>

@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>grass-visualizer-3d</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .view{position:relative;height:230px;border-radius:16px;overflow:hidden}
+ canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
+ .hud{position:absolute;left:12px;top:10px;z-index:2}
+ .match{position:absolute;right:10px;bottom:10px;z-index:2;display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:10px}
+ .match .sw{width:26px;height:26px;border-radius:6px;border:1px solid var(--line2)}
+ .match b{font-size:12px}.match small{display:block;font-family:var(--mono);font-size:9px;color:var(--cyan);letter-spacing:.1em}
+ .controls{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+ .ctl{display:flex;flex-direction:column;gap:3px}
+ .ctl label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice2);text-transform:uppercase}
+ .ctl label span{color:var(--cyan)}
+ input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--line2);outline:none}
+ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--cyan);box-shadow:var(--glow);cursor:pointer}
+</style></head>
+<body class="demo"><div class="demo-name">f · grass-visualizer-3d</div>
+<div class="stage">
+  <div class="view frost">
+    <canvas id="c"></canvas>
+    <div class="hud"><span class="chip">◇ drag to orbit</span></div>
+    <div class="match frost"><span class="sw" id="sw"></span><div><b id="mn">Emerald 45</b><small id="mm">LIVE MATCH · 96%</small></div></div>
+  </div>
+  <div class="controls">
+    <div class="ctl"><label>Pile height <span id="vh">38mm</span></label><input id="ih" type="range" min="14" max="55" value="38"></div>
+    <div class="ctl"><label>Density <span id="vd">high</span></label><input id="id" type="range" min="40" max="160" value="110"></div>
+    <div class="ctl"><label>Wind <span id="vw">breeze</span></label><input id="iw" type="range" min="0" max="100" value="42"></div>
+    <div class="ctl"><label>Hue <span id="vc">emerald</span></label><input id="ic" type="range" min="80" max="150" value="118"></div>
+  </div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');let W,H,dpr=Math.min(devicePixelRatio||1,2);
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);build();}
+let orbit=0,dragging=false,px=0;
+cv.addEventListener('mousedown',e=>{dragging=true;px=e.clientX;cv.style.cursor='grabbing';});
+addEventListener('mouseup',()=>{dragging=false;cv.style.cursor='grab';});
+addEventListener('mousemove',e=>{if(dragging){orbit+=(e.clientX-px)*.004;px=e.clientX;}});
+const P={h:38,d:110,w:42,c:118};let blades=[];
+function build(){blades=[];for(let i=0;i<P.d;i++){blades.push({x:Math.random(),z:Math.random(),p:Math.random()*6.28,l:.7+Math.random()*.6});}
+ blades.sort((a,b)=>a.z-b.z);}
+function bind(id,key,fmt,extra){const el=document.getElementById(id),out=document.getElementById(fmt);
+ el.addEventListener('input',()=>{P[key]=+el.value;extra(P[key],out);if(key==='d')build();});extra(P[key],out);}
+bind('ih','h','vh',(v,o)=>o.textContent=v+'mm');
+bind('id','d','vd',(v,o)=>{o.textContent=v>120?'lush':v>75?'high':'medium';});
+bind('iw','w','vw',(v,o)=>{o.textContent=v>66?'gusty':v>25?'breeze':'still';});
+bind('ic','c','vc',(v,o)=>{o.textContent=v>135?'lime':v>105?'emerald':'olive';match();});
+const names=['Olive 30','Emerald 45','Fescue 50','Lime 60'],sw=document.getElementById('sw'),mn=document.getElementById('mn'),mm=document.getElementById('mm');
+function match(){const idx=Math.min(3,Math.floor((P.c-80)/18));mn.textContent=names[idx];
+ sw.style.background=`linear-gradient(140deg,hsl(${P.c},55%,32%),hsl(${P.c},60%,22%))`;
+ mm.textContent='LIVE MATCH · '+(90+idx+Math.round(P.h/12))+'%';}
+size();addEventListener('resize',size);
+let t=0;
+function loop(){t+=.02;ctx.clearRect(0,0,W,H);
+ const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#07202f');g.addColorStop(1,'#041520');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ const cx=W/2,base=H*.9,wind=P.w/100;
+ for(const b of blades){const ang=b.x*6.28+orbit;const depth=(Math.cos(ang)*.5+.5);
+  const sx=cx+Math.sin(ang)*W*.42*(.4+b.z*.6);const sy=base-b.z*40;
+  const hgt=(H*.42)*(P.h/55)*b.l*(.5+depth*.5);
+  const sway=Math.sin(t*1.6+b.p)*wind*22*(1-b.z*.4);
+  const light=30+depth*38-b.z*10;const col=`hsl(${P.c},${45+depth*20}%,${light}%)`;
+  ctx.strokeStyle=col;ctx.lineWidth=1.4+depth*1.6;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(sx,sy);ctx.quadraticCurveTo(sx+sway*.5,sy-hgt*.55,sx+sway,sy-hgt);ctx.stroke();}
+ requestAnimationFrame(loop);}
+match();loop();
+</script></body></html>

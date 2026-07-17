@@ -1,0 +1,70 @@
+/* ══════════════════════════════════════════════════════════════════
+   BUILD TRACKER — flat amber tracking-scope panel (pipeline progress).
+   Radar scope + readout bars + ERSP mini-map + calibrated ruler, in the
+   bridge's amber terminal language with green cleared-checkpoint accents.
+   ══════════════════════════════════════════════════════════════════ */
+.btrk{
+  --b-amber:#ffb000; --b-amber-br:#ffce4d; --b-amber-dim:#a86e12; --b-ghost:#4a3208;
+  --b-red:#d84a1e; --b-teal:#43e0d0; --b-green:#5ce03a; --b-cyan:#00c8ff;
+  position:relative; width:100%; height:clamp(220px,34vh,300px);
+  background:radial-gradient(120% 130% at 50% 40%,#0d0800,#070400 78%);
+  border:1px solid var(--b-amber-dim); font-family:var(--font-mono);
+  box-shadow:inset 0 0 60px rgba(0,0,0,.7),0 0 30px rgba(255,176,0,.04);
+  display:flex; flex-direction:column; overflow:hidden; color:var(--b-amber);
+}
+.btrk::after{content:'';position:absolute;inset:0;z-index:6;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.22) 2px 4px)}
+.btrk-cnr{position:absolute;width:13px;height:13px;border:2px solid var(--b-amber);pointer-events:none;z-index:7}
+.btrk-cnr.tl{top:5px;left:5px;border-right:none;border-bottom:none}
+.btrk-cnr.tr{top:5px;right:5px;border-left:none;border-bottom:none}
+.btrk-cnr.bl{bottom:5px;left:5px;border-right:none;border-top:none}
+.btrk-cnr.br{bottom:5px;right:5px;border-left:none;border-top:none}
+
+.btrk-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 15px;
+  border-bottom:2px solid var(--b-amber);letter-spacing:.2em;font-size:12px;color:var(--b-amber-br)}
+.btrk-hdr .mid{color:var(--b-amber);opacity:.9}
+.btrk-hdr .rt{display:flex;align-items:center;gap:11px;font-size:10px;color:var(--b-amber-dim)}
+.btrk-hdr .seg{color:var(--b-amber)}
+.btrk-stat{font-size:9px;letter-spacing:.16em;padding:2px 7px;border:1px solid var(--b-amber-dim);color:var(--b-amber-dim)}
+.btrk-stat.on{color:var(--b-teal);border-color:var(--b-teal);text-shadow:0 0 6px rgba(67,224,208,.5)}
+
+.btrk-body{flex:1;display:grid;grid-template-columns:1fr 280px;min-height:0}
+.btrk-scope{position:relative;border-right:1px solid var(--b-ghost);min-height:0}
+.btrk-scope canvas{position:absolute;inset:0;width:100%;height:100%}
+.btrk-lbl{position:absolute;font-size:9px;letter-spacing:.13em;color:var(--b-amber-dim);pointer-events:none;z-index:3}
+.btrk-lbl.tl{top:11px;left:13px} .btrk-lbl.tr{top:11px;right:13px;text-align:right} .btrk-lbl.br{bottom:11px;right:13px;text-align:right}
+.btrk-lbl b{color:var(--b-amber)}
+.btrk-badge{position:absolute;left:13px;bottom:30px;z-index:3;border:1px solid var(--b-amber);color:var(--b-amber);font-size:10px;padding:1px 6px;letter-spacing:.1em}
+.btrk-status{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.1em;color:var(--b-amber-dim);z-index:3;white-space:nowrap}
+.btrk-status b{color:var(--b-teal)}
+
+.btrk-side{display:flex;flex-direction:column;padding:11px 13px;gap:9px;min-height:0}
+.btrk-cap{font-size:9px;letter-spacing:.2em;color:var(--b-amber-dim);display:flex;justify-content:space-between}
+.btrk-cap b{color:var(--b-amber-br);font-weight:normal}
+.btrk-bar{display:flex;align-items:center;gap:8px;border:1px solid var(--b-ghost);background:rgba(255,176,0,.03);padding:6px 9px;font-size:11px}
+.btrk-bar .bk{color:var(--b-amber-dim);font-size:9px;letter-spacing:.1em;min-width:56px}
+.btrk-bar .bv{color:var(--b-amber-br);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btrk-bar .bv a{color:var(--b-teal);text-decoration:none}
+.btrk-sq{display:flex;gap:3px}
+.btrk-sq i{width:8px;height:8px;border:1px solid var(--b-ghost);display:block}
+.btrk-sq i.a{background:var(--b-amber);border-color:var(--b-amber);box-shadow:0 0 4px rgba(255,176,0,.5)}
+.btrk-sq i.t{background:var(--b-teal);border-color:var(--b-teal);box-shadow:0 0 4px rgba(67,224,208,.5)}
+.btrk-ersp{position:relative;flex:1;min-height:80px;border:1px solid var(--b-ghost)}
+.btrk-ersp canvas{position:absolute;inset:0;width:100%;height:100%}
+.btrk-ersp .el{position:absolute;top:6px;left:8px;font-size:9px;letter-spacing:.15em;color:var(--b-amber-dim);z-index:2}
+.btrk-ersp .er{position:absolute;top:6px;right:8px;font-size:9px;letter-spacing:.15em;z-index:2}
+.btrk-clock{font-size:10px;letter-spacing:.16em;color:var(--b-amber-dim);text-align:right}
+.btrk-clock b{color:var(--b-green)}
+
+.btrk-ruler{height:32px;display:flex;align-items:flex-end;padding:0 15px 4px;position:relative;border-top:1px solid var(--b-ghost)}
+.btrk-ruler .tk{flex:1;border-left:1px solid var(--b-ghost);height:6px}
+.btrk-ruler .tk.maj{height:11px;border-left-color:var(--b-amber-dim)}
+.btrk-ruler .num{position:absolute;bottom:2px;font-size:9px;color:var(--b-amber-dim);transform:translateX(-50%)}
+.btrk-ruler .mark{position:absolute;bottom:2px;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+  border-bottom:8px solid var(--b-green);transform:translateX(-50%);transition:left .6s cubic-bezier(.16,1,.3,1);filter:drop-shadow(0 0 4px rgba(92,224,58,.6))}
+
+@media (max-width:900px){ .btrk-body{grid-template-columns:1fr} .btrk-side{display:none} }
+
+.pipeline-page{ display:flex; flex-direction:column; gap:14px; min-height:0; }
+.pipeline-page--projects{ height:100%; min-height:72vh; gap:0; }
+.pl-modebar{ display:flex; gap:6px; align-items:center; }

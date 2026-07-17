@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>state.carousel</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .vp{overflow:hidden;border-radius:12px;cursor:grab;touch-action:pan-y}
+ .vp:active{cursor:grabbing}
+ .track{display:flex;transition:transform .6s cubic-bezier(.2,.85,.25,1)}
+ .track.drag{transition:none}
+ .slide{flex:0 0 100%;padding:22px}
+ .slide .filler{height:150px;margin-bottom:12px}
+ .slide h2{font-size:22px}.slide p{font-size:12px;color:var(--ice);opacity:.75;margin-top:5px}
+ .foot{display:flex;align-items:center;justify-content:space-between}
+ .dots{display:flex;gap:7px}
+ .dot{width:8px;height:8px;border-radius:50%;background:var(--line2);cursor:pointer;transition:all .3s}
+ .dot.on{width:22px;border-radius:5px;background:linear-gradient(90deg,var(--cyan),var(--ice))}
+ .nav{display:flex;gap:8px}
+ .nav .btn{padding:9px 14px}
+</style></head>
+<body class="demo"><div class="demo-name">f · state.carousel</div>
+<div class="stage">
+  <div class="eyebrow">CAROUSEL / SLIDER · drag + momentum</div>
+  <div class="vp" id="vp"><div class="track" id="track"></div></div>
+  <div class="foot">
+    <div class="dots" id="dots"></div>
+    <div class="nav"><button class="btn ghost" id="prev">‹</button><button class="btn" id="next">›</button></div>
+  </div>
+</div>
+<script>
+const slides=[
+ {t:'Glacier Series',d:'Cold-forged panels, drag to explore.',tag:'01'},
+ {t:'Frost Signal',d:'Momentum snaps to the nearest page.',tag:'02'},
+ {t:'Aurora Deck',d:'Keyboard, touch and pointer aware.',tag:'03'},
+ {t:'Ice Core',d:'Loops seamlessly across breakpoints.',tag:'04'}];
+const track=document.getElementById('track'),dots=document.getElementById('dots'),vp=document.getElementById('vp');
+slides.forEach((s,i)=>{
+ track.insertAdjacentHTML('beforeend',`<div class="slide"><div class="filler eel"><span class="tag">${s.tag}</span></div><h2 class="glow">${s.t}</h2><p>${s.d}</p></div>`);
+ const d=document.createElement('div');d.className='dot'+(i?'':' on');d.onclick=()=>go(i);dots.appendChild(d);});
+let idx=0,n=slides.length,dragX=0,startX=0,dragging=false,w=0,auto;
+function render(anim){track.classList.toggle('drag',!anim);track.style.transform=`translateX(calc(${-idx*100}% + ${dragX}px))`;
+ [...dots.children].forEach((d,i)=>d.classList.toggle('on',i===idx));}
+function go(i){idx=(i+n)%n;dragX=0;render(true);resetAuto();}
+document.getElementById('next').onclick=()=>go(idx+1);
+document.getElementById('prev').onclick=()=>go(idx-1);
+function down(x){dragging=true;startX=x;w=vp.clientWidth;clearInterval(auto);}
+function move(x){if(!dragging)return;dragX=x-startX;render(false);}
+function up(){if(!dragging)return;dragging=false;if(Math.abs(dragX)>w*0.22)idx=Math.max(0,Math.min(n-1,idx+(dragX<0?1:-1)));dragX=0;render(true);resetAuto();}
+vp.addEventListener('mousedown',e=>down(e.clientX));
+window.addEventListener('mousemove',e=>move(e.clientX));
+window.addEventListener('mouseup',up);
+vp.addEventListener('touchstart',e=>down(e.touches[0].clientX),{passive:true});
+vp.addEventListener('touchmove',e=>move(e.touches[0].clientX),{passive:true});
+vp.addEventListener('touchend',up);
+function resetAuto(){clearInterval(auto);auto=setInterval(()=>go(idx+1),3200);}
+render(true);resetAuto();
+</script></body></html>

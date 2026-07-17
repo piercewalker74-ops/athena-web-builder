@@ -1,0 +1,61 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>delivery-estimate-tool</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .form{display:grid;grid-template-columns:1.4fr .8fr .8fr auto;gap:8px;align-items:end}
+ @media(max-width:520px){.form{grid-template-columns:1fr 1fr}}
+ label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ice);opacity:.7;margin-bottom:4px}
+ select,input{width:100%;background:rgba(4,18,30,.6);border:1px solid var(--line);border-radius:8px;color:var(--frost);
+   font-family:var(--mono);font-size:12px;padding:9px 10px;outline:none}
+ .form button{border:none;border-radius:8px;background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;font-weight:700;font-size:13px;padding:10px 16px;cursor:pointer;height:38px}
+ .result{display:grid;grid-template-columns:1.2fr 1fr;gap:10px;opacity:0;transform:translateY(12px);transition:.5s}
+ .result.show{opacity:1;transform:none}
+ @media(max-width:520px){.result{grid-template-columns:1fr}}
+ .est{padding:14px}
+ .est .eta{font-size:clamp(22px,5vw,34px);font-weight:700}
+ .stats{display:flex;gap:16px;margin-top:10px}
+ .stats div{font-family:var(--mono);font-size:10px;color:var(--ice);opacity:.75}
+ .stats b{display:block;font-size:20px;color:var(--frost);font-weight:700}
+ .inst{padding:12px}
+ .inst .ic{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12px}
+ .inst .ic:last-child{border:none}.inst .av{width:24px;height:24px;border-radius:50%;background:linear-gradient(120deg,var(--cyan),var(--teal))}
+ .inst .st{margin-left:auto;color:var(--cyan);font-family:var(--mono);font-size:10px}
+ .spin{width:16px;height:16px;border:2px solid var(--line2);border-top-color:var(--cyan);border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:-3px}
+ @keyframes sp{to{transform:rotate(360deg)}}
+</style></head>
+<body class="demo"><div class="demo-name">f · delivery-estimate-tool</div>
+<div class="stage">
+  <div class="eyebrow">DELIVERY + INSTALLER ESTIMATE</div>
+  <div class="form frost" style="padding:12px">
+    <div><label>PRODUCT</label><select id="prod"><option>Emerald 45 · Pet</option><option>Fairway Putt · 15mm</option><option>Meadow Lite · 32oz</option></select></div>
+    <div><label>ZIP</label><input id="zip" value="92501"></div>
+    <div><label>SQ FT</label><input id="qty" value="850"></div>
+    <button id="go">Estimate</button>
+  </div>
+  <div class="result" id="res">
+    <div class="est frost"><div class="eyebrow">ESTIMATED DELIVERY</div><div class="eta glow" id="eta">—</div>
+      <div class="stats"><div><b id="zone">—</b>ZONE</div><div><b id="rolls">0</b>ROLLS</div><div><b id="freight">$0</b>FREIGHT</div></div></div>
+    <div class="inst frost"><div class="eyebrow" style="margin-bottom:6px">RECOMMENDED INSTALLERS</div><div id="ilist"></div></div>
+  </div>
+</div>
+<script>
+const res=document.getElementById('res'),eta=document.getElementById('eta');
+const INST=[['GreenPro Turf','4.9 ★'],['Valley Lawns','4.8 ★'],['DryScape Co','4.7 ★']];
+function ease(t){return 1-Math.pow(1-t,3);}
+function animNum(el,to,fmt){const s=performance.now();(function st(n){const p=Math.min(1,(n-s)/900);el.textContent=fmt(Math.round(ease(p)*to));if(p<1)requestAnimationFrame(st);})(s);}
+function estimate(){
+  const zip=document.getElementById('zip').value.trim(), qty=+document.getElementById('qty').value||0;
+  eta.innerHTML='<span class="spin"></span> calculating';res.classList.add('show');
+  setTimeout(()=>{ // simulate API
+    const days=2+((+zip.slice(-1))%4), rolls=Math.max(1,Math.ceil(qty/150));
+    eta.textContent=`${days}–${days+2} business days`;
+    document.getElementById('zone').textContent='Z'+(1+(+zip.slice(0,1)%5));
+    animNum(document.getElementById('rolls'),rolls,v=>v);
+    animNum(document.getElementById('freight'),89+rolls*24,v=>'$'+v);
+    document.getElementById('ilist').innerHTML=INST.map(([n,r])=>`<div class="ic"><span class="av"></span>${n}<span class="st">${r}</span></div>`).join('');
+  },850);
+}
+document.getElementById('go').onclick=estimate;
+estimate();
+setInterval(()=>{document.getElementById('qty').value=[850,1200,540,2000][Math.floor(Math.random()*4)];estimate();},5000);
+</script></body></html>

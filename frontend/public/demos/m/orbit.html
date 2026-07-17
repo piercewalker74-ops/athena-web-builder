@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>orbit</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;display:flex;align-items:center;justify-content:center;position:relative}
+ .core{width:90px;height:90px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:#04121e;
+   background:radial-gradient(circle at 40% 35%,var(--ice),var(--cyan));box-shadow:var(--glow);position:relative;z-index:2;letter-spacing:.1em}
+ .ring{position:absolute;border:1px dashed var(--line);border-radius:50%}
+ .orb{position:absolute;top:50%;left:50%;transform-origin:0 0}
+ .node{position:absolute;transform:translate(-50%,-50%);padding:7px 12px;border-radius:999px;font-family:var(--mono);font-size:10px;
+   color:var(--ice2);background:var(--glass);border:1px solid var(--line2);backdrop-filter:blur(4px);white-space:nowrap}
+</style></head>
+<body class="demo"><div class="demo-name">m · orbit</div>
+<div class="stage" id="st">
+  <div class="ring" style="width:180px;height:180px"></div>
+  <div class="ring" style="width:290px;height:290px"></div>
+  <div class="core">CORE</div>
+</div>
+<script>
+const st=document.getElementById('st');
+const inner=['Tint','PPF','Detail'],outer=['UV','Heat','Glare','Clarity','Warranty'];
+function ring(items,rad,speed,dir){items.forEach((t,i)=>{const o=document.createElement('div');o.className='orb';o.dataset.a=(i/items.length)*2*Math.PI;o.dataset.r=rad;o.dataset.s=speed*dir;
+ o.innerHTML=`<div class="node">${t}</div>`;st.appendChild(o);});}
+ring(inner,90,0.5,1);ring(outer,145,0.3,-1);
+const orbs=[...st.querySelectorAll('.orb')];let t=0;
+function loop(){t+=0.016;orbs.forEach(o=>{const a=+o.dataset.a+t*+o.dataset.s,r=+o.dataset.r;
+ o.style.transform=`translate(${Math.cos(a)*r}px,${Math.sin(a)*r}px)`;});requestAnimationFrame(loop);}
+loop();
+</script></body></html>

@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>mascot</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+ .m{position:relative;width:150px;height:150px}
+ .body{position:absolute;inset:0;border-radius:46% 46% 42% 42%;background:linear-gradient(160deg,#bff0ff,#5cd6f2 70%,#39d3c9);
+   box-shadow:inset -10px -12px 24px rgba(20,80,110,.4),var(--glow);animation:bob 2.6s ease-in-out infinite}
+ @keyframes bob{50%{transform:translateY(-8px)}}
+ .eye{position:absolute;top:52px;width:34px;height:38px;border-radius:50%;background:#04121e}
+ .eL{left:34px}.eR{right:34px}
+ .pupil{position:absolute;width:14px;height:14px;border-radius:50%;background:#eaf6ff;top:12px;left:10px;transition:transform .08s}
+ .cheek{position:absolute;top:88px;width:16px;height:9px;border-radius:50%;background:rgba(47,224,255,.55)}
+ .cL{left:26px}.cR{right:26px}
+ .mouth{position:absolute;top:96px;left:50%;transform:translateX(-50%);width:28px;height:14px;border-radius:0 0 20px 20px;background:#04121e}
+ .foot{position:absolute;bottom:-6px;width:34px;height:14px;border-radius:0 0 12px 12px;background:#39d3c9}
+ .fL{left:34px}.fR{right:34px}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">m · mascot</div>
+<div class="stage">
+  <div class="eyebrow">BRAND MASCOT</div>
+  <div class="m" id="m">
+    <div class="foot fL"></div><div class="foot fR"></div>
+    <div class="body"></div>
+    <div class="eye eL"><div class="pupil"></div></div><div class="eye eR"><div class="pupil"></div></div>
+    <div class="cheek cL"></div><div class="cheek cR"></div><div class="mouth"></div>
+  </div>
+  <h2 class="big glow" style="font-size:26px">Meet Frost</h2>
+  <div class="hint">the pupils track your cursor</div>
+</div>
+<script>
+const pupils=[...document.querySelectorAll('.pupil')];
+document.addEventListener('mousemove',e=>{pupils.forEach(p=>{const r=p.parentElement.getBoundingClientRect();
+ const dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),a=Math.atan2(dy,dx),d=Math.min(7,Math.hypot(dx,dy)/25);
+ p.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`;});});
+</script></body></html>

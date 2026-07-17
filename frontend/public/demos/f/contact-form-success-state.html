@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>contact-form-success-state</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;gap:16px;flex-wrap:wrap}
+ .info{flex:1;min-width:170px;display:flex;flex-direction:column;gap:10px}
+ .info h1{font-size:22px}.info .sub{max-width:230px}
+ .card{flex:1;min-width:220px;padding:16px;border-radius:14px;position:relative;min-height:200px}
+ .fld{width:100%;background:var(--glass);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:12px;
+   color:var(--frost);font-family:var(--sans);margin-bottom:9px}
+ .btn.wide{width:100%;justify-content:center}
+ .btn.sending{background:linear-gradient(120deg,#1a4a5e,#123847);color:var(--ice2);box-shadow:none}
+ .spin{width:13px;height:13px;border:2px solid rgba(234,246,255,.3);border-top-color:var(--frost);border-radius:50%;animation:sp .7s linear infinite}
+ @keyframes sp{to{transform:rotate(360deg)}}
+ .state{position:absolute;inset:16px;border-radius:12px;display:none;flex-direction:column;align-items:center;justify-content:center;
+   text-align:center;gap:8px;background:var(--glass2);backdrop-filter:blur(3px)}
+ .state.show{display:flex;animation:fade .5s}
+ @keyframes fade{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+ .mark{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:24px}
+ .ok .mark{background:rgba(47,224,255,.15);color:var(--cyan);box-shadow:var(--glow)}
+ .err .mark{background:rgba(255,110,110,.15);color:#ff8f8f}
+ .state b{font-size:15px}.state p{font-size:11px;color:var(--ice);opacity:.75}
+</style></head>
+<body class="demo"><div class="demo-name">f · contact-form-success-state</div>
+<div class="stage">
+  <div class="info">
+    <div class="eyebrow">GET IN TOUCH</div>
+    <h1 class="glow">Send us the details.</h1>
+    <p class="sub">We reply within one business day — every message routes to a real installer, not a bot.</p>
+  </div>
+  <div class="card frost">
+    <form id="form">
+      <input class="fld" value="Jordan Blake" readonly>
+      <input class="fld" value="jordan@home.com" readonly>
+      <input class="fld" value="Quote for 900 sqft backyard" readonly>
+      <button class="btn wide" id="submit" type="button">Send message</button>
+    </form>
+    <div class="state ok" id="ok"><div class="mark">✓</div><b>Message sent</b><p>We'll be in touch shortly.</p></div>
+    <div class="state err" id="err"><div class="mark">!</div><b>Couldn't send</b><p>Retrying automatically…</p></div>
+  </div>
+</div>
+<script>
+const btn=document.getElementById('submit'),ok=document.getElementById('ok'),err=document.getElementById('err');
+const label=btn.innerHTML;let t=0;
+function reset(){ok.classList.remove('show');err.classList.remove('show');btn.classList.remove('sending');btn.disabled=false;btn.innerHTML=label;}
+function run(){reset();btn.classList.add('sending');btn.disabled=true;btn.innerHTML='<span class="spin"></span> Sending…';
+ const fail=(t%3===2);// occasionally show the error path, then recover
+ setTimeout(()=>{if(fail){err.classList.add('show');setTimeout(()=>{err.classList.remove('show');btn.innerHTML='<span class="spin"></span> Retrying…';
+   setTimeout(()=>{ok.classList.add('show');},900);},1200);}
+  else{ok.classList.add('show');}},1300);t++;}
+btn.onclick=run;
+run();setInterval(run,4600);
+</script></body></html>

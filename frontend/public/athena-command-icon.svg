@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
+      <stop offset="0%" stop-color="#0a2417"/>
+      <stop offset="100%" stop-color="#04120a"/>
+    </radialGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <g filter="url(#glow)" stroke="#4ade80" fill="none" stroke-linejoin="round">
+    <!-- Athena triangle mark -->
+    <polygon points="256,120 396,372 116,372" stroke-width="14"/>
+    <!-- mic body (command / voice) -->
+    <rect x="236" y="210" width="40" height="70" rx="20" fill="#4ade80" stroke="none"/>
+    <path d="M212 268 a44 44 0 0 0 88 0" stroke-width="12"/>
+    <line x1="256" y1="312" x2="256" y2="340" stroke-width="12"/>
+  </g>
+</svg>

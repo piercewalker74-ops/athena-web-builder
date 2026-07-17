@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>lightbox</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+ .th{border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .2s}
+ .th:hover{transform:scale(1.04)}
+ .th .filler{height:80px;border-radius:0}
+ .box{position:fixed;inset:0;background:rgba(3,10,18,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:5}
+ .box.on{display:flex;animation:fi .3s}@keyframes fi{from{opacity:0}}
+ .box .big-img{width:min(70vw,420px);height:280px;border-radius:14px}
+ .cls{position:absolute;top:18px;right:22px;font-family:var(--mono);color:var(--ice);cursor:pointer;font-size:18px}
+ .cap{position:absolute;bottom:26px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--ice)}
+</style></head>
+<body class="demo"><div class="demo-name">m · lightbox</div>
+<div class="stage" id="grid"></div>
+<div class="box" id="box"><span class="cls" id="cls">✕ close</span><div class="big-img filler"><span class="tag" id="tg">01</span></div><div class="cap" id="cap">tap outside to close</div></div>
+<script>
+const grid=document.getElementById('grid'),box=document.getElementById('box'),tg=document.getElementById('tg');
+for(let i=1;i<=8;i++){const t=document.createElement('div');t.className='th frost';
+ t.innerHTML=`<div class="filler"><span class="tag">${String(i).padStart(2,'0')}</span></div>`;
+ t.onclick=()=>{tg.textContent=String(i).padStart(2,'0');box.classList.add('on');};grid.appendChild(t);}
+box.onclick=e=>{if(e.target===box||e.target.id==='cls')box.classList.remove('on');};
+// auto-demo
+let i=0;setInterval(()=>{if(!box.classList.contains('on')){grid.children[i%8].click();i++;setTimeout(()=>box.classList.remove('on'),1400);}},3200);
+</script></body></html>

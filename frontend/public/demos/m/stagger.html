@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>stagger</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ .card{padding:16px;border-radius:12px;opacity:0;transform:translateY(20px) scale(.96);
+   transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .card.in{opacity:1;transform:none}
+ .card .filler{height:60px;margin-bottom:10px}
+ .card b{font-size:14px}.card p{font-size:11px;color:var(--ice);opacity:.7;margin-top:3px}
+</style></head>
+<body class="demo"><div class="demo-name">m · stagger</div>
+<div class="stage">
+  <div class="eyebrow">STAGGERED ENTRANCE</div>
+  <div class="grid" id="g"></div>
+</div>
+<script>
+const g=document.getElementById('g'),names=['Precision','Coverage','Warranty','Mobile','Certified','Fast'];
+names.forEach(n=>{const c=document.createElement('div');c.className='card frost';
+ c.innerHTML=`<div class="filler"><span class="tag">IMG</span></div><b>${n}</b><p>filler description line</p>`;g.appendChild(c);});
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),150+i*120));}
+run();setInterval(run,4200);
+</script></body></html>

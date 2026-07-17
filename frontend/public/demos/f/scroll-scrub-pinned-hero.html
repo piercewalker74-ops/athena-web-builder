@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scroll-scrub-pinned-hero</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px;max-width:480px;margin:auto}
+ .frame{height:250px;border-radius:16px;position:relative;overflow:hidden}
+ .layer{position:absolute;inset:0;border-radius:0}
+ .bg{transition:transform .05s linear}
+ .pour,.lit{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .05s linear}
+ .state{font-family:var(--mono);font-size:34px;letter-spacing:.02em;color:var(--frost);text-shadow:0 2px 18px rgba(0,0,0,.6)}
+ .lit .state{color:var(--ice);text-shadow:0 0 22px rgba(47,224,255,.7)}
+ .copy{position:absolute;left:16px;bottom:14px;right:16px}
+ .copy h1{font-size:clamp(19px,4vw,28px);transition:transform .05s linear,opacity .05s linear}
+ .copy .sub{transition:transform .05s linear,opacity .05s linear}
+ .prog{position:absolute;top:12px;left:14px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--frost);background:rgba(4,18,30,.55);padding:3px 9px;border-radius:6px}
+ .track{height:5px;border-radius:999px;background:var(--line);position:relative;cursor:pointer}
+ .track .f{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--cyan);box-shadow:var(--glow)}
+ .track .kn{position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:var(--ice);box-shadow:var(--glow)}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em;text-align:center}
+</style></head>
+<body class="demo"><div class="demo-name">f · scroll-scrub-pinned-hero</div>
+<div class="stage">
+  <div class="frame frost">
+    <span class="prog" id="pg">SCROLL 00%</span>
+    <div class="filler layer bg eel" id="bg"></div>
+    <div class="pour" id="pour"><div class="state">POUR</div></div>
+    <div class="lit" id="lit"><div class="state glow">LIT</div></div>
+    <div class="copy">
+      <h1 class="glow" id="h">Laid in a day.<br>Green for a decade.</h1>
+      <div class="sub" id="s">Watch the transformation scrub as you scroll.</div>
+    </div>
+  </div>
+  <div class="track" id="tr"><div class="f" id="tf"></div><div class="kn" id="kn"></div></div>
+  <div class="hint">drag to scrub the pinned hero timeline</div>
+</div>
+<script>
+const bg=document.getElementById('bg'),pour=document.getElementById('pour'),lit=document.getElementById('lit'),
+ h=document.getElementById('h'),s=document.getElementById('s'),pg=document.getElementById('pg'),
+ tf=document.getElementById('tf'),kn=document.getElementById('kn'),tr=document.getElementById('tr');
+function set(p){p=Math.max(0,Math.min(1,p));
+ tf.style.width=p*100+'%';kn.style.left=p*100+'%';
+ bg.style.transform=`scale(${1.15-p*.15}) translateY(${(p-.5)*-24}px)`;
+ pour.style.opacity=1-Math.min(1,p*1.6);
+ lit.style.opacity=Math.max(0,(p-.35)/.65);
+ const cr=Math.min(1,p*1.4);
+ h.style.transform=`translateY(${(1-cr)*30}px)`;h.style.opacity=cr;
+ s.style.transform=`translateY(${(1-cr)*40}px)`;s.style.opacity=Math.max(0,cr-.2);
+ pg.textContent='SCROLL '+String(Math.round(p*100)).padStart(2,'0')+'%';}
+let drag=false;tr.addEventListener('mousedown',e=>{drag=true;mv(e);});addEventListener('mouseup',()=>drag=false);
+addEventListener('mousemove',e=>{if(drag)mv(e);});
+function mv(e){const r=tr.getBoundingClientRect();set((e.clientX-r.left)/r.width);}
+let a=0;setInterval(()=>{if(!drag){a+=.014;set((Math.sin(a)*.5+.5));}},30);
+</script></body></html>

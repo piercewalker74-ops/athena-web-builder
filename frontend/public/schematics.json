@@ -1,0 +1,22 @@
+[
+  {
+    "id": "hero-aurora-kinetic",
+    "name": "Aurora Kinetic",
+    "section": "A",
+    "sectionName": "Hero",
+    "combines": ["WebGL aurora shader", "GSAP split-text reveal", "Magnetic CTA", "Film grain + vignette"],
+    "libs": ["GSAP", "raw WebGL"],
+    "description": "A single hero layering a live WebGL aurora flow-field, a per-character GSAP mask-rise reveal, a magnetic call-to-action, and film-grain post — multiple techniques composed into one section.",
+    "demo": "/demos/s/hero-aurora-kinetic.html"
+  },
+  {
+    "id": "hero-kinetic-type",
+    "name": "Kinetic Type",
+    "section": "A",
+    "sectionName": "Hero",
+    "combines": ["GSAP line reveal", "Scroll-velocity marquee skew", "Hover char-scramble", "Pointer parallax"],
+    "libs": ["GSAP"],
+    "description": "A type-driven hero with no WebGL: GSAP line-clip reveals, a marquee band that skews with scroll momentum, characters that scramble on hover, and pointer-parallax on the headline.",
+    "demo": "/demos/s/hero-kinetic-type.html"
+  }
+]

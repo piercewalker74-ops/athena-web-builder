@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>calendar</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+ .cal{padding:18px;border-radius:16px}
+ .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:13px;font-weight:600}
+ .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+ .dow{font-family:var(--mono);font-size:8px;color:var(--ice);opacity:.5;text-align:center;letter-spacing:.05em}
+ .d{aspect-ratio:1;display:grid;place-items:center;font-size:12px;border-radius:8px;cursor:pointer;color:var(--ice2);transition:all .2s}
+ .d.off{opacity:.25}.d.free:hover{background:var(--glass2)}
+ .d.free{border:1px solid var(--line)}
+ .d.sel{background:var(--cyan);color:#04121e;box-shadow:var(--glow);border:none}
+ .slots{display:flex;flex-direction:column;gap:8px;min-width:150px}
+ .slot{padding:11px 14px;border-radius:10px;border:1px solid var(--line);font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .2s;
+   opacity:0;transform:translateX(10px);animation:si .4s forwards}
+ @keyframes si{to{opacity:1;transform:none}}
+ .slot:hover,.slot.on{border-color:var(--cyan);color:var(--frost);background:rgba(47,224,255,.06)}
+</style></head>
+<body class="demo"><div class="demo-name">m · booking calendar</div>
+<div class="stage">
+  <div class="cal frost">
+    <div class="ch"><span>◀</span><span class="glow">July 2026</span><span>▶</span></div>
+    <div class="grid" id="g"></div>
+  </div>
+  <div class="slots" id="slots"><div class="eyebrow" style="margin-bottom:2px">AVAILABLE</div></div>
+</div>
+<script>
+const g=document.getElementById('g'),slots=document.getElementById('slots');
+['S','M','T','W','T','F','S'].forEach(d=>{const e=document.createElement('div');e.className='dow';e.textContent=d;g.appendChild(e);});
+const start=3;//offset
+for(let i=0;i<35;i++){const day=i-start+1;const e=document.createElement('div');
+ if(day<1||day>31){e.className='d off';}else{const free=[8,9,11,15,16,18,22,23,25,29].includes(day);e.className='d '+(free?'free':'off');e.textContent=day;
+  if(free)e.onclick=()=>pick(e,day);}g.appendChild(e);}
+const times=['9:00 AM','11:30 AM','2:00 PM','4:30 PM'];
+function pick(e,day){document.querySelectorAll('.d.sel').forEach(x=>x.classList.remove('sel'));e.classList.add('sel');
+ slots.innerHTML='<div class="eyebrow" style="margin-bottom:2px">JUL '+day+'</div>';
+ times.forEach((t,i)=>{const s=document.createElement('div');s.className='slot';s.style.animationDelay=(i*70)+'ms';s.textContent=t;
+  s.onclick=()=>{document.querySelectorAll('.slot.on').forEach(x=>x.classList.remove('on'));s.classList.add('on');};slots.appendChild(s);});}
+const frees=[...document.querySelectorAll('.d.free')];let ci=0;
+function cycle(){pick(frees[ci%frees.length],+frees[ci%frees.length].textContent);ci++;}
+cycle();setInterval(cycle,2600);
+</script></body></html>

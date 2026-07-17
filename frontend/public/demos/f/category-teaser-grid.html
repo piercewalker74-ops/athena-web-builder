@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>category-teaser-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .head{display:flex;justify-content:space-between;align-items:baseline}
+ .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+ .cat{padding:14px;border-radius:12px;display:flex;flex-direction:column;gap:8px;cursor:pointer;
+   opacity:0;transform:translateY(16px);transition:transform .3s,box-shadow .3s,opacity .5s}
+ .cat.in{opacity:1;transform:none}
+ .cat:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(47,224,255,.22)}
+ .cat .ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--glass2);border:1px solid var(--line)}
+ .cat .ic svg{width:17px;height:17px;stroke:var(--cyan);fill:none;stroke-width:1.7}
+ .cat b{font-size:13px}.cat span{font-size:10px;color:var(--ice);opacity:.65}
+ .feat{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ .feat .filler{height:96px}
+ .callout{padding:14px 16px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;
+   background:linear-gradient(120deg,rgba(47,224,255,.12),rgba(57,211,201,.08));border:1px solid var(--line2)}
+ .callout b{font-size:14px}
+</style></head>
+<body class="demo"><div class="demo-name">f · category-teaser-grid</div>
+<div class="stage">
+  <div class="head"><div class="eyebrow">WHAT WE CARRY</div><a class="chip" href="#" onclick="return false">Browse all →</a></div>
+  <div class="cats" id="cats"></div>
+  <div class="feat">
+    <div class="filler"><span class="tag">FEATURED</span></div>
+    <div class="filler eel"><span class="tag">NEW IN</span></div>
+  </div>
+  <div class="callout"><b>Contractor pricing on bulk orders</b><button class="btn">Get a quote</button></div>
+</div>
+<script>
+const svg=p=>`<svg viewBox="0 0 24 24">${p}</svg>`;
+const cats=[
+ ['Turf',svg('<path d="M12 3v18M4 9l8 3 8-3"/>')],
+ ['Pavers',svg('<rect x="3" y="4" width="7" height="7"/><rect x="14" y="13" width="7" height="7"/>')],
+ ['Edging',svg('<path d="M3 12h18M6 8v8M18 8v8"/>')],
+ ['Infill',svg('<path d="M4 18l8-12 8 12z"/>')],
+ ['Tools',svg('<path d="M14 4l6 6-4 4-6-6zM4 20l6-6"/>')],
+ ['Adhesive',svg('<path d="M6 3h12v6l-6 12-6-12z"/>')]];
+const c=document.getElementById('cats');
+cats.forEach(([n,ic])=>{const d=document.createElement('div');d.className='cat frost';
+ d.innerHTML=`<div class="ic">${ic}</div><b>${n}</b><span>view range →</span>`;c.appendChild(d);});
+const tiles=[...c.children];
+function run(){tiles.forEach(t=>t.classList.remove('in'));tiles.forEach((t,i)=>setTimeout(()=>t.classList.add('in'),140+i*90));}
+run();setInterval(run,5200);
+</script></body></html>

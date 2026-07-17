@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>trust-stat-band</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .band{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+ .tile{padding:18px 12px;text-align:center;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:6px}
+ .tile:last-child{border-right:none}
+ .ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--glass2);border:1px solid var(--line);box-shadow:var(--glow)}
+ .ic svg{width:17px;height:17px;stroke:var(--cyan);fill:none;stroke-width:1.8}
+ .num{font-size:clamp(22px,4vw,34px);font-weight:700;letter-spacing:-.02em;line-height:1}
+ .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ice);text-transform:uppercase}
+ .subl{font-size:10px;color:var(--ice);opacity:.6}
+ .call{cursor:pointer;transition:background .25s}.call:hover{background:var(--glass2)}
+ .call .num{color:var(--cyan)}
+ @media(max-width:520px){.band{grid-template-columns:repeat(2,1fr)}.tile:nth-child(2){border-right:none}}
+</style></head>
+<body class="demo"><div class="demo-name">f · trust-stat-band</div>
+<div class="stage">
+  <div class="eyebrow">WHY HOMEOWNERS PICK US</div>
+  <div class="band frost" id="band">
+    <div class="tile"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></div>
+      <div class="num" data-t="4.9" data-s="" data-dec="1">0</div><div class="lbl">Rating</div><div class="subl">Google · 340 reviews</div></div>
+    <div class="tile"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 7v5l3 2"/></svg></div>
+      <div class="num" data-t="24" data-s="/7">0</div><div class="lbl">Dispatch</div><div class="subl">Same-day service</div></div>
+    <div class="tile"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div>
+      <div class="num" data-t="18" data-s="yr">0</div><div class="lbl">Licensed</div><div class="subl">Bonded & insured</div></div>
+    <div class="tile call" title="Tap to call"><div class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-3 2a12 12 0 006 6l2-3 5 2v4a2 2 0 01-2 2A17 17 0 013 6a2 2 0 012-2z"/></svg></div>
+      <div class="num" style="font-size:18px">Tap to call</div><div class="lbl">(602) 555-0198</div><div class="subl">Free estimates</div></div>
+  </div>
+</div>
+<script>
+const nums=[...document.querySelectorAll('.num[data-t]')];
+function ease(t){return 1-Math.pow(1-t,3);}
+function run(){const dur=1500,start=performance.now();
+ function step(now){const p=Math.min(1,(now-start)/dur);
+  nums.forEach(n=>{const t=+n.dataset.t,dec=+(n.dataset.dec||0),v=ease(p)*t;
+   n.textContent=(dec?v.toFixed(dec):Math.round(v))+n.dataset.s;});
+  if(p<1)requestAnimationFrame(step);}
+ requestAnimationFrame(step);}
+run();setInterval(run,4200);
+</script></body></html>

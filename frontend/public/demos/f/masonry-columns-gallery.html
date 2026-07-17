@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>masonry-columns-gallery</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .wall{columns:3;column-gap:9px}
+ @media(max-width:520px){.wall{columns:2}}
+ .t{break-inside:avoid;margin-bottom:9px;border-radius:12px;overflow:hidden;position:relative;
+   opacity:0;transform:translateY(20px) scale(.97);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .t.in{opacity:1;transform:none}
+ .t .filler{border-radius:0}
+ .t .cap{position:absolute;left:6px;bottom:5px;font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--ice2);
+   background:rgba(4,18,30,.55);padding:2px 6px;border-radius:5px}
+ .cols{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55}
+</style></head>
+<body class="demo"><div class="demo-name">f · masonry-columns-gallery</div>
+<div class="stage">
+  <div class="eyebrow">SCRAPBOOK WALL <span class="cols">· pure CSS columns · 3→2→1</span></div>
+  <div class="wall" id="w"></div>
+</div>
+<script>
+const items=[[130,'lawn'],[92,'green'],[168,'deck'],[108,'patio'],[150,'pool'],[84,'pets'],
+ [124,'roof'],[144,'yard'],[100,'play'],[160,'court'],[96,'entry'],[128,'trim']];
+const w=document.getElementById('w');
+items.forEach(([h,c],i)=>{const d=document.createElement('div');d.className='t frost';
+ d.innerHTML=`<div class="filler ${i%3===0?'eel':''}" style="height:${h}px"><span class="tag">${String(i+1).padStart(2,'0')}</span></div><span class="cap">${c}</span>`;
+ w.appendChild(d);});
+const ts=[...w.children];
+function run(){ts.forEach(t=>t.classList.remove('in'));ts.forEach((t,i)=>setTimeout(()=>t.classList.add('in'),90+i*65));}
+run();setInterval(run,5600);
+</script></body></html>

@@ -1,0 +1,60 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>embla-series-carousel</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .head{display:flex;align-items:center;justify-content:space-between}
+ .arrows{display:flex;gap:8px}
+ .arw{width:34px;height:34px;border-radius:50%;border:1px solid var(--line2);background:var(--glass);color:var(--ice2);
+   cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:opacity .2s}
+ .arw:disabled{opacity:.28;cursor:default}
+ .vp{overflow:hidden;border-radius:14px}
+ .track{display:flex;gap:12px;transition:transform .45s cubic-bezier(.25,.9,.25,1);cursor:grab;touch-action:pan-y}
+ .track.drag{transition:none;cursor:grabbing}
+ .slide{flex:0 0 46%;min-width:0}
+ .card{border-radius:12px;padding:10px}
+ .card .filler{height:110px}
+ .card b{display:block;font-size:13px;margin-top:9px}
+ .card .m{display:flex;justify-content:space-between;margin-top:4px}
+ .card small{font-family:var(--mono);font-size:10px;color:var(--ice);opacity:.7}
+ .card .p{font-family:var(--mono);font-size:11px;color:var(--cyan)}
+ .dots{display:flex;gap:5px;justify-content:center}
+ .dots i{width:6px;height:6px;border-radius:50%;background:var(--line2)}.dots i.on{background:var(--cyan);box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">f · embla-series-carousel</div>
+<div class="stage">
+  <div class="head"><div class="eyebrow">SERIES · PUTTING GREENS</div>
+    <div class="arrows"><button class="arw" id="prev">‹</button><button class="arw" id="next">›</button></div></div>
+  <div class="vp" id="vp"><div class="track" id="track"></div></div>
+  <div class="dots" id="dots"></div>
+</div>
+<script>
+const items=[['Tour 15','15mm','$5.10'],['Pro Roll','18mm','$5.60'],['Nylon 12','12mm','$6.20'],['Championship','20mm','$6.90'],['Fringe','30mm','$4.40'],['Nurse','25mm','$4.10']];
+const track=document.getElementById('track'),vp=document.getElementById('vp'),prev=document.getElementById('prev'),next=document.getElementById('next'),dots=document.getElementById('dots');
+items.forEach((it,i)=>{const s=document.createElement('div');s.className='slide';
+ s.innerHTML=`<div class="card frost"><div class="filler ${i%2?'eel':''}"><span class="tag">0${i+1}</span></div>
+   <b>${it[0]}</b><div class="m"><small>${it[1]} pile</small><span class="p">${it[2]}/ft²</span></div></div>`;track.appendChild(s);});
+const slides=[...track.children];
+items.forEach((_,i)=>{const d=document.createElement('i');if(!i)d.className='on';dots.appendChild(d);});
+const dotEls=[...dots.children];
+let idx=0,perView=2;
+function measure(){perView=vp.clientWidth<340?1:vp.clientWidth<520?2:3;
+ slides.forEach(s=>s.style.flexBasis=(100/perView-2)+'%');clamp();go(idx);}
+function maxIdx(){return Math.max(0,slides.length-perView);}
+function clamp(){idx=Math.max(0,Math.min(idx,maxIdx()));}
+function go(i){idx=i;clamp();const step=vp.clientWidth/perView;
+ track.style.transform=`translateX(${-idx*step}px)`;
+ prev.disabled=idx<=0;next.disabled=idx>=maxIdx();
+ dotEls.forEach((d,k)=>d.classList.toggle('on',k>=idx&&k<idx+perView));}
+prev.onclick=()=>go(idx-1);next.onclick=()=>go(idx+1);
+addEventListener('keydown',e=>{if(e.key==='ArrowLeft')go(idx-1);if(e.key==='ArrowRight')go(idx+1);});
+// drag
+let sx=0,dx=0,dragging=false;
+track.addEventListener('pointerdown',e=>{dragging=true;sx=e.clientX;dx=0;track.classList.add('drag');track.setPointerCapture(e.pointerId);});
+track.addEventListener('pointermove',e=>{if(!dragging)return;dx=e.clientX-sx;const step=vp.clientWidth/perView;
+ track.style.transform=`translateX(${-idx*step+dx}px)`;});
+track.addEventListener('pointerup',()=>{if(!dragging)return;dragging=false;track.classList.remove('drag');
+ if(dx<-40)go(idx+1);else if(dx>40)go(idx-1);else go(idx);});
+addEventListener('resize',measure);measure();
+// gentle auto-advance so it looks alive
+setInterval(()=>{if(!dragging){if(idx>=maxIdx())go(0);else go(idx+1);}},2600);
+</script></body></html>

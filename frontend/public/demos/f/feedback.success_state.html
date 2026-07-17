@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>feedback.success_state</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .card{padding:26px;min-height:250px;display:flex;flex-direction:column;justify-content:center}
+ .form{display:flex;flex-direction:column;gap:13px;transition:opacity .4s,transform .4s}
+ .form.gone{opacity:0;transform:scale(.96);pointer-events:none;position:absolute}
+ .inp{padding:11px 13px;border-radius:9px;border:1px solid var(--line);background:rgba(4,18,30,.5);color:var(--ice);font-size:13px}
+ .btn.full{justify-content:center;width:100%}
+ .btn.full[disabled]{opacity:.7;cursor:default}
+ .spin{width:15px;height:15px;border:2px solid rgba(4,18,30,.3);border-top-color:#04121e;border-radius:50%;animation:sp .7s linear infinite}
+ @keyframes sp{to{transform:rotate(360deg)}}
+ /* success block */
+ .done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;
+   opacity:0;transform:translateY(14px);transition:all .55s cubic-bezier(.2,.8,.2,1);position:absolute;inset:26px;justify-content:center}
+ .done.show{opacity:1;transform:none}
+ .ring{width:66px;height:66px}
+ .ring circle,.ring path{stroke:var(--teal);stroke-width:5;fill:none;stroke-linecap:round}
+ .ring .c{stroke-dasharray:189;stroke-dashoffset:189}
+ .ring .t{stroke-dasharray:40;stroke-dashoffset:40}
+ .done.show .c{animation:draw .6s ease forwards}
+ .done.show .t{animation:draw .35s .5s ease forwards}
+ @keyframes draw{to{stroke-dashoffset:0}}
+ .done h2{font-size:24px}.done p{font-size:13px;color:var(--ice);opacity:.75;max-width:280px}
+</style></head>
+<body class="demo"><div class="demo-name">f · feedback.success_state</div>
+<div class="stage">
+  <div class="eyebrow">SUCCESS STATE · closes the loop</div>
+  <div class="card frost" style="position:relative">
+    <form class="form" id="form">
+      <input class="inp" value="ari@glacier.io" readonly>
+      <input class="inp" value="Ship my Frost Kit sample" readonly>
+      <button class="btn full" id="submit" type="button">Request sample</button>
+    </form>
+    <div class="done" id="done">
+      <svg class="ring" viewBox="0 0 70 70"><circle class="c" cx="35" cy="35" r="30"/><path class="t" d="M22 36 l9 9 l17 -20"/></svg>
+      <h2 class="glow">You're all set.</h2>
+      <p>Your Frost Kit sample is on its way — check ari@glacier.io for tracking.</p>
+    </div>
+  </div>
+</div>
+<script>
+const form=document.getElementById('form'),btn=document.getElementById('submit'),done=document.getElementById('done');
+function reset(){done.classList.remove('show');form.classList.remove('gone');btn.disabled=false;btn.innerHTML='Request sample';}
+function submit(){btn.disabled=true;btn.innerHTML='<span class="spin"></span> Sending…';
+ setTimeout(()=>{form.classList.add('gone');done.classList.add('show');},1200);}
+btn.addEventListener('click',submit);
+// auto-loop the flow
+function loop(){reset();setTimeout(submit,900);}
+loop();setInterval(loop,4600);
+</script></body></html>

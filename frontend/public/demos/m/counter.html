@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>counter</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:center}
+ .stat{padding:22px 12px}
+ .num{font-size:clamp(30px,6vw,54px);font-weight:700;letter-spacing:-.02em;line-height:1}
+ .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--ice);opacity:.7;margin-top:8px}
+</style></head>
+<body class="demo"><div class="demo-name">m · counter</div>
+<div class="stage">
+  <div class="stat frost"><div class="num glow" data-t="1240" data-s="+">0</div><div class="lbl">JOBS DONE</div></div>
+  <div class="stat frost"><div class="num glow" data-t="99" data-s="%">0</div><div class="lbl">RETENTION</div></div>
+  <div class="stat frost"><div class="num glow" data-t="14" data-s="yr">0</div><div class="lbl">EXPERIENCE</div></div>
+</div>
+<script>
+const nums=[...document.querySelectorAll('.num')];
+function ease(t){return 1-Math.pow(1-t,3);}
+function run(){const dur=1600,start=performance.now();
+ function step(now){const p=Math.min(1,(now-start)/dur);nums.forEach(n=>{const t=+n.dataset.t;n.firstChild.textContent=Math.round(ease(p)*t);n.childNodes[0].nodeValue=Math.round(ease(p)*t)+n.dataset.s;});if(p<1)requestAnimationFrame(step);}
+ requestAnimationFrame(step);}
+run();setInterval(run,3800);
+</script></body></html>

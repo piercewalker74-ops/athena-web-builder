@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dodge Mini-Game</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:460px;display:flex;flex-direction:column;gap:10px}
+ .field{position:relative;height:280px;border-radius:16px;overflow:hidden;cursor:none}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .hud{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ice)}
+ .hud b{color:var(--cyan)}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.55;letter-spacing:.14em;text-align:center}
+</style></head>
+<body class="demo"><div class="demo-name">f · dodge mini-game</div>
+<div class="stage">
+  <div class="hud"><span>SCORE <b id="sc">0</b></span><span>UNLOCK AT <b>150</b></span></div>
+  <div class="field frost"><canvas id="c"></canvas></div>
+  <div class="hint">steer the crystal · evade the shards · auto-plays when idle</div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d'),scEl=document.getElementById('sc');
+let W,H,dpr=Math.min(devicePixelRatio||1,2),px,py,tx,ty,haz=[],score=0,auto=true,phase=0;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);px=W/2;py=H-40;tx=px;ty=py;}
+size();addEventListener('resize',size);
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();tx=e.clientX-r.left;ty=e.clientY-r.top;auto=false;});
+cv.addEventListener('mouseleave',()=>auto=true);
+function spawn(){haz.push({x:Math.random()*W,y:-10,v:1.4+Math.random()*1.8,s:6+Math.random()*8,r:Math.random()*6});}
+let f=0;function loop(){f++;phase+=0.02;ctx.clearRect(0,0,W,H);
+ if(auto){tx=W/2+Math.sin(phase)*W*0.35;ty=H-40;}
+ px+=(tx-px)*.15;py+=(ty-py)*.15;
+ if(f%22===0)spawn();
+ for(let i=haz.length-1;i>=0;i--){const h=haz[i];h.y+=h.v;h.r+=0.05;
+  ctx.save();ctx.translate(h.x,h.y);ctx.rotate(h.r);ctx.fillStyle='rgba(143,230,255,.85)';ctx.strokeStyle='rgba(47,224,255,.9)';
+  ctx.beginPath();ctx.moveTo(0,-h.s);ctx.lineTo(h.s*.7,0);ctx.lineTo(0,h.s);ctx.lineTo(-h.s*.7,0);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
+  const d=Math.hypot(h.x-px,h.y-py);
+  if(auto&&d<h.s+16){h.x+=(h.x-px)*.04;}// auto-dodge nudge
+  if(h.y>H+12){haz.splice(i,1);score+=5;scEl.textContent=score;}}
+ // player crystal
+ ctx.save();ctx.translate(px,py);ctx.rotate(phase);const g=ctx.createRadialGradient(0,0,2,0,0,16);g.addColorStop(0,'#eaf6ff');g.addColorStop(1,'#2fe0ff');
+ ctx.fillStyle=g;ctx.beginPath();for(let a=0;a<6;a++){const an=a/6*Math.PI*2;ctx.lineTo(Math.cos(an)*13,Math.sin(an)*13);}ctx.closePath();ctx.fill();
+ ctx.shadowColor='#2fe0ff';ctx.shadowBlur=16;ctx.fill();ctx.restore();
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

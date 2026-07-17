@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>install-kit-calculator</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:520px;display:grid;grid-template-columns:180px 1fr;gap:14px}
+ .panel{padding:14px}
+ .panel h4{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase;margin:10px 0 6px}
+ .panel h4:first-child{margin-top:0}
+ .tiles{display:flex;flex-direction:column;gap:6px}
+ .tile{border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12px;cursor:pointer;transition:all .2s}
+ .tile.on{border-color:var(--cyan);background:var(--glass2);box-shadow:var(--glow)}
+ .tile small{display:block;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.6}
+ .led{padding:14px}
+ .led .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+ .led h2{font-size:16px}
+ .row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 2px;border-bottom:1px dashed var(--line);
+   opacity:0;transform:translateX(-12px);transition:all .45s}
+ .row.in{opacity:1;transform:none}
+ .row .nm{font-size:13px;font-weight:600}
+ .row .rs{font-size:9px;font-family:var(--mono);color:var(--ice);opacity:.55;margin-top:1px}
+ .row .qty{font-family:var(--mono);font-size:13px;color:var(--cyan);text-align:right;white-space:nowrap}
+ .total{display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--line2);font-weight:700}
+ .total .v{font-family:var(--mono);color:var(--teal)}
+</style></head>
+<body class="demo"><div class="demo-name">f · install-kit-calculator</div>
+<div class="stage">
+ <div class="frost panel">
+  <h4>Infill</h4>
+  <div class="tiles" id="infill">
+   <div class="tile on" data-k="zeo">Zeolite<small>pet · odor lock</small></div>
+   <div class="tile" data-k="silica">Silica<small>ballast · budget</small></div>
+   <div class="tile" data-k="chill">HydroChill<small>cooling</small></div>
+  </div>
+  <h4>Seam method</h4>
+  <div class="tiles" id="seam">
+   <div class="tile on" data-k="tape">Tape + glue<small>strongest</small></div>
+   <div class="tile" data-k="nail">Nail seam<small>fast</small></div>
+  </div>
+ </div>
+ <div class="frost led">
+  <div class="top"><div><div class="eyebrow">TAKEOFF · 450 ft²</div><h2 class="glow">Materials list</h2></div><span class="chip">◇ auto</span></div>
+  <div id="rows"></div>
+  <div class="total"><span>Est. materials</span><span class="v" id="tot">—</span></div>
+ </div>
+</div>
+<script>
+const rowsEl=document.getElementById('rows'),totEl=document.getElementById('tot');
+const AREA=450;
+function compute(){const infill=document.querySelector('#infill .on').dataset.k,seam=document.querySelector('#seam .on').dataset.k;
+ const items=[];
+ const rate={zeo:2,silica:1.5,chill:1.8}[infill];
+ items.push(['Turf roll (15ft)',Math.ceil(AREA/375)+' rolls','450 ft² ÷ 375/roll',Math.ceil(AREA/375)*640]);
+ items.push(['Class-II base',Math.ceil(AREA*0.012)+' tons','3" compacted sub-base',Math.ceil(AREA*0.012)*48]);
+ const inf={zeo:'Zeolite',silica:'Silica',chill:'HydroChill'}[infill];
+ items.push([inf+' infill',Math.ceil(AREA*rate/50)+' bags',rate+' lb/ft² @ 50lb',Math.ceil(AREA*rate/50)*18]);
+ if(seam==='tape'){items.push(['Seam tape + glue','40 ft','perimeter joins',56]);}
+ else{items.push(['5" seam nails','2 boxes','nailed every 4"',44]);}
+ items.push(['Landscape spikes',Math.ceil(AREA/50)+' pk','1 per 12" edge',Math.ceil(AREA/50)*9]);
+ const total=items.reduce((s,i)=>s+i[3],0);
+ rowsEl.innerHTML='';items.forEach((it,i)=>{const r=document.createElement('div');r.className='row';
+  r.innerHTML=`<div><div class="nm">${it[0]}</div><div class="rs">${it[2]}</div></div><div class="qty">${it[1]}</div>`;
+  rowsEl.appendChild(r);setTimeout(()=>r.classList.add('in'),120+i*110);});
+ totEl.textContent='$'+total.toLocaleString();}
+document.querySelectorAll('.tiles').forEach(g=>g.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{
+ g.querySelectorAll('.tile').forEach(x=>x.classList.remove('on'));t.classList.add('on');compute();}));
+compute();
+// auto demo
+const picks=[['infill','silica'],['seam','nail'],['infill','chill'],['infill','zeo'],['seam','tape']];let p=0;
+function demo(){const [g,k]=picks[p%picks.length];p++;document.querySelector(`#${g} [data-k="${k}"]`).click();}
+setInterval(demo,2000);
+</script></body></html>

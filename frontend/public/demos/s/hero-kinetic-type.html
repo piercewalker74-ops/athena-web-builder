@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hero Schematic · Kinetic Type</title>
+<!-- Composed schematic: type-driven hero, no WebGL. Layers:
+     (1) GSAP per-line clip reveal  (2) scroll-velocity skew on a marquee band
+     (3) hover character-scramble  (4) pointer-parallax on the headline. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  *{ box-sizing:border-box; margin:0; }
+  html,body{ height:100%; background:#0a0a0c; color:#f2f0ea; overflow-x:hidden;
+    font-family:'Segoe UI',system-ui,sans-serif; }
+  .hero{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:8vh 6vw; gap:5vh; }
+  .eyebrow{ font:600 12px/1 inherit; letter-spacing:.4em; text-transform:uppercase; color:#c8ff4d; }
+  h1{ font-size:clamp(44px,11vw,150px); line-height:.9; font-weight:900; letter-spacing:-.03em; }
+  h1 .line{ display:block; overflow:hidden; }
+  h1 .line > span{ display:block; transform:translateY(105%); }
+  .scramble{ cursor:pointer; }
+  .marq{ overflow:hidden; white-space:nowrap; border-block:1px solid #23232a; padding:14px 0; will-change:transform; }
+  .marq__t{ display:inline-block; font:800 26px/1 inherit; letter-spacing:-.01em; color:#88888f; will-change:transform; }
+  .marq__t b{ color:#c8ff4d; }
+  .sub{ max-width:52ch; color:#9a9aa2; font-size:clamp(14px,1.8vw,18px); line-height:1.55; }
+  .spacer{ height:60vh; display:grid; place-items:center; color:#3a3a42; font-size:12px; letter-spacing:.3em; text-transform:uppercase; }
+  @media(prefers-reduced-motion:reduce){ h1 .line > span{transform:none} }
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="eyebrow">Composed Section Schematic</div>
+  <h1 id="h1"><span class="line"><span>DESIGN</span></span><span class="line"><span class="scramble" data-text="THAT MOVES">THAT MOVES</span></span><span class="line"><span>DIFFERENT.</span></span></h1>
+  <p class="sub">Type as the whole show — GSAP line reveals, a scroll-velocity marquee that skews with your momentum, and characters that scramble on hover. Zero WebGL, all motion.</p>
+</section>
+<div class="marq"><span class="marq__t" id="marq">KINETIC&nbsp;·&nbsp;<b>GSAP</b>&nbsp;·&nbsp;VELOCITY&nbsp;·&nbsp;<b>SKEW</b>&nbsp;·&nbsp;SCRAMBLE&nbsp;·&nbsp;<b>SPLIT</b>&nbsp;·&nbsp;KINETIC&nbsp;·&nbsp;<b>GSAP</b>&nbsp;·&nbsp;VELOCITY&nbsp;·&nbsp;<b>SKEW</b>&nbsp;·&nbsp;SCRAMBLE&nbsp;·&nbsp;<b>SPLIT</b>&nbsp;·&nbsp;</span></div>
+<div class="spacer">scroll — watch the band skew</div>
+
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* (1) GSAP line reveal */
+if(!reduce){
+  gsap.timeline({defaults:{ease:'power4.out'}})
+    .to('.eyebrow',{opacity:1,duration:.5,startAt:{opacity:0}})
+    .to('h1 .line > span',{y:'0%',duration:1.1,stagger:.12},'-=0.2')
+    .to('.sub',{opacity:1,y:0,duration:.8,startAt:{opacity:0,y:20}},'-=0.7');
+}
+
+/* (2) scroll-velocity marquee skew + drift */
+const marq = document.getElementById('marq');
+let mx = 0, last = 0, vel = 0;
+function tick(){
+  const y = window.scrollY;
+  vel = (y - last); last = y;
+  mx -= 1.1 + Math.min(Math.abs(vel)*0.6, 40) * Math.sign(vel || 1);
+  const w = marq.scrollWidth/2;
+  if(mx <= -w) mx += w; if(mx > 0) mx -= w;
+  const skew = Math.max(-14, Math.min(14, vel * 0.6));
+  marq.style.transform = `translateX(${mx}px) skewX(${reduce?0:skew}deg)`;
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+/* (3) hover character-scramble */
+const CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%@*<>/\\=+?';
+document.querySelectorAll('.scramble').forEach(el=>{
+  const final = el.dataset.text;
+  el.addEventListener('pointerenter', ()=>{
+    if(reduce) return;
+    let f = 0;
+    const iv = setInterval(()=>{
+      el.textContent = final.split('').map((c,i)=> i < f ? c : (c===' '?' ':CH[Math.floor(Math.random()*CH.length)])).join('');
+      f += 0.5; if(f >= final.length){ clearInterval(iv); el.textContent = final; }
+    }, 28);
+  });
+});
+
+/* (4) pointer parallax on the headline */
+const h1 = document.getElementById('h1');
+if(!reduce) addEventListener('pointermove', e=>{
+  const dx = (e.clientX/innerWidth - .5), dy = (e.clientY/innerHeight - .5);
+  gsap.to(h1,{ x: dx*30, y: dy*18, rotateY: dx*4, duration:.8, ease:'power3.out' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>dropzone</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%;max-width:440px}
+ .zone{width:100%;border:2px dashed var(--line2);border-radius:18px;height:180px;display:grid;place-items:center;text-align:center;transition:all .3s;background:var(--glass)}
+ .zone.hot{border-color:var(--cyan);background:rgba(47,224,255,.08);transform:scale(1.02);box-shadow:var(--glow)}
+ .zone .ic{font-size:40px}.zone p{font-size:12px;color:var(--ice);opacity:.7;margin-top:6px}
+ .ghost{position:absolute;width:70px;height:52px;border-radius:8px;pointer-events:none;transition:none;box-shadow:0 8px 22px rgba(0,0,0,.4)}
+ .ghost .tag{font-size:8px}
+</style></head>
+<body class="demo"><div class="demo-name">m · dropzone</div>
+<div class="stage">
+  <div class="zone" id="z"><div><div class="ic glow">⬓</div><p id="p">Drag a file into the zone</p></div></div>
+</div>
+<div class="ghost filler" id="g"><span class="tag">IMG</span></div>
+<script>
+const z=document.getElementById('z'),g=document.getElementById('g'),p=document.getElementById('p');
+function run(){const zr=z.getBoundingClientRect();const sx=zr.left-120,sy=zr.top+40;const ex=zr.left+zr.width/2-35,ey=zr.top+zr.height/2-26;
+ let t=0;g.style.opacity=1;
+ (function step(){t+=0.02;const e=t<1?t:1;const x=sx+(ex-sx)*e,y=sy+(ey-sy)*e;g.style.left=x+'px';g.style.top=y+'px';
+  const near=e>0.6;z.classList.toggle('hot',near);
+  if(e<1)requestAnimationFrame(step);
+  else{p.textContent='✓ dropped — uploading';setTimeout(()=>{g.style.opacity=0;z.classList.remove('hot');p.textContent='Drag a file into the zone';},900);}})();}
+run();setInterval(run,3000);
+</script></body></html>

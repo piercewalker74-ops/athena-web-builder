@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gradient-text-headline</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px;min-height:320px}
+ h1{font-size:clamp(30px,7vw,58px);font-weight:750;letter-spacing:-.02em;line-height:1.05;max-width:9ch}
+ .grad{background:linear-gradient(100deg,var(--cyan),var(--ice2) 30%,var(--teal) 60%,var(--cyan));
+   background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+   filter:drop-shadow(0 0 22px rgba(47,224,255,.45));animation:flow 5s linear infinite}
+ @keyframes flow{to{background-position:280% 0}}
+ .plain{color:var(--frost);opacity:.92}
+ .sub{max-width:34ch}
+ .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+</style></head>
+<body class="demo"><div class="demo-name">f · gradient-text-headline</div>
+<div class="stage">
+  <div class="eyebrow">CLIPPED-GRADIENT TYPE</div>
+  <h1><span class="plain">Turf that</span> <span class="grad">stays green</span> <span class="plain">all year.</span></h1>
+  <p class="sub">Key phrases painted with a background-clip gradient glow against dark type — instant emphasis, zero extra markup.</p>
+  <div class="chips"><span class="chip">background-clip:text</span><span class="chip">no images</span></div>
+</div>
+<script>
+// re-tint the glowing phrase on a gentle loop so the accent breathes
+const grad=document.querySelector('.grad');
+const sets=[
+ 'linear-gradient(100deg,var(--cyan),var(--ice2) 30%,var(--teal) 60%,var(--cyan))',
+ 'linear-gradient(100deg,var(--teal),var(--cyan) 35%,var(--ice) 65%,var(--teal))',
+ 'linear-gradient(100deg,var(--ice),var(--cyan) 40%,var(--ice2) 70%,var(--ice))'];
+let i=0;setInterval(()=>{i=(i+1)%sets.length;grad.style.backgroundImage=sets[i];grad.style.backgroundSize='280% 100%';},3200);
+</script></body></html>

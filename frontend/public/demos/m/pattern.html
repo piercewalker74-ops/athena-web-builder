@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pattern</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;border-radius:18px;position:relative;overflow:hidden;display:grid;place-items:center}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .cap{position:relative;text-align:center}
+</style></head>
+<body class="demo"><div class="demo-name">m · animated pattern</div>
+<div class="stage frost"><canvas id="c"></canvas>
+ <div class="cap"><div class="eyebrow">HALFTONE FIELD</div><h1 class="big glow">Reactive texture</h1></div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');let W,H,dpr=Math.min(devicePixelRatio||1,2),mx=-99,my=-99,t=0;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}size();addEventListener('resize',size);
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;});
+cv.addEventListener('mouseleave',()=>{mx=my=-99;});
+const gap=22;
+function loop(){t+=0.03;ctx.clearRect(0,0,W,H);
+ for(let x=gap/2;x<W;x+=gap)for(let y=gap/2;y<H;y+=gap){
+  const w=Math.sin(x*0.03+t)+Math.cos(y*0.03+t);let r=1.4+w*1.3;
+  const d=Math.hypot(x-mx,y-my);if(d<70)r+=(70-d)/12;
+  ctx.beginPath();ctx.arc(x,y,Math.max(.4,r),0,7);
+  ctx.fillStyle=`rgba(${100+w*40},${200+w*30},255,${.28+.25*Math.sin(x*0.02+t)})`;ctx.fill();}
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

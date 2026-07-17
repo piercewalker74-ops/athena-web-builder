@@ -1,0 +1,414 @@
+/* ============================================================
+   ATHENA — VISUAL OVERHAUL EFFECTS
+   Ambient backgrounds, animations, polish
+   ============================================================ */
+
+/* ── Ambient background canvas ─────────────────────────────── */
+.ambient-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Sections hosting an ambient canvas need a positioning context;
+   their inner panels render on top via z-index: 1. */
+.comms,
+.mission-log,
+.review-inbox,
+.memory-browser,
+.ops-page {
+  position: relative;
+}
+
+.comms__messages,
+.comms__input-area,
+.mission-log__header,
+.mission-log__feed,
+.review-inbox__header,
+.review-inbox__content,
+.memory-browser__list,
+.memory-browser__viewer,
+.ops-header,
+.ops-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Mission log entry slide-in ─────────────────────────────── */
+@keyframes mission-entry-in {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.mission-entry {
+  animation: mission-entry-in 0.32s ease-out both;
+}
+
+/* ── Nav rail hover sweep ────────────────────────────────────── */
+.nav-link {
+  overflow: hidden;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,176,0,0.16), transparent);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.nav-link:hover::after {
+  animation: nav-sweep 0.45s ease-out forwards;
+}
+
+@keyframes nav-sweep {
+  0%   { left: -55%; opacity: 1; }
+  100% { left: 130%; opacity: 1; }
+}
+
+/* ── Project bar phase badge scanline ───────────────────────── */
+.project-bar__status {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-bar__status::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,176,0,0.22) 50%, transparent 100%);
+  transform: translateX(-150%);
+  animation: phase-scanline 5.5s ease-in-out infinite 3s;
+  pointer-events: none;
+}
+
+@keyframes phase-scanline {
+  0%   { transform: translateX(-150%); }
+  40%  { transform: translateX(210%); }
+  100% { transform: translateX(210%); }
+}
+
+/* ── Comms idle satellite signal rings ──────────────────────── */
+.comms__satellite-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+}
+
+.comms__empty-icon {
+  font-size: 2.2rem;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px rgba(255,176,0,0.45));
+}
+
+.comms__signal-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255,176,0,0.3);
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  animation: signal-ring-expand 3s ease-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.comms__signal-ring:nth-child(2) { animation-delay: 1s; }
+.comms__signal-ring:nth-child(3) { animation-delay: 2s; }
+
+@keyframes signal-ring-expand {
+  0%   { width: 22px; height: 22px; opacity: 0.7; }
+  100% { width: 120px; height: 120px; opacity: 0; }
+}
+
+/* ── Operations cron card status dot heartbeat ──────────────── */
+@keyframes heartbeat-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  28%       { transform: scale(1.45); opacity: 0.9; }
+  45%       { transform: scale(1);    opacity: 0.75; }
+  65%       { transform: scale(1.2);  opacity: 0.9; }
+}
+
+.cron-card__status-dot--pulse {
+  animation: heartbeat-pulse 2.8s ease-in-out infinite;
+}
+
+/* ── System Vitals signal bars ──────────────────────────────── */
+.vitals__bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1.5px;
+  height: 10px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.vitals__bar {
+  width: 3px;
+  background: var(--green);
+  box-shadow: 0 0 3px var(--green);
+  animation: bar-pulse 1.8s ease-in-out infinite;
+}
+
+.vitals__bar:nth-child(1) { height: 30%; animation-delay: 0s; }
+.vitals__bar:nth-child(2) { height: 65%; animation-delay: 0.25s; }
+.vitals__bar:nth-child(3) { height: 100%; animation-delay: 0.5s; }
+
+@keyframes bar-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+.vitals__bars--offline .vitals__bar {
+  background: var(--alert);
+  box-shadow: 0 0 3px var(--alert);
+}
+
+.vitals__bars--checking .vitals__bar {
+  background: var(--amber);
+  box-shadow: 0 0 3px var(--amber);
+  animation: bar-pulse 0.8s ease-in-out infinite;
+}
+
+/* ── Inbox empty state ──────────────────────────────────────── */
+.inbox-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  position: relative;
+  padding: 2rem;
+}
+
+.inbox-empty__rings {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,176,0,0.12);
+  animation: inbox-ring 3.5s ease-out infinite;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+.inbox-empty__rings::before {
+  content: '';
+  position: absolute;
+  top: -35px; left: -35px; right: -35px; bottom: -35px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,176,0,0.07);
+  animation: inbox-ring 3.5s ease-out 1.2s infinite;
+}
+
+.inbox-empty__rings::after {
+  content: '';
+  position: absolute;
+  top: -65px; left: -65px; right: -65px; bottom: -65px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,176,0,0.04);
+  animation: inbox-ring 3.5s ease-out 2.4s infinite;
+}
+
+@keyframes inbox-ring {
+  0%   { opacity: 0.8; transform: translate(-50%, -50%) scale(0.75); }
+  100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.5); }
+}
+
+.inbox-empty__rings::before,
+.inbox-empty__rings::after {
+  transform: none;
+}
+
+@keyframes inbox-ring-child {
+  0%   { opacity: 0.7; transform: scale(0.8); }
+  100% { opacity: 0;   transform: scale(1.4); }
+}
+
+.inbox-empty__rings::before { animation-name: inbox-ring-child; }
+.inbox-empty__rings::after  { animation-name: inbox-ring-child; }
+
+.inbox-empty__icon {
+  font-size: 3rem;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 18px rgba(255,176,0,0.4));
+  animation: inbox-icon-float 4s ease-in-out infinite;
+}
+
+.inbox-empty__title {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--amber-dim);
+  position: relative;
+  z-index: 1;
+}
+
+.inbox-empty__sub {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--amber-ghost);
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.inbox-empty__hint {
+  font-size: 9px;
+  color: var(--chrome);
+  position: relative;
+  z-index: 1;
+}
+
+.inbox-empty__hint code { color: var(--amber-dim); }
+
+@keyframes inbox-icon-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ── Pipeline kanban empty column shimmer ───────────────────── */
+@keyframes kanban-shimmer {
+  0%, 100% { border-color: var(--amber-ghost);  box-shadow: none; }
+  50%       { border-color: var(--amber-dim);   box-shadow: inset 0 0 14px rgba(255,176,0,0.07); }
+}
+
+.pipeline-empty--shimmer {
+  border: 1px dashed var(--amber-ghost);
+  animation: kanban-shimmer 3.2s ease-in-out infinite;
+  padding: 0.6rem;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--amber-ghost);
+  border-radius: 1px;
+}
+
+/* ── Operations next-run timeline ───────────────────────────── */
+.ops-timeline {
+  padding: 0.8rem 1rem 1rem;
+  border-top: 1px solid var(--border-dim);
+  margin-top: auto;
+}
+
+.ops-timeline__label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--chrome);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ops-timeline__label::before { content: '//'; color: var(--amber-ghost); }
+
+.ops-timeline__track {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-left: 0.6rem;
+  border-left: 1px solid var(--border-dim);
+}
+
+.ops-timeline__entry {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 10px;
+  position: relative;
+}
+
+.ops-timeline__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--holo);
+  box-shadow: var(--glow-holo);
+  flex-shrink: 0;
+  animation: pulse-dot 2s ease-in-out infinite;
+  position: absolute;
+  left: -0.915rem;
+}
+
+.ops-timeline__name {
+  color: var(--amber-dim);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ops-timeline__time {
+  color: var(--holo);
+  text-shadow: var(--glow-holo);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ── Memory file list text-overflow ────────────────────────── */
+.memory-file-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.memory-file-btn__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.memory-file-btn__meta {
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+
+/* ── Memory typewriter blink cursor ────────────────────────── */
+.memory-type-cursor {
+  display: inline-block;
+  animation: cursor-blink 1s step-start infinite;
+  color: var(--amber);
+}
+
+/* ── Reduced motion: disable all decorative effects ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  .mission-entry,
+  .comms__signal-ring,
+  .cron-card__status-dot--pulse,
+  .vitals__bar,
+  .inbox-empty__rings,
+  .inbox-empty__icon,
+  .ops-timeline__dot,
+  .project-bar__status::after,
+  .pipeline-empty--shimmer,
+  .ambient-bg { animation: none !important; }
+
+  .nav-link::after,
+  .ambient-bg { display: none !important; }
+}

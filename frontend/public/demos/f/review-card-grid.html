@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>review-card-grid</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+ @media(max-width:480px){.grid{grid-template-columns:1fr 1fr}.grid>:nth-child(n+5){display:none}}
+ .card{position:relative;padding:16px 14px 14px;border-radius:12px;opacity:0;transform:translateY(20px) scale(.96);
+   transition:all .6s cubic-bezier(.2,.8,.2,1)}
+ .card.in{opacity:1;transform:none}
+ .qmark{position:absolute;top:-6px;right:10px;font-family:Georgia,serif;font-size:52px;line-height:1;color:var(--cyan);opacity:.22}
+ .stars{color:var(--cyan);font-size:12px;letter-spacing:2px;filter:drop-shadow(0 0 6px rgba(47,224,255,.5))}
+ .q{font-size:12px;line-height:1.45;color:var(--frost);margin:8px 0 12px}
+ .meta{display:flex;align-items:center;gap:8px}
+ .av{width:26px;height:26px;border-radius:50%;flex:0 0 auto}
+ .who{font-size:11px;font-weight:600}.svc{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.6}
+</style></head>
+<body class="demo"><div class="demo-name">f · review-card-grid</div>
+<div class="stage">
+  <div class="eyebrow">★★★★★ &nbsp;WHAT PEOPLE SAY</div>
+  <div class="grid" id="g"></div>
+</div>
+<script>
+const R=[
+ ['Fast, tidy and on time — driveway looks brand new.','Marcus T.','PRESSURE WASH'],
+ ['They saved our oak. Honest quote, zero upsell.','Dana R.','TREE CARE'],
+ ['Booked online at 9, crew here by noon. Wild.','Priya S.','GUTTER CLEAN'],
+ ['Best window job on the block. Streak-free.','Leo M.','WINDOWS'],
+ ['Polite, insured, and the lawn is immaculate.','Grace W.','LAWN CARE'],
+ ['Fixed what two others couldn’t. Highly recommend.','Owen K.','ROOF REPAIR']];
+const g=document.getElementById('g');
+R.forEach(r=>{const c=document.createElement('div');c.className='card frost';
+ c.innerHTML=`<div class="qmark">”</div><div class="stars">★★★★★</div><p class="q">${r[0]}</p>
+   <div class="meta"><div class="av filler eel"></div><div><div class="who">${r[1]}</div><div class="svc">${r[2]}</div></div></div>`;
+ g.appendChild(c);});
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),120+i*110));}
+run();setInterval(run,4600);
+</script></body></html>

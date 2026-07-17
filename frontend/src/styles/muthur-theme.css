@@ -1,0 +1,113 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   MU/TH/UR 6000 THEME  —  applied as a copy from:
+     · The-weyland-yutani-corporation/MUTHUR-TERMINAL  (#1)
+     · jcar/muthur-terminal                            (#2)
+   Both ship the same phosphor CRT theme. This file re-skins Athena by
+   overriding its (token-based) palette to green phosphor and layering the
+   MU/TH/UR glow + CRT treatment. Imported LAST so it wins the cascade.
+   Holo-blue is kept as Athena's single "live/active" accent.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* DUAL PHOSPHOR — green data + retro-war amber chrome (so it's not all green) */
+  --war-amber:      #e8a63a;
+  --war-amber-dim:  #b87f26;
+  /* MOSTLY GREEN — amber is only a light accent on the logo + section title */
+  --amber:        #33ff33;
+  --amber-dim:    #1f9e1f;   /* labels/secondary back to green */
+  --amber-ghost:  #0c3d0c;   /* borders back to green */
+  /* brighter green accents */
+  --green:        #66ff66;
+  --green-dim:    #33cc33;
+  --green-ghost:  #0a3302;
+  /* warm near-black backgrounds (less green) */
+  --bg:           #070603;
+  --bg2:          #0d0b06;
+  --bg3:          #12100a;
+  --bg-panel:     #0a0806;
+  /* phosphor tokens from the source theme */
+  --phosphor:        #33ff33;
+  --phosphor-bright: #66ff66;
+  --phosphor-dim:    #1a8c1a;
+  --crt-bg:          #0d1a0d;
+  --crt-dark:        #050a05;
+  /* NOTE: --holo (#00c8ff) intentionally left as Athena's live-element accent */
+}
+
+/* pixel-crisp phosphor text + a per-element glow (currentColor => each color glows itself) */
+body {
+  color: var(--amber);
+  background: var(--bg);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  text-shadow: 0 0 2px currentColor;
+}
+::selection { background: var(--phosphor); color: var(--crt-dark); }
+
+/* greened scrollbar */
+::-webkit-scrollbar-track       { background: var(--crt-dark); }
+::-webkit-scrollbar-thumb       { background: #1a4d1a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--phosphor); }
+
+/* ── MU/TH/UR effect keyframes (namespaced to avoid clashing with Athena's) ── */
+@keyframes mtr-scan   { 0% { background-position: 0 0; } 100% { background-position: 0 4px; } }
+@keyframes mtr-flicker{ 0%,100%{opacity:.98} 5%{opacity:.95} 10%{opacity:.98} 20%{opacity:.99} 50%{opacity:.96} 90%{opacity:.95} }
+@keyframes mtr-glow   { 0%,100%{ text-shadow:0 0 4px #33ff33,0 0 10px #33ff3380,0 0 20px #33ff3340 }
+                        50%    { text-shadow:0 0 6px #33ff33,0 0 14px #33ff3380,0 0 28px #33ff3340 } }
+@keyframes mtr-blink  { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes mtr-boot   { from{opacity:0;transform:translateY(2px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── opt-in classes the interface can apply to hero panels / boot / cursor ── */
+.mtr-phosphor      { color: var(--phosphor); animation: mtr-glow 4s ease-in-out infinite; }
+.mtr-phosphor-dim  { color: var(--phosphor-dim); text-shadow: 0 0 2px var(--phosphor-dim); }
+.mtr-cursor        { animation: mtr-blink 1s step-end infinite; }
+.mtr-boot-line     { animation: mtr-boot .3s ease-out forwards; opacity: 0; }
+
+/* CRT screen: wrap any panel/screen to get scanlines + vignette + flicker */
+.mtr-crt { position: relative; animation: mtr-flicker 8s infinite; }
+.mtr-crt::before {
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:10;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.15) 0px, rgba(0,0,0,.15) 1px, transparent 1px, transparent 3px);
+  animation: mtr-scan .1s linear infinite;
+}
+.mtr-crt::after {
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:10;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.4) 100%);
+}
+
+/* ── amber accent ONLY on the ATHENA logo + section title (rest stays green) ── */
+.nav-rail__logo-name { color: var(--war-amber) !important; text-shadow: 0 0 6px var(--war-amber), 0 0 12px #e8a63a55; }
+
+/* blinking block cursor shown while ATHENA types in */
+.nav-rail__logo-cursor {
+  display: inline-block;
+  width: 0.6ch;
+  height: 1em;
+  background: var(--war-amber);
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  animation: logo-cursor-blink 0.7s step-end infinite;
+}
+/* hide cursor once typing is complete (parent full width = 6 chars) */
+.nav-rail__logo-name[aria-label="ATHENA"]:not(:empty) .nav-rail__logo-cursor {
+  animation-delay: 0.66s; /* matches last char delay: 400 + 5*110 = 950ms */
+}
+@keyframes logo-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.project-bar__title  { color: var(--war-amber) !important; text-shadow: 0 0 5px var(--war-amber); }
+
+/* ── workspace: content scans in top→bottom behind the SectionIntro overlay ── */
+.mtr-workspace { position: relative; }
+.mtr-workspace > :not(.section-intro) { animation: mtr-content-in 0.55s ease-out 0.35s both; }
+@keyframes mtr-content-in {
+  from { opacity: 0; clip-path: inset(0 0 100% 0); }
+  to   { opacity: 1; clip-path: inset(0 0 0% 0);   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body { text-shadow: none; }
+  .mtr-phosphor, .mtr-cursor, .mtr-boot-line, .mtr-crt, .mtr-crt::before,
+  .mtr-workspace > :not(.section-intro) { animation: none !important; }
+}

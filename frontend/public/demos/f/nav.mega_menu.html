@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>nav.mega_menu</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;align-items:stretch}
+ .bar{display:flex;align-items:center;gap:18px;padding:12px 16px;border-radius:12px 12px 0 0;border-bottom:1px solid var(--line)}
+ .brand{font-weight:700;font-size:15px}
+ .navitem{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ice2);cursor:pointer;position:relative;padding:4px 2px}
+ .navitem.active{color:var(--cyan)}
+ .navitem.active:after{content:'';position:absolute;left:0;right:0;bottom:-13px;height:2px;background:var(--cyan);box-shadow:var(--glow)}
+ .mega{border-radius:0 0 14px 14px;padding:18px;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:18px;overflow:hidden}
+ .col h4{font-size:11px;font-family:var(--mono);letter-spacing:.16em;color:var(--cyan);margin-bottom:10px;text-transform:uppercase}
+ .lk{display:block;font-size:13px;color:var(--ice2);padding:5px 0;opacity:0;transform:translateY(10px);transition:all .45s}
+ .lk .d{display:block;font-size:10px;color:var(--ice);opacity:.55}
+ .lk.in{opacity:1;transform:none}
+ .feat{position:relative;border-radius:10px;overflow:hidden;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;padding:12px;
+   opacity:0;transform:translateY(10px);transition:all .5s}
+ .feat.in{opacity:1;transform:none}
+ .feat .filler{position:absolute;inset:0;border-radius:0}
+ .feat b{position:relative;font-size:13px}.feat .p{position:relative;font-size:10px;color:var(--ice);opacity:.7}
+</style></head>
+<body class="demo"><div class="demo-name">f · nav.mega_menu</div>
+<div class="stage frost">
+  <div class="bar">
+    <div class="brand glow">Verdant</div>
+    <div class="navitem active">Products</div>
+    <div class="navitem">Solutions</div>
+    <div class="navitem">Company</div>
+  </div>
+  <div class="mega" id="mega">
+    <div class="col"><h4>By Type</h4>
+      <a class="lk">Landscape Turf<span class="d">Pet · putting · shade</span></a>
+      <a class="lk">Sports Field<span class="d">FIFA-grade fibre</span></a>
+      <a class="lk">Rooftop Deck<span class="d">Drainage backed</span></a>
+    </div>
+    <div class="col"><h4>By Need</h4>
+      <a class="lk">Low Water<span class="d">Zero irrigation</span></a>
+      <a class="lk">High Traffic<span class="d">Commercial rated</span></a>
+      <a class="lk">Pet Friendly<span class="d">Antimicrobial</span></a>
+    </div>
+    <div class="feat"><div class="filler eel"><span class="tag">NEW</span></div><b class="glow">Pioneer Pro 60</b><div class="p">The season's flagship pile — now shipping.</div></div>
+  </div>
+</div>
+<script>
+const items=[...document.querySelectorAll('.mega .lk,.mega .feat')];
+function run(){items.forEach(e=>e.classList.remove('in'));items.forEach((e,i)=>setTimeout(()=>e.classList.add('in'),140+i*90));}
+run();setInterval(run,4200);
+const navs=[...document.querySelectorAll('.navitem')];let a=0;
+setInterval(()=>{navs.forEach(n=>n.classList.remove('active'));a=(a+1)%navs.length;navs[a].classList.add('active');},2100);
+</script></body></html>

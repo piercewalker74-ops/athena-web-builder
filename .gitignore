@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# builds
+dist/
+**/dist/
+.next/
+build/
+frontend/.vite/
+
+# env & secrets — NEVER commit
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.local
+
+# logs & runtime state
+*.log
+**/*.log
+appr.json
+patch.json
+
+# local project data (never publish client work)
+clients/
+**/clients/
+
+# os / editor
+.DS_Store
+Thumbs.db
+nul

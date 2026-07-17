@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>location-hours-map-block</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:1fr 1.1fr;gap:16px;align-items:stretch}
+ @media(max-width:520px){.stage{grid-template-columns:1fr}}
+ .info{display:flex;flex-direction:column;gap:12px}
+ .addr b{font-size:15px}.addr p{font-size:12px;color:var(--ice);opacity:.75;line-height:1.5;margin-top:3px}
+ .call{align-self:flex-start}
+ .hours{list-style:none;font-size:12px;border-top:1px solid var(--line);padding-top:8px}
+ .hours li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)}
+ .hours li.today{color:var(--cyan);font-weight:600}
+ .hours .d{color:var(--ice);opacity:.8}
+ .map{position:relative;border-radius:14px;overflow:hidden;min-height:300px;border:1px solid var(--line)}
+ .map svg{position:absolute;inset:0;width:100%;height:100%}
+ .grid line{stroke:var(--line);stroke-width:.5}
+ .pulse{fill:none;stroke:var(--cyan);transform-origin:center;animation:pl 2.4s ease-out infinite}
+ @keyframes pl{0%{r:4px;opacity:.9}100%{r:28px;opacity:0}}
+ .core{fill:var(--cyan)}
+ .pincap{position:absolute;left:12px;bottom:12px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--frost);background:rgba(4,18,30,.7);padding:4px 9px;border-radius:7px}
+</style></head>
+<body class="demo"><div class="demo-name">f · location-hours-map-block</div>
+<div class="stage">
+  <div class="info frost" style="padding:16px">
+    <div class="eyebrow">FIND US</div>
+    <div class="addr"><b>Frostline Coffee</b><p>418 Glacier Ave<br>Bozeman, MT 59715</p></div>
+    <button class="btn call">Call (406) 555-0142</button>
+    <ul class="hours" id="hours"></ul>
+  </div>
+  <div class="map frost">
+    <svg viewBox="0 0 400 320"><g class="grid" id="g"></g>
+      <path d="M40,60 L360,60 M180,0 L180,320 M40,220 L360,220" stroke="var(--line2)" stroke-width="1"/>
+      <circle class="pulse" cx="200" cy="150"/><circle class="core" cx="200" cy="150" r="4"/>
+    </svg>
+    <div class="pincap">◇ 2 min from Main St.</div>
+  </div>
+</div>
+<script>
+const g=document.getElementById('g');
+for(let i=0;i<=400;i+=34)g.innerHTML+=`<line x1="${i}" y1="0" x2="${i}" y2="320"/>`;
+for(let i=0;i<=320;i+=34)g.innerHTML+=`<line x1="0" y1="${i}" x2="400" y2="${i}"/>`;
+const days=[['Mon','7–4'],['Tue','7–4'],['Wed','7–4'],['Thu','7–4'],['Fri','7–6'],['Sat','8–6'],['Sun','8–2']];
+const today=new Date().getDay(); // 0=Sun
+const ul=document.getElementById('hours');
+days.forEach((d,i)=>{const idx=(i+1)%7; // Mon=0 -> day1
+ const li=document.createElement('li');if(idx===today)li.className='today';
+ li.innerHTML=`<span class="d">${d[0]}</span><span>${d[1]}</span>`;ul.appendChild(li);});
+</script></body></html>

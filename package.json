@@ -1,0 +1,22 @@
+{
+  "name": "athena",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c yellow,cyan \"npm --workspace=backend run dev\" \"npm --workspace=frontend run dev\"",
+    "dev:frontend": "npm --workspace=frontend run dev",
+    "build": "npm --workspace=frontend run build",
+    "install:all": "npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "esbuild@0.21.5": true
+  }
+}

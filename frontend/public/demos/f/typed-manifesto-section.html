@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>typed-manifesto-section</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:560px}
+ .cur{display:inline-block;width:2px;height:1em;background:var(--teal);margin-left:3px;vertical-align:-1px;animation:bl .7s step-end infinite;box-shadow:0 0 10px rgba(57,211,201,.8)}
+ @keyframes bl{50%{opacity:0}}
+ .clip{overflow:hidden;padding-bottom:4px}
+ h1{font-size:clamp(24px,4.4vw,40px);transform:translateY(110%);transition:transform .9s cubic-bezier(.2,.9,.2,1)}
+ h1.up{transform:none}
+ .body p{color:var(--ice);opacity:0;transform:translateY(22px);transition:all .8s cubic-bezier(.2,.8,.2,1);font-size:14px;line-height:1.7;margin-top:14px}
+ .body p.in{opacity:.85;transform:none}
+ .rule{height:1px;background:var(--line);margin:22px 0;width:100%}
+</style></head>
+<body class="demo"><div class="demo-name">f · typed-manifesto-section</div>
+<div class="stage">
+ <div class="eyebrow" id="eb">&nbsp;<span class="cur"></span></div>
+ <div class="clip"><h1 class="glow" id="h">Real lawns are dying.<br>We grow the ones that last.</h1></div>
+ <div class="rule"></div>
+ <div class="body" id="body">
+  <p>Every roll of turf we lay is UV-locked, lead-free and backed for fifteen years — because a yard should outlive the drought, not the warranty.</p>
+  <p>No mowing. No runoff. No brown patch in August. Just an even, walkable green that reads real from the curb and holds up to cleats, dogs and July heat.</p>
+ </div>
+</div>
+<script>
+const eb=document.getElementById('eb'),h=document.getElementById('h'),ps=[...document.querySelectorAll('#body p')];
+const word='OUR MISSION';
+function typeEyebrow(cb){let i=0;eb.innerHTML='<span></span><span class="cur"></span>';const s=eb.firstChild;
+ (function t(){if(i<=word.length){s.textContent=word.slice(0,i++);setTimeout(t,70);}else cb();})();}
+function run(){h.classList.remove('up');ps.forEach(p=>p.classList.remove('in'));
+ typeEyebrow(()=>{h.classList.add('up');ps.forEach((p,i)=>setTimeout(()=>p.classList.add('in'),500+i*280));});}
+run();setInterval(run,6000);
+</script></body></html>

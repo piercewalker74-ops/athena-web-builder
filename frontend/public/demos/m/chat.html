@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>chat</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:380px}
+ .win{border-radius:16px;overflow:hidden;display:flex;flex-direction:column;height:320px}
+ .bar{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:12px}
+ .bar .av{width:26px;height:26px;border-radius:50%;background:linear-gradient(120deg,var(--cyan),var(--ice))}
+ .bar .on{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--teal)}
+ .body{flex:1;padding:14px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+ .msg{max-width:76%;padding:9px 13px;border-radius:14px;font-size:12.5px;line-height:1.4;
+   opacity:0;transform:translateY(10px);animation:pop .4s forwards}
+ @keyframes pop{to{opacity:1;transform:none}}
+ .bot{align-self:flex-start;background:var(--glass);border:1px solid var(--line);border-bottom-left-radius:4px}
+ .me{align-self:flex-end;background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;border-bottom-right-radius:4px}
+ .typing{align-self:flex-start;display:flex;gap:4px;padding:11px 14px;background:var(--glass);border:1px solid var(--line);border-radius:14px}
+ .typing i{width:6px;height:6px;border-radius:50%;background:var(--ice);animation:bl 1s infinite}
+ .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+ @keyframes bl{50%{opacity:.3;transform:translateY(-3px)}}
+</style></head>
+<body class="demo"><div class="demo-name">m · live chat</div>
+<div class="stage"><div class="win frost">
+  <div class="bar"><div class="av"></div><b>Apex Tint Co</b><span class="on">● online</span></div>
+  <div class="body" id="b"></div>
+</div></div>
+<script>
+const seq=[['bot','Hey! Looking for a tint quote? 👋'],['me','Yeah, 2018 Model 3'],['typing'],['bot','Nice — our Tesla ceramic package is $499, same-day. Want a slot?'],['me','Book me in 🙌']];
+const b=document.getElementById('b');
+function run(){b.innerHTML='';let i=0;
+ (function next(){if(i>=seq.length)return setTimeout(run,1800);const s=seq[i++];
+  if(s[0]==='typing'){const t=document.createElement('div');t.className='typing';t.innerHTML='<i></i><i></i><i></i>';b.appendChild(t);setTimeout(()=>{t.remove();next();},1100);}
+  else{const m=document.createElement('div');m.className='msg '+s[0];m.textContent=s[1];b.appendChild(m);setTimeout(next,900);}})();}
+run();
+</script></body></html>

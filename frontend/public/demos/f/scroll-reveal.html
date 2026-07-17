@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scroll-reveal</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:14px}
+ .rv{opacity:0;transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+ .rv[data-dir=up]{transform:translateY(30px)}
+ .rv[data-dir=left]{transform:translateX(-34px)}
+ .rv[data-dir=right]{transform:translateX(34px)}
+ .rv[data-dir=fade]{transform:none}
+ .rv.in{opacity:1;transform:none}
+ .row{display:flex;gap:12px}.filler{height:104px;flex:1}
+ .badge{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--cyan);position:absolute;top:6px;right:8px}
+ .filler{position:relative}
+ .line{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--ice),transparent)}
+ .obs{position:fixed;bottom:12px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.5;letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">f · scroll-reveal</div>
+<div class="stage">
+  <div class="eyebrow rv" data-dir="fade" data-d="0">INTERSECTIONOBSERVER REVEAL</div>
+  <h1 class="big glow rv" data-dir="up" data-d="1">Each element declares<br>its own direction.</h1>
+  <div class="line rv" data-dir="left" data-d="2" style="width:64%"></div>
+  <div class="row">
+    <div class="filler rv" data-dir="left" data-d="3"><span class="tag">up</span><span class="badge">dir=left</span></div>
+    <div class="filler eel rv" data-dir="up" data-d="4"><span class="badge">dir=up</span></div>
+    <div class="filler rv" data-dir="right" data-d="5"><span class="badge">dir=right</span></div>
+  </div>
+</div>
+<div class="obs">up · left · right · fade — each with its own delay, repeats on re-entry</div>
+<script>
+const els=[...document.querySelectorAll('.rv')];
+// simulate observer: reveal in DOM order with per-element delay, then repeat
+function run(){els.forEach(e=>e.classList.remove('in'));
+ els.forEach(e=>{const d=+e.dataset.d;setTimeout(()=>e.classList.add('in'),160+d*220);});}
+run();setInterval(run,4600);
+</script></body></html>

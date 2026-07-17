@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>state.page_transition</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .browser{border-radius:12px;overflow:hidden}
+ .bar{display:flex;gap:16px;padding:11px 16px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+ .bar a{color:var(--ice);opacity:.55;cursor:pointer;text-transform:uppercase;transition:opacity .3s;position:relative}
+ .bar a.on{opacity:1;color:var(--cyan)}
+ .bar a.on:after{content:'';position:absolute;left:0;right:0;bottom:-12px;height:2px;background:var(--cyan);box-shadow:var(--glow)}
+ .view{position:relative;height:230px;overflow:hidden}
+ .page{position:absolute;inset:0;padding:24px;display:flex;flex-direction:column;justify-content:center;gap:10px;
+   opacity:0;transition:opacity .4s .35s}
+ .page.live{opacity:1}
+ .page .filler{height:90px}
+ .page h2{font-size:26px}.page p{font-size:12px;color:var(--ice);opacity:.75}
+ /* the sweeping curtain */
+ .curtain{position:absolute;inset:0;transform:translateX(-100%);z-index:5;pointer-events:none;
+   background:linear-gradient(120deg,var(--cyan),var(--teal));box-shadow:var(--glow)}
+ .curtain.wipe{animation:wipe .95s cubic-bezier(.7,0,.3,1)}
+ @keyframes wipe{0%{transform:translateX(-100%)}45%{transform:translateX(0)}100%{transform:translateX(100%)}}
+</style></head>
+<body class="demo"><div class="demo-name">f · state.page_transition</div>
+<div class="stage">
+  <div class="eyebrow">PAGE TRANSITION CURTAIN · route wipe</div>
+  <div class="browser frost">
+    <div class="bar" id="nav"></div>
+    <div class="view">
+      <div class="curtain" id="curtain"></div>
+      <div class="page live" id="page"></div>
+    </div>
+  </div>
+</div>
+<script>
+const routes=[
+ {k:'HOME',t:'Glacier Studio',d:'The new page reveals behind the wipe.',tag:'HOME'},
+ {k:'WORK',t:'Selected Work',d:'A panel sweeps across between routes.',tag:'WORK'},
+ {k:'ABOUT',t:'Cold Craft',d:'Hides load, adds continuity.',tag:'ABOUT'}];
+const nav=document.getElementById('nav'),page=document.getElementById('page'),curtain=document.getElementById('curtain');
+routes.forEach((r,i)=>{const a=document.createElement('a');a.textContent=r.k;a.className=i?'':'on';a.onclick=()=>navigate(i);nav.appendChild(a);});
+let cur=0,busy=false;
+function paint(i){const r=routes[i];page.innerHTML=`<div class="filler eel"><span class="tag">${r.tag}</span></div><h2 class="glow">${r.t}</h2><p>${r.d}</p>`;
+ [...nav.children].forEach((a,j)=>a.classList.toggle('on',j===i));}
+function navigate(i){if(busy||i===cur)return;busy=true;cur=i;
+ curtain.classList.remove('wipe');void curtain.offsetWidth;curtain.classList.add('wipe');
+ page.classList.remove('live');
+ setTimeout(()=>{paint(i);page.classList.add('live');},430);
+ setTimeout(()=>{busy=false;},1000);}
+paint(0);
+setInterval(()=>navigate((cur+1)%routes.length),3400);
+</script></body></html>

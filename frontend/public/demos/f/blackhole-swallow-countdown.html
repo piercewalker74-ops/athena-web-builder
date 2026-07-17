@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>blackhole-swallow-countdown</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;position:relative;border-radius:16px;overflow:hidden}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .over{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+   text-align:center;gap:4px;transition:opacity .8s,transform .8s;pointer-events:none}
+ .swall .b{font-size:clamp(24px,5vw,38px);font-weight:700}
+ .cd{opacity:0;transform:scale(.9)}
+ .cd.on{opacity:1;transform:none}
+ .cd .row{display:flex;gap:14px;font-family:var(--mono)}
+ .cd .u{display:flex;flex-direction:column;align-items:center}
+ .cd .n{font-size:clamp(26px,6vw,44px);color:var(--cyan);line-height:1}
+ .cd .l{font-size:8px;letter-spacing:.2em;color:var(--ice);opacity:.6;margin-top:5px}
+ .swall.gone{opacity:0;transform:scale(.2) rotate(320deg)}
+</style></head>
+<body class="demo"><div class="demo-name">f · blackhole-swallow-countdown</div>
+<div class="stage frost"><canvas id="c"></canvas>
+ <div class="over swall" id="s1"><div class="eyebrow">SAVE THE DATE</div><div class="b glow">Everything begins Aug 9</div></div>
+ <div class="over cd" id="cd"><div class="eyebrow">COUNTING DOWN TO</div>
+   <div class="row"><div class="u"><span class="n" id="dd">00</span><span class="l">DAYS</span></div>
+   <div class="u"><span class="n" id="hh">00</span><span class="l">HRS</span></div>
+   <div class="u"><span class="n" id="mm">00</span><span class="l">MIN</span></div>
+   <div class="u"><span class="n" id="ss">00</span><span class="l">SEC</span></div></div></div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+let W,H,dpr=Math.min(devicePixelRatio||1,2),spin=[],phase='hold',t0=performance.now();
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+size();addEventListener('resize',size);
+for(let i=0;i<160;i++)spin.push({a:Math.random()*7,r:40+Math.random()*160,sp:.004+Math.random()*.02,sz:Math.random()*1.8+.4});
+const target=new Date(); target.setDate(target.getDate()+28);
+function pad(n){return String(n).padStart(2,'0');}
+function tick(){const d=Math.max(0,target-new Date()),s=Math.floor(d/1000);
+ document.getElementById('dd').textContent=pad(Math.floor(s/86400));
+ document.getElementById('hh').textContent=pad(Math.floor(s/3600)%24);
+ document.getElementById('mm').textContent=pad(Math.floor(s/60)%60);
+ document.getElementById('ss').textContent=pad(s%60);}
+setInterval(tick,1000);tick();
+function loop(now){ctx.clearRect(0,0,W,H);const cx=W/2,cy=H/2;const el=now-t0;
+ // swirl accretion disk
+ for(const p of spin){p.a+=p.sp*(1+(80/p.r));if(phase!=='hold')p.r*=.992;if(p.r<8)p.r=40+Math.random()*160;
+  const x=cx+Math.cos(p.a)*p.r,y=cy+Math.sin(p.a)*p.r*.45;
+  ctx.beginPath();ctx.arc(x,y,p.sz,0,7);ctx.fillStyle=`rgba(47,224,255,${.15+ .5*(1-p.r/200)})`;ctx.fill();}
+ // core
+ const rg=ctx.createRadialGradient(cx,cy,2,cx,cy,phase==='count'?90:34);
+ rg.addColorStop(0,'#020a12');rg.addColorStop(.6,'rgba(4,18,30,.9)');rg.addColorStop(1,'rgba(47,224,255,.05)');
+ ctx.fillStyle=rg;ctx.beginPath();ctx.arc(cx,cy,phase==='count'?90:34,0,7);ctx.fill();
+ if(phase==='count'){const g=Math.abs(Math.sin(el/600));ctx.strokeStyle=`rgba(47,224,255,${.4+.5*g})`;ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.arc(cx,cy,82,0,7);ctx.stroke();}
+ requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+// state machine loop
+function cycle(){phase='hold';document.getElementById('s1').classList.remove('gone');document.getElementById('cd').classList.remove('on');t0=performance.now();
+ setTimeout(()=>{phase='swallow';document.getElementById('s1').classList.add('gone');},2200);
+ setTimeout(()=>{phase='count';document.getElementById('cd').classList.add('on');},3400);
+ setTimeout(cycle,8000);}
+cycle();
+</script></body></html>

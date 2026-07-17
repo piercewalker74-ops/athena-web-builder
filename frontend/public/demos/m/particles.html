@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>particles</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:320px;position:relative;border-radius:16px;overflow:hidden}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .cap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+</style></head>
+<body class="demo"><div class="demo-name">m · particles</div>
+<div class="stage frost"><canvas id="c"></canvas>
+ <div class="cap"><div class="eyebrow">PARTICLE FIELD</div><h1 class="big glow">Frost drift</h1></div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');let W,H,dpr=Math.min(devicePixelRatio||1,2),P=[],mx=-1,my=-1;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+size();addEventListener('resize',size);
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;});
+cv.addEventListener('mouseleave',()=>{mx=-1;my=-1;});
+for(let i=0;i<90;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*2+.6});
+function loop(){ctx.clearRect(0,0,W,H);
+ for(const p of P){if(mx>0){const dx=p.x-mx,dy=p.y-my,d=Math.hypot(dx,dy);if(d<90){p.vx+=dx/d*.15;p.vy+=dy/d*.15;}}
+  p.x+=p.vx;p.y+=p.vy;p.vx*=.99;p.vy*=.99;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+  ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fillStyle='rgba(143,230,255,.8)';ctx.fill();}
+ for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+  if(d<70){ctx.strokeStyle=`rgba(47,224,255,${.14*(1-d/70)})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

@@ -1,0 +1,51 @@
+/* ═══ IGLO · ICY-TECH DEMO THEME ═══  shared by every feature demo (m/*.html, f/*.html) */
+:root{
+  --deep:#04121e; --deep2:#071a2b; --ink:#0a2436;
+  --ice:#8fe6ff; --ice2:#b8ecff; --frost:#eaf6ff; --cyan:#2fe0ff; --teal:#39d3c9;
+  --line:rgba(120,220,255,.18); --line2:rgba(120,220,255,.35);
+  --glass:rgba(150,225,255,.06); --glass2:rgba(150,225,255,.11);
+  --glow:0 0 18px rgba(47,224,255,.35); --sans:'Segoe UI',Inter,system-ui,sans-serif; --mono:'Courier New',monospace;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body.demo{
+  background:
+    radial-gradient(120% 90% at 25% 15%, rgba(47,224,255,.10), transparent 55%),
+    radial-gradient(120% 100% at 80% 90%, rgba(57,211,201,.10), transparent 55%),
+    linear-gradient(160deg,#061726,#03101c 70%);
+  color:var(--frost); font-family:var(--sans); overflow:hidden;
+  display:flex; align-items:center; justify-content:center; padding:18px;
+}
+/* faint frost grain + scanline overlay */
+body.demo::after{content:'';position:fixed;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(0,0,0,.08) 3px 4px)}
+.stage{position:relative;width:100%;max-width:640px}
+
+/* frosted glass surfaces */
+.frost{background:var(--glass);border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(6px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06), var(--glow)}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.28em;color:var(--cyan);text-transform:uppercase;opacity:.85}
+h1,h2{font-weight:650;letter-spacing:-.01em;line-height:1.02}
+.big{font-size:clamp(26px,5vw,46px)}
+.sub{color:var(--ice);opacity:.8;font-size:14px;line-height:1.5}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  color:var(--ice2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--glass)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:#04121e;cursor:pointer;
+  background:linear-gradient(120deg,var(--cyan),var(--ice));border:none;border-radius:999px;padding:11px 22px;
+  box-shadow:0 6px 22px rgba(47,224,255,.4)}
+.btn.ghost{background:transparent;color:var(--ice2);border:1px solid var(--line2);box-shadow:none}
+.glow{text-shadow:0 0 14px rgba(47,224,255,.5)}
+
+/* icy "filler image" — a frosted gradient tile with a crystal facet + a swappable tag */
+.filler{position:relative;border-radius:10px;border:1px solid var(--line);overflow:hidden;
+  background:linear-gradient(140deg,#0c2f45,#0a2236 60%,#0e3a4e)}
+.filler:before{content:'';position:absolute;inset:0;opacity:.5;background:
+  conic-gradient(from 210deg at 60% 30%, rgba(143,230,255,.25), transparent 30%, rgba(57,211,201,.18) 60%, transparent 80%)}
+.filler:after{content:'◇ filler';position:absolute;left:8px;bottom:6px;font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:rgba(234,246,255,.55)}
+.filler.eel:before{background:radial-gradient(60% 120% at 70% 50%, rgba(47,224,255,.3), transparent 60%),
+  repeating-linear-gradient(115deg, rgba(143,230,255,.12) 0 6px, transparent 6px 16px)}
+
+.tag{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:8px;letter-spacing:.12em;
+  color:var(--cyan);border:1px solid var(--line2);border-radius:6px;padding:2px 7px;background:rgba(4,18,30,.6)}
+.demo-name{position:fixed;left:12px;top:10px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:rgba(143,230,255,.5)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

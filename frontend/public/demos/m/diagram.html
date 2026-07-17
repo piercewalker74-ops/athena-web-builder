@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>diagram</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{width:100%;max-width:520px}
+ svg{width:100%;height:300px}
+ .edge{stroke:var(--line2);stroke-width:2;fill:none;stroke-dasharray:6 6;animation:flow 1s linear infinite}
+ @keyframes flow{to{stroke-dashoffset:-12}}
+ .node rect{fill:var(--ink);stroke:var(--line2);rx:10}
+ .node.hot rect{stroke:var(--cyan);filter:drop-shadow(0 0 6px rgba(47,224,255,.6))}
+ .node text{fill:var(--frost);font-family:var(--mono);font-size:11px;text-anchor:middle;dominant-baseline:middle}
+ .pkt{fill:var(--cyan);filter:drop-shadow(0 0 5px rgba(47,224,255,.8))}
+</style></head>
+<body class="demo"><div class="demo-name">m · animated diagram</div>
+<div class="stage">
+  <div class="eyebrow" style="margin-bottom:8px">SYSTEM DIAGRAM</div>
+  <svg viewBox="0 0 520 300" id="svg">
+    <path class="edge" d="M110,70 C200,70 200,150 260,150"/>
+    <path class="edge" d="M110,230 C200,230 200,150 260,150"/>
+    <path class="edge" d="M360,150 C420,150 420,150 430,150"/>
+    <g class="node" data-n="0"><rect x="20" y="45" width="90" height="50"/><text x="65" y="70">Client</text></g>
+    <g class="node" data-n="1"><rect x="20" y="205" width="90" height="50"/><text x="65" y="230">CDN</text></g>
+    <g class="node" data-n="2"><rect x="260" y="125" width="100" height="50"/><text x="310" y="150">Edge API</text></g>
+    <g class="node" data-n="3"><rect x="430" y="125" width="80" height="50"/><text x="470" y="150">DB</text></g>
+    <circle class="pkt" id="pkt" r="5" cx="110" cy="70"/>
+  </svg>
+</div>
+<script>
+const pkt=document.getElementById('pkt');const path=document.querySelector('.edge');
+const paths=[...document.querySelectorAll('.edge')];const nodes=[...document.querySelectorAll('.node')];
+let pi=0,t=0;
+function loop(){t+=0.012;const p=paths[pi%paths.length];const len=p.getTotalLength();const pt=p.getPointAtLength((t%1)*len);
+ pkt.setAttribute('cx',pt.x);pkt.setAttribute('cy',pt.y);
+ nodes.forEach((n,i)=>n.classList.toggle('hot',i===(Math.floor(t)%nodes.length)));
+ if(t%1<0.016)pi++;requestAnimationFrame(loop);}
+loop();
+</script></body></html>

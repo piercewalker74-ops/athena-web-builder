@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>split-feature-with-pills</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center}
+ .cover{border-radius:16px;height:230px;position:relative}
+ .rv{opacity:0;transform:translateY(24px);filter:blur(5px);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none;filter:none}
+ .cover.rv{transform:translateX(-24px);filter:none}
+ .cover.rv.in{transform:none}
+ .copy{display:flex;flex-direction:column;gap:11px}
+ .copy h1{font-size:clamp(21px,4vw,32px)}
+ .copy p{font-size:13px;line-height:1.6;color:var(--ice);opacity:.8}
+ .pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+ .pill{display:inline-flex;align-items:center;gap:5px}
+ .pill small{font-family:var(--mono);opacity:.6;font-size:9px;letter-spacing:.1em}
+ .go{align-self:flex-start;margin-top:4px}
+</style></head>
+<body class="demo"><div class="demo-name">f · split-feature-with-pills</div>
+<div class="stage">
+  <div class="filler cover rv" data-d="0"><span class="tag">SUBJECT</span></div>
+  <div class="copy">
+    <div class="eyebrow rv" data-d="1">FLAGSHIP TURF</div>
+    <h1 class="glow rv" data-d="2">Fairway 40 — the pro's lawn.</h1>
+    <p class="rv" data-d="3">A soft, deep-pile blend engineered for foot traffic, pets and full sun. Installed in a day, guaranteed for the decade.</p>
+    <div class="pills rv" data-d="4">
+      <span class="chip pill"><small>PILE</small> 40mm</span>
+      <span class="chip pill"><small>FROM</small> $4.20/ft²</span>
+      <span class="chip pill"><small>WARRANTY</small> 12 yr</span>
+    </div>
+    <button class="btn go rv" data-d="5">Get a sample →</button>
+  </div>
+</div>
+<script>
+const els=[...document.querySelectorAll('.rv')];
+function run(){els.forEach(e=>e.classList.remove('in'));els.forEach((e,i)=>setTimeout(()=>e.classList.add('in'),200+i*180));}
+run();setInterval(run,5000);
+</script></body></html>

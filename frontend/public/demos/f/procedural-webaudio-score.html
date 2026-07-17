@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>procedural-webaudio-score</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px;padding:20px}
+ .top{display:flex;justify-content:space-between;align-items:center}
+ .viz{height:110px;display:flex;align-items:flex-end;gap:3px;padding:0 4px}
+ .bar{flex:1;background:linear-gradient(to top,var(--teal),var(--cyan));border-radius:3px 3px 0 0;height:10%;box-shadow:0 0 8px rgba(47,224,255,.4)}
+ .danger{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ice)}
+ .meter{flex:1;height:6px;border-radius:3px;background:var(--glass2);overflow:hidden;position:relative}
+ .meter i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--cyan),#ff7a4a);width:0%;transition:width .3s}
+ .mrow{overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+ .track{display:flex;gap:14px;width:max-content;animation:m 16s linear infinite}
+ @keyframes m{to{transform:translateX(-50%)}}
+ .ev{font-family:var(--mono);font-size:11px;color:var(--ice2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:var(--glass);white-space:nowrap}
+ .btn{align-self:flex-start}
+</style></head>
+<body class="demo"><div class="demo-name">f · procedural-webaudio-score</div>
+<div class="stage frost">
+ <div class="top"><div class="eyebrow">WEBAUDIO · NO ASSETS</div><span class="chip" id="state">◇ synth idle</span></div>
+ <div class="viz" id="viz"></div>
+ <div class="danger"><span>DANGER</span><div class="meter"><i id="mfill"></i></div><span id="dval">0%</span></div>
+ <div class="mrow"><div class="track" id="track"></div></div>
+ <button class="btn" id="play">▶ Enable score</button>
+</div>
+<script>
+const viz=document.getElementById('viz');const bars=[];for(let i=0;i<28;i++){const b=document.createElement('div');b.className='bar';viz.appendChild(b);bars.push(b);}
+const events=['click ▸ tick','chime ▸ C5','whoosh ▸ down','lo-fi bed ▸ loop','detune +12c','filter ▸ 800Hz','riser ▸ swell'];
+const track=document.getElementById('track');[...events,...events,...events].forEach(e=>{const s=document.createElement('span');s.className='ev';s.textContent=e;track.appendChild(s);});
+const mfill=document.getElementById('mfill'),dval=document.getElementById('dval'),stateEl=document.getElementById('state');
+let t=0,danger=0,dir=1;
+function loop(){t+=0.05;danger+=dir*0.006;if(danger>1){danger=1;dir=-1;}if(danger<0){danger=0;dir=1;}
+ mfill.style.width=(danger*100).toFixed(0)+'%';dval.textContent=(danger*100).toFixed(0)+'%';
+ bars.forEach((b,i)=>{const v=(Math.sin(t+i*0.5)*0.5+0.5)*(0.35+danger*0.6)+Math.random()*0.1*danger;b.style.height=(8+v*90)+'%';});
+ requestAnimationFrame(loop);}
+loop();
+// real synthesized audio (gesture-gated per browser autoplay policy)
+let ac,bed;document.getElementById('play').onclick=function(){
+ if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();
+  // looping lo-fi bed whose filter follows danger
+  bed=ac.createOscillator();const g=ac.createGain(),f=ac.createBiquadFilter();
+  bed.type='sawtooth';bed.frequency.value=110;f.type='lowpass';f.frequency.value=500;g.gain.value=0.04;
+  bed.connect(f);f.connect(g);g.connect(ac.destination);bed.start();
+  setInterval(()=>{if(ac)f.frequency.value=400+danger*2600,bed.detune.value=danger*40;},200);
+  stateEl.textContent='◇ score live';this.textContent='● playing';
+  // schedule chimes
+  setInterval(()=>{const o=ac.createOscillator(),gg=ac.createGain();o.type='sine';
+   o.frequency.value=[523,659,784][Math.floor(Math.random()*3)];gg.gain.value=0.0001;
+   o.connect(gg);gg.connect(ac.destination);const n=ac.currentTime;
+   gg.gain.exponentialRampToValueAtTime(0.06,n+0.02);gg.gain.exponentialRampToValueAtTime(0.0001,n+0.5);
+   o.start(n);o.stop(n+0.5);},1400);
+ }else{ac.resume();}
+};
+</script></body></html>

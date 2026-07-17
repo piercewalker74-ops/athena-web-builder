@@ -1,0 +1,473 @@
+{
+"templates": [
+{
+"id": "template.local_services",
+"name": "Local Services / Lead Gen",
+"industries": [
+"local_services",
+"construction",
+"landscaping",
+"restaurants",
+"fitness",
+"legal",
+"real_estate",
+"healthcare"
+],
+"cat": "local-service",
+"sections": [
+"nav.sticky_bar",
+"hero.split",
+"proof.logo_bar",
+"features.alternating_rows",
+"features.comparison_slider",
+"media.gallery_grid",
+"proof.testimonial_grid",
+"stats.metric_band",
+"faq.accordion",
+"form.lead_capture",
+"cta.final_screen",
+"footer.mega",
+"cta.sticky_bar"
+]
+},
+{
+"id": "template.saas",
+"name": "SaaS / Dev Tool",
+"industries": [
+"saas",
+"devtools",
+"ai",
+"b2b"
+],
+"cat": "professional",
+"sections": [
+"nav.sticky_bar",
+"nav.command_palette",
+"hero.split",
+"proof.logo_bar",
+"features.bento_grid",
+"features.sticky_scrollytelling",
+"media.video_showcase",
+"stats.metric_band",
+"proof.testimonial_grid",
+"pricing.tiered_cards",
+"faq.accordion",
+"cta.final_screen",
+"footer.mega"
+]
+},
+{
+"id": "template.agency_portfolio",
+"name": "Agency / Portfolio",
+"industries": [
+"agency",
+"portfolio",
+"personal_brand",
+"photography",
+"architecture"
+],
+"cat": "professional",
+"sections": [
+"utility.preloader",
+"utility.custom_cursor",
+"nav.sticky_bar",
+"hero.minimal_type",
+"utility.marquee_strip",
+"media.gallery_grid",
+"proof.results_cards",
+"features.alternating_rows",
+"proof.testimonial_grid",
+"footer.statement"
+]
+},
+{
+"id": "template.ecommerce",
+"name": "E-commerce",
+"industries": [
+"ecommerce",
+"retail",
+"fashion",
+"cosmetics"
+],
+"cat": "product",
+"sections": [
+"nav.sticky_bar",
+"nav.mega_menu",
+"hero.floating_product",
+"proof.logo_bar",
+"media.gallery_grid",
+"features.bento_grid",
+"features.spec_table",
+"proof.testimonial_grid",
+"faq.accordion",
+"cta.banner",
+"footer.mega",
+"cta.sticky_bar"
+]
+},
+{
+"id": "template.luxury",
+"name": "Luxury / Automotive / Fashion",
+"industries": [
+"luxury",
+"fashion",
+"automotive",
+"hospitality",
+"jewelry"
+],
+"cat": "product",
+"sections": [
+"utility.preloader",
+"nav.sticky_bar",
+"hero.cinematic_scroll",
+"media.video_showcase",
+"features.alternating_rows",
+"hero.floating_product",
+"media.gallery_grid",
+"cta.final_screen",
+"footer.statement"
+]
+},
+{
+"id": "template.science_space",
+"name": "Space / Science / Biotech / Defense",
+"industries": [
+"space",
+"biotech",
+"defense",
+"scientific_research",
+"medical_devices"
+],
+"cat": "professional",
+"sections": [
+"nav.sticky_bar",
+"hero.cinematic_scroll",
+"stats.metric_band",
+"features.sticky_scrollytelling",
+"features.hotspots",
+"stats.timeline",
+"features.spec_table",
+"proof.logo_bar",
+"cta.final_screen",
+"footer.mega"
+]
+},
+{
+"id": "template.trust_sector",
+"name": "Cybersecurity / Finance / Healthcare",
+"industries": [
+"cybersecurity",
+"finance",
+"fintech",
+"healthcare",
+"insurance",
+"legal"
+],
+"cat": "professional",
+"sections": [
+"nav.sticky_bar",
+"hero.split",
+"proof.logo_bar",
+"features.alternating_rows",
+"features.spec_table",
+"stats.metric_band",
+"proof.results_cards",
+"proof.testimonial_grid",
+"faq.accordion",
+"form.lead_capture",
+"cta.final_screen",
+"footer.mega"
+]
+}
+],
+"sectionMeta": {
+"nav.sticky_bar": {
+"name": "Sticky Nav Bar",
+"purpose": "Persistent wayfinding and an always-reachable CTA.",
+"arch": "NAV",
+"kind": "global",
+"priority": "essential",
+"sig": false
+},
+"nav.mega_menu": {
+"name": "Mega Menu",
+"purpose": "Exposes deep information architecture without deep clicking. Merchandising surface.",
+"arch": "NAV",
+"kind": "global",
+"priority": "recommended",
+"sig": false
+},
+"nav.command_palette": {
+"name": "Command Palette (Cmd+K)",
+"purpose": "Keyboard-summoned search and actions. Signals 'built for pros'.",
+"arch": "OV",
+"kind": "overlay",
+"priority": "advanced",
+"sig": false
+},
+"hero.centered": {
+"name": "Centered Hero",
+"purpose": "Zero-ambiguity value statement. Eye lands center, reads top to bottom.",
+"arch": "A",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"hero.split": {
+"name": "Split Hero",
+"purpose": "Show and tell. Copy beside a visual proof point or an inline form.",
+"arch": "A",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"hero.video_background": {
+"name": "Video Background Hero",
+"purpose": "Motion captures attention pre-cognitively. Conveys atmosphere and energy instantly.",
+"arch": "A",
+"kind": "block",
+"priority": "recommended",
+"sig": false
+},
+"hero.floating_product": {
+"name": "Floating Product Hero",
+"purpose": "Hero-worships the product. The float implies lightness; the shadow implies dimension.",
+"arch": "A",
+"kind": "block",
+"priority": "recommended",
+"sig": true
+},
+"hero.minimal_type": {
+"name": "Minimal Typographic Hero",
+"purpose": "Confidence signal. Nothing to hide behind. Loads instantly.",
+"arch": "A",
+"kind": "block",
+"priority": "recommended",
+"sig": false
+},
+"hero.cinematic_scroll": {
+"name": "Cinematic Scroll Hero",
+"purpose": "The hero is the first beat of a scroll-driven story. Enormous perceived production value.",
+"arch": "A",
+"kind": "wrapper",
+"priority": "advanced",
+"sig": true
+},
+"hero.webgl": {
+"name": "3D / WebGL Hero",
+"purpose": "Peak spectacle. Signals technical sophistication. Interactive equals memorable.",
+"arch": "A",
+"kind": "block",
+"priority": "experimental",
+"sig": true
+},
+"proof.logo_bar": {
+"name": "Logo / Trust Bar",
+"purpose": "Borrowed credibility. Recognizable logos short-circuit skepticism in under a second.",
+"arch": "C",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"proof.testimonial_grid": {
+"name": "Testimonial Grid / Wall",
+"purpose": "Scannable, honest proof at volume. Nothing hidden behind a carousel arrow.",
+"arch": "H",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"proof.results_cards": {
+"name": "Case Study / Results Cards",
+"purpose": "Numbers convert. '3x booked jobs' beats 'great to work with' every time.",
+"arch": "L",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"proof.video_testimonials": {
+"name": "Video Testimonials",
+"purpose": "Face plus voice plus specifics. The hardest form of proof to fake, and the most persuasive.",
+"arch": "H",
+"kind": "block",
+"priority": "recommended",
+"sig": false
+},
+"features.bento_grid": {
+"name": "Bento Feature Grid",
+"purpose": "Packs many features with visual rhythm. Cell size weights importance.",
+"arch": "D",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"features.alternating_rows": {
+"name": "Alternating Feature Rows",
+"purpose": "Zig-zag pacing. Each feature gets room to breathe and be understood.",
+"arch": "B",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"features.sticky_scrollytelling": {
+"name": "Sticky Feature Scrollytelling",
+"purpose": "Text steps scroll while a pinned visual updates to match. Ties explanation tightly to demonstration.",
+"arch": "E",
+"kind": "wrapper",
+"priority": "advanced",
+"sig": true
+},
+"features.comparison_slider": {
+"name": "Before / After Slider",
+"purpose": "Instantly legible proof of transformation. Tactile and unarguable.",
+"arch": "F",
+"kind": "block",
+"priority": "recommended",
+"sig": true
+},
+"features.hotspots": {
+"name": "Interactive Hotspots",
+"purpose": "Tappable points on a product reveal detail. Rewards curiosity, explains spatially.",
+"arch": "D",
+"kind": "block",
+"priority": "advanced",
+"sig": true
+},
+"features.spec_table": {
+"name": "Specifications / Comparison Table",
+"purpose": "Hard data for the evaluating buyer. The rational close.",
+"arch": "I",
+"kind": "block",
+"priority": "recommended",
+"sig": false
+},
+"media.gallery_grid": {
+"name": "Project / Work Gallery",
+"purpose": "Show the actual work. For most service businesses this is the strongest proof they own.",
+"arch": "D",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"media.video_showcase": {
+"name": "Video Showcase",
+"purpose": "A produced film or product demo, presented deliberately rather than dumped in an embed.",
+"arch": "D",
+"kind": "block",
+"priority": "recommended",
+"sig": false
+},
+"stats.metric_band": {
+"name": "Stat Band",
+"purpose": "Concentrated credibility in one row. Cheap, fast, high-trust.",
+"arch": "G",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"stats.timeline": {
+"name": "Timeline",
+"purpose": "Milestones along a drawn line. Story, roadmap, or process.",
+"arch": "G",
+"kind": "block",
+"priority": "recommended",
+"sig": false
+},
+"pricing.tiered_cards": {
+"name": "Tiered Pricing Cards",
+"purpose": "Anchoring plus the compromise effect. Three options make the middle feel safe.",
+"arch": "L",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"pricing.calculator": {
+"name": "Pricing / ROI Calculator",
+"purpose": "The user talks themselves into the number. Reframes price as investment.",
+"arch": "K",
+"kind": "block",
+"priority": "advanced",
+"sig": false
+},
+"faq.accordion": {
+"name": "FAQ Accordion",
+"purpose": "Objection handling at the point of decision. Each question is a sales objection you neutralize.",
+"arch": "I",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"form.lead_capture": {
+"name": "Lead Capture Form",
+"purpose": "The conversion. Every field is friction; ask for the least that lets you follow up.",
+"arch": "K",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"cta.banner": {
+"name": "CTA Banner",
+"purpose": "Re-offers the action after you have made part of the case. Contrast makes it unmissable.",
+"arch": "K",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"cta.final_screen": {
+"name": "Final Full-Screen CTA",
+"purpose": "Last impression. The user who scrolled this far is warm — give them the clean shot. Peak-end rule.",
+"arch": "K",
+"kind": "block",
+"priority": "essential",
+"sig": false
+},
+"cta.sticky_bar": {
+"name": "Sticky Mobile CTA Bar",
+"purpose": "Always-available action. On mobile lead-gen this is frequently the single highest-converting element on the site.",
+"arch": "OV",
+"kind": "overlay",
+"priority": "essential",
+"sig": false
+},
+"footer.mega": {
+"name": "Mega Footer",
+"purpose": "Wayfinding, trust, SEO internal linking, and last-chance conversion. Not a dumping ground.",
+"arch": "FT",
+"kind": "global",
+"priority": "essential",
+"sig": false
+},
+"footer.statement": {
+"name": "Oversized Statement Footer",
+"purpose": "Ends on personality. The giant 'let's talk' email link is the agency signature.",
+"arch": "FT",
+"kind": "global",
+"priority": "recommended",
+"sig": false
+},
+"utility.marquee_strip": {
+"name": "Marquee Strip",
+"purpose": "A continuously scrolling band of text or logos. Cheap energy, conveys volume.",
+"arch": "C",
+"kind": "block",
+"priority": "recommended",
+"sig": false
+},
+"utility.preloader": {
+"name": "Preloader",
+"purpose": "Covers genuine heavy-asset load with a brand moment.",
+"arch": "OV",
+"kind": "overlay",
+"priority": "advanced",
+"sig": false
+},
+"utility.custom_cursor": {
+"name": "Custom Cursor",
+"purpose": "Branded pointer that reacts to interactive elements. Craft signal.",
+"arch": "OV",
+"kind": "overlay",
+"priority": "advanced",
+"sig": false
+}
+}
+}

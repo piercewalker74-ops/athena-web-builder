@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>alternating-image-text-rows</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px}
+ .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;
+   opacity:0;transform:translateY(26px);filter:blur(6px);transition:all .85s cubic-bezier(.2,.8,.2,1)}
+ .row.in{opacity:1;transform:none;filter:none}
+ .row.flip .txt{order:2}.row.flip .media{order:1}
+ .media{height:130px}.media .filler{height:100%}
+ .txt h2{font-size:18px}
+ .txt p{font-size:12px;color:var(--ice);opacity:.78;line-height:1.5;margin:6px 0 8px}
+ .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+ .call{font-family:var(--mono);font-size:11px;color:var(--cyan)}
+ @media(max-width:520px){.row,.row.flip .txt,.row.flip .media{grid-template-columns:1fr;order:0}}
+</style></head>
+<body class="demo"><div class="demo-name">f · alternating-image-text-rows</div>
+<div class="stage" id="stage"></div>
+<script>
+const ROWS=[
+ ['LANDSCAPE','Residential Turf',"Soft, pet-safe blades that stay green through drought bans and cut your water bill in half.",['ProTurf','Meadow','EverGreen'],'📞 (555) 240-7788'],
+ ['SPORT','Backyard Greens',"Tour-grade putting rolls with true ball speed — practice your short game at home.",['TourRoll','GreenSpeed'],'📞 (555) 240-7799'],
+ ['COMMERCIAL','Storefront & Medians',"Low-maintenance curb appeal for offices, hotels and retail frontage, installed overnight.",['Commercial','Poolside'],'📞 (555) 240-7710']];
+const stage=document.getElementById('stage');
+stage.innerHTML=ROWS.map((r,i)=>`<div class="row ${i%2?'flip':''}">
+  <div class="txt"><div class="eyebrow">${r[0]}</div><h2 class="glow">${r[1]}</h2><p>${r[2]}</p>
+   <div class="chips">${r[3].map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+   <div class="call">${r[4]}</div></div>
+  <div class="media"><div class="filler"><span class="tag">${i===2?'PHOTOS SOON':'IMG'}</span></div></div>
+ </div>`).join('');
+const rows=[...stage.children];
+function run(){rows.forEach(r=>r.classList.remove('in'));rows.forEach((r,i)=>setTimeout(()=>r.classList.add('in'),200+i*260));}
+run();setInterval(run,5000);
+</script></body></html>

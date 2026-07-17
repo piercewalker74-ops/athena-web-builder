@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>multi-step-assessment-quiz</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px}
+ .rail{display:flex;align-items:center;gap:6px}
+ .rail .num{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:var(--ice);transition:all .4s;flex:0 0 auto}
+ .rail .num.on{background:var(--cyan);color:#04121e;border-color:var(--cyan);box-shadow:var(--glow)}
+ .rail .num.done{border-color:var(--cyan);color:var(--cyan)}
+ .rail .seg{flex:1;height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+ .rail .seg i{display:block;height:100%;width:0;background:var(--cyan);transition:width .5s}
+ .q{min-height:120px}
+ .q h2{font-size:19px;margin-bottom:14px}
+ .chips{display:flex;flex-wrap:wrap;gap:8px}
+ .opt{cursor:pointer;font-family:var(--mono);font-size:12px;padding:9px 15px;border-radius:999px;border:1px solid var(--line2);color:var(--ice2);background:var(--glass);transition:all .2s}
+ .opt.sel{background:linear-gradient(120deg,var(--cyan),var(--ice));color:#04121e;border-color:transparent;box-shadow:var(--glow)}
+ .slide{margin-top:6px}.slide .rd{font-family:var(--mono);color:var(--cyan);font-size:14px;margin-bottom:8px}
+ input[type=range]{width:100%;-webkit-appearance:none;height:6px;border-radius:999px;background:var(--line)}
+ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--cyan);box-shadow:var(--glow);cursor:pointer}
+ .foot{display:flex;justify-content:space-between;align-items:center}
+ .err{font-size:11px;color:#ff7a92;font-family:var(--mono)}
+ .done-box{text-align:center;padding:14px 0}.done-box .ck{width:56px;height:56px;border-radius:50%;background:var(--cyan);color:#04121e;display:grid;place-items:center;font-size:28px;margin:0 auto 12px;box-shadow:var(--glow)}
+</style></head>
+<body class="demo"><div class="demo-name">f · multi-step-assessment-quiz</div>
+<div class="stage frost" style="padding:20px">
+  <div class="eyebrow">HEALTH ASSESSMENT</div>
+  <div class="rail" id="rail"></div>
+  <div class="q" id="q"></div>
+  <div class="foot"><span class="err" id="err"></span><button class="btn" id="next">Continue</button></div>
+</div>
+<script>
+const Q=[
+ {t:'What is your primary goal?',type:'chip',o:['Better sleep','More energy','Lower stress','Longevity']},
+ {t:'How active are you weekly?',type:'chip',o:['Sedentary','1–2 days','3–4 days','5+ days']},
+ {t:'Average nightly sleep?',type:'slide',min:3,max:10,def:6,unit:'hrs'}];
+const rail=document.getElementById('rail'),q=document.getElementById('q'),err=document.getElementById('err'),next=document.getElementById('next');
+let step=0;const ans={};
+function drawRail(){rail.innerHTML='';for(let i=0;i<Q.length;i++){const n=document.createElement('div');n.className='num'+(i<step?' done':i===step?' on':'');n.textContent=i<step?'✓':i+1;rail.appendChild(n);
+ if(i<Q.length-1){const s=document.createElement('div');s.className='seg';s.innerHTML=`<i style="width:${i<step?100:0}%"></i>`;rail.appendChild(s);}}}
+function render(){err.textContent='';const cfg=Q[step];
+ if(step>=Q.length){q.innerHTML=`<div class="done-box"><div class="ck">✓</div><h2 class="glow">All set.</h2><p class="sub">Your personalized protocol is ready.</p></div>`;next.style.display='none';drawRail();return;}
+ next.textContent=step===Q.length-1?'See results':'Continue';
+ if(cfg.type==='chip'){q.innerHTML=`<h2 class="glow">${cfg.t}</h2><div class="chips">${cfg.o.map(o=>`<div class="opt${ans[step]===o?' sel':''}">${o}</div>`).join('')}</div>`;
+  q.querySelectorAll('.opt').forEach(el=>el.onclick=()=>{ans[step]=el.textContent;q.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');err.textContent='';});}
+ else{const v=ans[step]??cfg.def;q.innerHTML=`<h2 class="glow">${cfg.t}</h2><div class="slide"><div class="rd" id="rd">${v} ${cfg.unit}</div><input type="range" min="${cfg.min}" max="${cfg.max}" value="${v}" id="sl"></div>`;
+  const sl=q.querySelector('#sl'),rd=q.querySelector('#rd');ans[step]=+sl.value;sl.oninput=()=>{ans[step]=+sl.value;rd.textContent=sl.value+' '+cfg.unit;};}
+ drawRail();}
+let paused=false;
+next.onclick=()=>{paused=true;if(step<Q.length&&Q[step].type==='chip'&&!ans[step]){err.textContent='Pick one to continue.';return;}step++;render();};
+q.addEventListener('click',()=>paused=true);
+render();
+// auto-demo loop until the visitor takes over
+setInterval(()=>{if(paused)return;const cfg=Q[step];
+ if(step>=Q.length){step=0;Object.keys(ans).forEach(k=>delete ans[k]);render();return;}
+ if(cfg&&cfg.type==='chip'&&!ans[step]){const o=cfg.o[Math.floor(Math.random()*cfg.o.length)];ans[step]=o;
+  const el=[...q.querySelectorAll('.opt')].find(x=>x.textContent===o);if(el){q.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}return;}
+ step++;render();},1300);
+</script></body></html>

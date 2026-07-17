@@ -1,0 +1,20 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>magnetic</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:26px;align-items:center;text-align:center}
+ .wrap{padding:60px}
+ .mag{transition:transform .18s ease-out}
+ .hint{font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.5;letter-spacing:.16em}
+</style></head>
+<body class="demo"><div class="demo-name">m · magnetic</div>
+<div class="stage">
+  <div class="eyebrow">MAGNETIC BUTTON</div>
+  <div class="wrap"><button class="btn mag" id="b">Book a slot →</button></div>
+  <div class="hint">the button leans toward your cursor</div>
+</div>
+<script>
+const b=document.getElementById('b');const R=90;
+document.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;
+ const dx=e.clientX-cx,dy=e.clientY-cy,d=Math.hypot(dx,dy);
+ if(d<R+80){b.style.transform=`translate(${dx*.35}px,${dy*.35}px) scale(1.05)`;}else{b.style.transform='';}});
+</script></body></html>

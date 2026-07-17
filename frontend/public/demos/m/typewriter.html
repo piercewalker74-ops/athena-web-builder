@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>typewriter</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{text-align:center}
+ .big{font-size:clamp(26px,5vw,44px)}
+ .cur{display:inline-block;width:3px;height:1em;background:var(--cyan);margin-left:4px;vertical-align:-2px;animation:bl .7s step-end infinite;box-shadow:var(--glow)}
+ @keyframes bl{50%{opacity:0}}
+ .swap{color:var(--cyan)}
+</style></head>
+<body class="demo"><div class="demo-name">m · typewriter</div>
+<div class="stage">
+  <div class="eyebrow">TYPEWRITER</div>
+  <h1 class="big glow">We install <span class="swap" id="w"></span><span class="cur"></span></h1>
+</div>
+<script>
+const words=['ceramic tint.','paint protection.','windshield strips.','tesla packages.'];const el=document.getElementById('w');
+let wi=0,ci=0,del=false;
+function tick(){const w=words[wi];if(!del){el.textContent=w.slice(0,++ci);if(ci===w.length){del=true;return setTimeout(tick,1100);}}
+ else{el.textContent=w.slice(0,--ci);if(ci===0){del=false;wi=(wi+1)%words.length;}}
+ setTimeout(tick,del?45:90);}
+tick();
+</script></body></html>

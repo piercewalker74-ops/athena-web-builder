@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>cursor.blend</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:330px;border-radius:18px;overflow:hidden;position:relative;cursor:none;background:#e9f6ff}
+ .bands{position:absolute;inset:0;display:flex}
+ .bands i{flex:1}
+ .bands i:nth-child(odd){background:#04121e}
+ .bands i:nth-child(even){background:#eaf6ff}
+ .copy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;pointer-events:none}
+ .copy .big{font-size:clamp(30px,8vw,66px);font-weight:750;color:#7ad9ff;letter-spacing:-.02em;mix-blend-mode:normal}
+ .copy .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:#39d3c9}
+ .blob{position:absolute;width:120px;height:120px;border-radius:50%;background:#fff;
+   mix-blend-mode:difference;pointer-events:none;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+ .hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9px;color:#39d3c9;letter-spacing:.14em;mix-blend-mode:difference}
+</style></head>
+<body class="demo"><div class="demo-name">f · cursor.blend</div>
+<div class="stage" id="st">
+  <div class="bands"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="copy"><div class="lbl">BLEND-MODE CURSOR</div><div class="big glow">INVERT</div></div>
+  <div class="blob" id="blob"></div>
+  <div class="hint">the cursor inverts whatever sits beneath it</div>
+</div>
+<script>
+const st=document.getElementById('st'),blob=document.getElementById('blob');
+let x=180,y=165,tx=180,ty=165,real=false,idle=0;
+st.addEventListener('mousemove',e=>{const r=st.getBoundingClientRect();tx=e.clientX-r.left;ty=e.clientY-r.top;real=true;idle=0;});
+st.addEventListener('mouseenter',()=>blob.style.width=blob.style.height='120px');
+function loop(t){
+  idle++;
+  if(!real||idle>90){ // drift on its own
+    const w=st.clientWidth,h=st.clientHeight;
+    tx=w*(.5+.34*Math.sin(t/1400));ty=h*(.5+.3*Math.cos(t/1000));
+  }
+  x+=(tx-x)*.12;y+=(ty-y)*.12;
+  blob.style.left=x+'px';blob.style.top=y+'px';
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script></body></html>

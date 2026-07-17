@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>themed-reviews-on-photo</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{border-radius:16px;overflow:hidden;position:relative}
+ .bg{position:absolute;inset:0;border-radius:0}
+ .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,18,30,.72),rgba(4,18,30,.9))}
+ .inner{position:relative;padding:22px 18px}
+ .head{text-align:center;margin-bottom:16px}
+ .score{font-size:clamp(30px,6vw,48px);font-weight:700;line-height:1}
+ .stars{color:var(--cyan);font-size:16px;letter-spacing:3px;margin:6px 0;text-shadow:var(--glow)}
+ .count{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ice);opacity:.75}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+ .rv{padding:13px;border-radius:11px;opacity:0;transform:translateY(20px);transition:all .7s cubic-bezier(.2,.8,.2,1)}
+ .rv.in{opacity:1;transform:none}
+ .rv .s{color:var(--cyan);font-size:11px;letter-spacing:2px}
+ .rv b{display:block;font-size:13px;margin:6px 0 4px}
+ .rv p{font-size:11px;color:var(--ice);opacity:.75;line-height:1.5}
+</style></head>
+<body class="demo"><div class="demo-name">f · themed-reviews-on-photo</div>
+<div class="stage frost">
+  <div class="filler bg eel"></div><div class="scrim"></div>
+  <div class="inner">
+    <div class="head">
+      <div class="score glow" id="sc">4.9</div>
+      <div class="stars">★★★★★</div>
+      <div class="count">FROM 412 VERIFIED INSTALLS</div>
+    </div>
+    <div class="grid" id="g"></div>
+  </div>
+</div>
+<script>
+const themes=[
+ {t:'Clean install',d:'Crews arrived on time and left the yard spotless.'},
+ {t:'Looks real',d:'Neighbors keep asking who mows it. Nobody does.'},
+ {t:'Holds up',d:'Three summers in, still lush and no fading.'}];
+const g=document.getElementById('g');
+themes.forEach(x=>{const c=document.createElement('div');c.className='rv frost';
+ c.innerHTML=`<div class="s">★★★★★</div><b>${x.t}</b><p>${x.d}</p>`;g.appendChild(c);});
+const cards=[...g.children];
+function run(){cards.forEach(c=>c.classList.remove('in'));cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),200+i*200));}
+run();setInterval(run,4600);
+</script></body></html>

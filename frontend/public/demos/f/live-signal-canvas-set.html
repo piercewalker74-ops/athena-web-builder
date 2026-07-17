@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>live-signal-canvas-set</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+ .sig{position:relative;height:96px;border-radius:12px;overflow:hidden}
+ .sig canvas{position:absolute;inset:0;width:100%;height:100%}
+ .sig .lbl{position:absolute;left:9px;bottom:7px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--frost);z-index:1;text-transform:uppercase}
+ @media(max-width:460px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style></head>
+<body class="demo"><div class="demo-name">f · live-signal-canvas-set</div>
+<div class="stage frost" style="padding:18px">
+  <div class="eyebrow">DOMAIN LIVE-SIGNAL SET</div>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const SIGS=[
+ ['ECG','#ff5b7a','ecg'],['Glucose','#39d3c9','glucose'],['Molecules','#8fe6ff','mol'],
+ ['Sleep','#a98bff','sleep'],['Neurons','#2fe0ff','neuron'],['VO₂ Max','#5bff9d','ring']];
+const grid=document.getElementById('grid');const cards=[];
+SIGS.forEach(([name,accent,kind])=>{
+ const d=document.createElement('div');d.className='sig';
+ d.innerHTML=`<canvas></canvas><span class="lbl" style="color:${accent}">${name}</span>`;
+ grid.appendChild(d);const cv=d.querySelector('canvas'),ctx=cv.getContext('2d');
+ cards.push({ctx,cv,accent,kind,nodes:[]});});
+const dpr=Math.min(devicePixelRatio||1,2);
+function size(){cards.forEach(c=>{c.W=c.cv.clientWidth;c.H=c.cv.clientHeight;c.cv.width=c.W*dpr;c.cv.height=c.H*dpr;c.ctx.setTransform(dpr,0,0,dpr,0,0);
+ if(c.kind==='mol'||c.kind==='neuron'){c.nodes=Array.from({length:c.kind==='mol'?5:7},()=>({x:Math.random()*c.W,y:Math.random()*c.H,a:Math.random()*6}));}});}
+let t=0;
+function draw(){t+=0.03;cards.forEach(c=>{const {ctx,W,H,accent,kind}=c;ctx.clearRect(0,0,W,H);ctx.lineWidth=2;ctx.strokeStyle=accent;ctx.fillStyle=accent;
+ if(kind==='ecg'){ctx.beginPath();const sw=(t*60)%W;for(let x=0;x<W;x++){const p=((x-sw+W)%W)/W;let y=H/2;const s=Math.abs(p-.5);if(s<.02)y-=(( .02-s)/.02)*H*.42;else if(s<.05)y+=(( .05-s)/.05)*H*.12;ctx.globalAlpha=1-Math.abs(x-sw)/W*.7;x?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();ctx.globalAlpha=1;}
+ else if(kind==='glucose'){ctx.beginPath();for(let x=0;x<W;x++){const y=H/2+Math.sin(x*.04+t)*H*.22+Math.sin(x*.11+t*1.7)*H*.08;x?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();}
+ else if(kind==='ring'){const cx=W/2,cy=H/2,r=Math.min(W,H)*.32,pct=.5+Math.sin(t*.6)*.35;ctx.lineWidth=6;ctx.strokeStyle='rgba(255,255,255,.08)';ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.stroke();ctx.strokeStyle=accent;ctx.beginPath();ctx.arc(cx,cy,r,-1.57,-1.57+pct*6.28);ctx.stroke();}
+ else if(kind==='sleep'){ctx.beginPath();for(let x=0;x<W;x++){const br=Math.sin(x*.02+t*.5);const y=H/2+Math.sign(br)*Math.pow(Math.abs(br),.6)*H*.28;x?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();}
+ else{c.nodes.forEach(n=>{n.a+=.02;n.x+=Math.cos(n.a)*.3;n.y+=Math.sin(n.a)*.3;if(n.x<0||n.x>W)n.a=Math.PI-n.a;if(n.y<0||n.y>H)n.a=-n.a;});
+  ctx.globalAlpha=.4;for(let i=0;i<c.nodes.length;i++)for(let j=i+1;j<c.nodes.length;j++){const a=c.nodes[i],b=c.nodes[j];if(Math.hypot(a.x-b.x,a.y-b.y)<W*.6){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}
+  ctx.globalAlpha=1;c.nodes.forEach((n,i)=>{const pulse=kind==='neuron'?(.5+.5*Math.sin(t*3+i)):1;ctx.beginPath();ctx.arc(n.x,n.y,2+pulse*2,0,7);ctx.fill();});}
+});requestAnimationFrame(draw);}
+size();addEventListener('resize',size);draw();
+</script></body></html>

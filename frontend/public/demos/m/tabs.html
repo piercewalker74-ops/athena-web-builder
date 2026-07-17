@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>tabs</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px}
+ .bar{display:flex;gap:6px;position:relative}
+ .tab{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ice);opacity:.6;padding:9px 16px;border-radius:999px;cursor:pointer;position:relative;z-index:1;transition:opacity .2s,color .2s}
+ .tab.on{opacity:1;color:#04121e}
+ .pill{position:absolute;top:0;height:100%;border-radius:999px;background:linear-gradient(120deg,var(--cyan),var(--ice));transition:all .35s cubic-bezier(.3,.8,.3,1);z-index:0;box-shadow:var(--glow)}
+ .panel{display:flex;gap:16px;align-items:center}
+ .panel .filler{width:180px;height:130px;flex:0 0 auto}
+ .panel h2{font-size:20px}.panel p{font-size:12px;color:var(--ice);opacity:.75;margin-top:6px;line-height:1.5}
+ .fade{animation:fi .4s}@keyframes fi{from{opacity:0;transform:translateY(8px)}}
+</style></head>
+<body class="demo"><div class="demo-name">m · tabs</div>
+<div class="stage frost" style="padding:20px">
+  <div class="bar" id="bar"><div class="pill" id="pill"></div></div>
+  <div class="panel" id="panel"></div>
+</div>
+<script>
+const T=[['Tint','Ceramic film that blocks 99% UV and cuts cabin heat without radio interference.'],
+ ['PPF','Self-healing urethane that shields paint from rock chips and swirl marks.'],
+ ['Detail','Multi-stage correction and coating for a mirror finish that lasts years.']];
+const bar=document.getElementById('bar'),pill=document.getElementById('pill'),panel=document.getElementById('panel');let cur=0;
+T.forEach((t,i)=>{const b=document.createElement('div');b.className='tab';b.textContent=t[0];b.onclick=()=>sel(i);bar.appendChild(b);});
+const tabs=[...bar.querySelectorAll('.tab')];
+function sel(i){cur=i;tabs.forEach((t,j)=>t.classList.toggle('on',j===i));const r=tabs[i];pill.style.left=r.offsetLeft+'px';pill.style.width=r.offsetWidth+'px';
+ panel.innerHTML=`<div class="filler"><span class="tag">IMG</span></div><div><h2 class="glow">${T[i][0]}</h2><p>${T[i][1]}</p></div>`;
+ panel.firstChild.parentElement.classList.remove('fade');void panel.offsetWidth;panel.classList.add('fade');}
+sel(0);setInterval(()=>sel((cur+1)%T.length),2600);
+</script></body></html>

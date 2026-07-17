@@ -1,0 +1,57 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>backing-cross-section-cards</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{max-width:440px}
+ .card{padding:16px 18px}
+ h2{font-size:17px}.eyebrow{margin-bottom:2px}
+ svg{width:100%;height:190px;margin:8px 0 4px;display:block}
+ .layer rect{transition:opacity .3s}
+ .layer.dim rect{opacity:.28}
+ .layer.dim text{opacity:.3}
+ .lt{fill:var(--frost);font-family:var(--mono);font-size:9px;letter-spacing:.05em}
+ .lv{fill:var(--ice2);font-family:var(--mono);font-size:8px;opacity:.7}
+ .legend{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+ .lg{display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--ice);opacity:.85}
+ .sw{width:12px;height:12px;border-radius:3px;flex:0 0 auto}
+ .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+ .drain{fill:var(--deep)}
+</style></head>
+<body class="demo"><div class="demo-name">f · backing-cross-section-cards</div>
+<div class="stage">
+ <div class="frost card">
+  <div class="eyebrow">CONSTRUCTION · CUTAWAY</div>
+  <h2 class="glow">Emerald Ridge 2.0"</h2>
+  <svg viewBox="0 0 400 200" id="svg">
+   <defs><pattern id="perf" width="26" height="18" patternUnits="userSpaceOnUse"><circle class="drain" cx="13" cy="9" r="3"/></pattern></defs>
+   <!-- blades -->
+   <g class="layer" data-l="0"><g id="blades"></g>
+     <text class="lt" x="300" y="24">Blades · 42mm</text><text class="lv" x="300" y="36">PE / nylon mix</text></g>
+   <g class="layer" data-l="1"><rect x="20" y="96" width="360" height="16" fill="#2f8f6a"/><text class="lt" x="300" y="130">Thatch zone</text></g>
+   <g class="layer" data-l="2"><rect x="20" y="112" width="360" height="18" fill="#5a4632"/><text class="lt" x="140" y="126" text-anchor="middle" style="font-size:8px">Primary backing</text></g>
+   <g class="layer" data-l="3"><rect x="20" y="130" width="360" height="22" fill="#2b3a2a"/><rect x="20" y="130" width="360" height="22" fill="url(#perf)"/><text class="lt" x="140" y="145" text-anchor="middle" style="font-size:8px">Perf urethane coat</text></g>
+   <g class="layer" data-l="4"><rect x="20" y="152" width="360" height="14" fill="#1a2836"/><text class="lt" x="300" y="176">Drainage · 30 in/hr</text></g>
+  </svg>
+  <div class="legend" id="legend"></div>
+  <div class="chips">
+   <span class="chip">◇ found on: Backyards</span><span class="chip">◇ Pet runs</span><span class="chip">◇ Rooftops</span>
+  </div>
+ </div>
+</div>
+<script>
+const svg=document.getElementById('svg');
+// grass blades
+let bl='';for(let x=24;x<380;x+=9){const h=30+Math.random()*22,sw=(Math.random()-.5)*6,c=['#3fd18a','#2fae72','#57e0a0'][x%3];
+ bl+=`<path d="M${x} 96 Q${x+sw} ${96-h} ${x+sw*1.4} ${96-h}" stroke="${c}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;}
+document.getElementById('blades').innerHTML=bl;
+const layers=[...document.querySelectorAll('.layer')];
+const meta=[['Blades','#3fd18a'],['Thatch zone','#2f8f6a'],['Primary backing','#5a4632'],['Perf urethane','#2b3a2a'],['Drainage core','#1a2836']];
+const legend=document.getElementById('legend');
+meta.forEach((m,i)=>{const d=document.createElement('div');d.className='lg';
+ d.innerHTML=`<span class="sw" style="background:${m[1]}"></span>${m[0]}`;
+ d.onmouseenter=()=>focus(i);legend.appendChild(d);});
+function focus(i){layers.forEach((l,j)=>l.classList.toggle('dim',j!==i));}
+function clear(){layers.forEach(l=>l.classList.remove('dim'));}
+let cur=0;function cycle(){focus(cur);cur=(cur+1)%layers.length;}
+cycle();setInterval(cycle,1600);
+legend.addEventListener('mouseleave',clear);
+</script></body></html>

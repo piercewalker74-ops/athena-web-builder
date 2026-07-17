@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>volumetric-3d-hero-scene</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px;position:relative;border-radius:18px;overflow:hidden}
+ canvas{position:absolute;inset:0;width:100%;height:100%}
+ .cap{position:absolute;left:22px;bottom:20px;pointer-events:none}
+ .cap .big{font-size:clamp(24px,4.6vw,40px)}
+ .badge{position:absolute;right:14px;top:14px}
+</style></head>
+<body class="demo"><div class="demo-name">f · volumetric-3d-hero-scene</div>
+<div class="stage frost"><canvas id="c"></canvas>
+ <span class="chip badge">◇ ACES · bloom</span>
+ <div class="cap"><div class="eyebrow">VOLUMETRIC SCENE</div><h1 class="big glow">The helix,<br>rendered in glass.</h1></div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');let W,H,dpr=Math.min(devicePixelRatio||1,2),t=0;
+function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+size();addEventListener('resize',size);
+// GPGPU-style dust floating behind the helix
+const dust=[];for(let i=0;i<70;i++)dust.push({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.4,s:Math.random()*.2+.05});
+function loop(){t+=0.016;
+ ctx.clearRect(0,0,W,H);
+ // dust
+ for(const d of dust){d.y-=d.s*0.004;if(d.y<0)d.y=1;ctx.beginPath();ctx.arc(d.x*W*0.55+W*0.28,d.y*H,d.r,0,7);ctx.fillStyle='rgba(143,230,255,'+(.15+d.s)+')';ctx.fill();}
+ const cx=W*0.55,turns=3.2,N=120,amp=Math.min(W,H)*0.16;
+ for(let strand=0;strand<2;strand++){
+  ctx.beginPath();
+  for(let i=0;i<=N;i++){const u=i/N;const y=H*0.12+u*H*0.76;
+   const ph=u*turns*Math.PI*2+t+strand*Math.PI;
+   const x=cx+Math.sin(ph)*amp;const z=Math.cos(ph);
+   if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+  ctx.strokeStyle=strand?'rgba(57,211,201,.85)':'rgba(47,224,255,.9)';ctx.lineWidth=2.4;ctx.shadowBlur=16;ctx.shadowColor='rgba(47,224,255,.6)';ctx.stroke();ctx.shadowBlur=0;
+ }
+ // colored rungs with a Gaussian "radiation break" gap near middle
+ for(let i=4;i<N;i+=6){const u=i/N;const y=H*0.12+u*H*0.76;const ph=u*turns*Math.PI*2+t;
+  const gap=Math.exp(-Math.pow((u-0.5)*4.2,2));if(Math.random()<gap*0.9&&Math.abs(u-0.5)<0.14)continue;
+  const x1=cx+Math.sin(ph)*amp,x2=cx+Math.sin(ph+Math.PI)*amp,z=Math.cos(ph);
+  ctx.globalAlpha=.4+.5*(z*0.5+0.5);ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);
+  ctx.strokeStyle=i%12<6?'rgba(180,236,255,.9)':'rgba(47,224,255,.7)';ctx.lineWidth=2;ctx.stroke();
+  // phosphate nodes
+  ctx.beginPath();ctx.arc(x1,y,z>0?3.2:2,0,7);ctx.fillStyle='rgba(234,246,255,.9)';ctx.fill();ctx.globalAlpha=1;}
+ requestAnimationFrame(loop);}
+loop();
+</script></body></html>

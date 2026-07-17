@@ -1,0 +1,46 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>floating-cutout-parallax</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:320px;position:relative;overflow:hidden;border-radius:18px;display:flex;align-items:center;padding:0 34px}
+ .bg{position:absolute;inset:0;opacity:.5}
+ .bg .filler{width:100%;height:100%;border-radius:0}
+ .copy{position:relative;z-index:3;max-width:52%}
+ .copy h1{font-size:clamp(24px,5vw,40px)}
+ .cut{position:absolute;right:6%;top:50%;z-index:2;width:190px;height:190px;
+   filter:drop-shadow(0 30px 26px rgba(4,18,30,.7));will-change:transform}
+ .roll{position:relative;width:100%;height:100%}
+ .roll .disc{position:absolute;inset:0;border-radius:50%;
+   background:radial-gradient(circle at 42% 38%,#1a6b52,#0e4a38 55%,#0a3327);
+   border:1px solid rgba(120,220,255,.25);overflow:hidden}
+ .roll .disc:before{content:'';position:absolute;inset:0;
+   background:repeating-conic-gradient(from 0deg,rgba(57,211,201,.18) 0 3deg,transparent 3deg 7deg)}
+ .roll .core{position:absolute;top:34%;left:34%;width:32%;height:32%;border-radius:50%;
+   background:radial-gradient(circle,#08202f,#0a3327);border:1px solid rgba(120,220,255,.3)}
+ .shadow{position:absolute;right:6%;bottom:14%;width:170px;height:22px;z-index:1;border-radius:50%;
+   background:radial-gradient(ellipse,rgba(4,18,30,.6),transparent 70%);filter:blur(4px)}
+ .hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:9px;color:var(--ice);opacity:.5;letter-spacing:.14em}
+</style></head>
+<body class="demo"><div class="demo-name">f · floating-cutout-parallax</div>
+<div class="stage frost" id="st">
+  <div class="bg"><div class="filler"><span class="tag">SCENE</span></div></div>
+  <div class="shadow" id="sh"></div>
+  <div class="cut" id="cut"><div class="roll"><div class="disc"></div><div class="core"></div></div></div>
+  <div class="copy">
+    <div class="eyebrow">PREMIUM TURF ROLL</div>
+    <h1 class="glow">It floats.<br>You install.</h1>
+    <p class="sub" style="margin-top:8px">45oz face weight, drains anywhere.</p>
+  </div>
+  <div class="hint">scroll · the roll drifts free of the page</div>
+</div>
+<script>
+const cut=document.getElementById('cut'),sh=document.getElementById('sh');
+let t=0;
+function loop(){t+=0.016;
+  const y=Math.sin(t)*14, rot=Math.sin(t*.7)*5;
+  cut.style.transform=`translateY(calc(-50% + ${y}px)) rotate(${rot}deg)`;
+  sh.style.transform=`scale(${1-Math.sin(t)*.08})`;sh.style.opacity=.5-Math.sin(t)*.12;
+  requestAnimationFrame(loop);}
+loop();
+// react to scroll/pointer: nudge float offset
+addEventListener('mousemove',e=>{const off=(e.clientY/innerHeight-.5)*10;cut.style.marginTop=off+'px';});
+</script></body></html>

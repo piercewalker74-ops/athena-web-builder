@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>craft-story-columns</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:16px}
+ .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+ .col{opacity:0;transform:translateY(24px);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .col.in{opacity:1;transform:none}
+ .rule{height:2px;width:40px;background:linear-gradient(90deg,var(--cyan),transparent);border-radius:2px;margin-bottom:12px;box-shadow:var(--glow)}
+ .col h3{font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
+ .col p{font-size:12px;line-height:1.65;color:var(--ice);opacity:.78}
+ .maker{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--cyan);font-weight:600;
+   opacity:0;transform:translateY(18px);transition:all .8s cubic-bezier(.2,.8,.2,1)}
+ .maker.in{opacity:1;transform:none}
+</style></head>
+<body class="demo"><div class="demo-name">f · craft-story-columns</div>
+<div class="stage">
+  <div class="eyebrow">HOW IT'S MADE</div>
+  <div class="cols" id="c">
+    <div class="col"><div class="rule"></div><h3>Sourced</h3><p>We select monofilament yarn spun for UV-stable color that holds its tone through every season without fading.</p></div>
+    <div class="col"><div class="rule"></div><h3>Tufted</h3><p>Each blade is machine-tufted at precise gauge and stitch rate, then locked with a permeable latex backing.</p></div>
+    <div class="col"><div class="rule"></div><h3>Finished</h3><p>Rolls are inspected by hand, trimmed to spec and packed the same day the order is confirmed.</p></div>
+  </div>
+  <a class="maker" id="m">Meet the maker →</a>
+</div>
+<script>
+const cols=[...document.querySelectorAll('.col')],m=document.getElementById('m');
+function run(){
+ cols.forEach(c=>c.classList.remove('in'));m.classList.remove('in');
+ cols.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),200+i*260));
+ setTimeout(()=>m.classList.add('in'),200+cols.length*260);
+}
+run();setInterval(run,5200);
+</script></body></html>

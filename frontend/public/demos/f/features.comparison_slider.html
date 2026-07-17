@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>features.comparison_slider</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{display:flex;flex-direction:column;gap:12px;align-items:center}
+ .eyebrow{align-self:flex-start}
+ .ba{position:relative;width:100%;max-width:460px;height:260px;border-radius:16px;overflow:hidden;cursor:ew-resize;user-select:none}
+ .ba .filler{position:absolute;inset:0;border-radius:0}
+ .after{clip-path:inset(0 0 0 var(--x,50%))}
+ .after:before{background:radial-gradient(80% 120% at 60% 40%,rgba(47,224,255,.35),transparent 60%),linear-gradient(140deg,#0c3d54,#0e4a5f)}
+ .lbl{position:absolute;top:10px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--frost);background:rgba(4,18,30,.65);padding:4px 9px;border-radius:6px}
+ .l1{left:10px}.l2{right:10px}
+ .handle{position:absolute;top:0;bottom:0;left:var(--x,50%);width:2px;background:var(--cyan);box-shadow:var(--glow)}
+ .knob{position:absolute;top:50%;left:var(--x,50%);transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;
+   background:var(--cyan);display:flex;align-items:center;justify-content:center;color:#04121e;font-size:14px;box-shadow:var(--glow)}
+ .cap{font-size:12px;color:var(--ice);opacity:.7;text-align:center}
+</style></head>
+<body class="demo"><div class="demo-name">f · features.comparison_slider</div>
+<div class="stage">
+  <div class="eyebrow">SEE THE TRANSFORMATION</div>
+  <div class="ba frost" id="ba">
+    <div class="filler before"><span class="tag" style="left:8px;right:auto">WORN LAWN</span></div>
+    <div class="filler after eel" id="af"></div>
+    <div class="lbl l1">BEFORE</div><div class="lbl l2">AFTER</div>
+    <div class="handle" id="h"></div><div class="knob" id="k">⟷</div>
+  </div>
+  <div class="cap">Drag to compare — patchy sod vs. installed turf</div>
+</div>
+<script>
+const ba=document.getElementById('ba'),af=document.getElementById('af'),h=document.getElementById('h'),k=document.getElementById('k');
+let drag=false,idle=0;
+function set(px){const r=ba.getBoundingClientRect();let p=Math.max(4,Math.min(96,(px-r.left)/r.width*100));
+ [af,h,k].forEach(e=>e.style.setProperty('--x',p+'%'));}
+ba.addEventListener('mousedown',e=>{drag=true;set(e.clientX);});
+ba.addEventListener('touchstart',e=>{drag=true;set(e.touches[0].clientX);},{passive:true});
+addEventListener('mousemove',e=>{if(drag)set(e.clientX);});
+addEventListener('touchmove',e=>{if(drag)set(e.touches[0].clientX);},{passive:true});
+addEventListener('mouseup',()=>drag=false);addEventListener('touchend',()=>drag=false);
+setInterval(()=>{if(!drag){idle+=.024;const r=ba.getBoundingClientRect();set(r.left+r.width*(.5+Math.sin(idle)*.36));}},40);
+</script></body></html>

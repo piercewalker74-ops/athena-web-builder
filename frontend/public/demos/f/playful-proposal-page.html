@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>playful-proposal-page</title><link rel="stylesheet" href="../_theme.css">
+<style>
+ .stage{height:340px}
+ .screens{position:relative;height:290px;border-radius:18px;overflow:hidden}
+ .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;
+   opacity:0;transform:translateY(40px);transition:opacity .6s,transform .6s cubic-bezier(.2,.8,.2,1)}
+ .screen.on{opacity:1;transform:none}
+ .screen .big{font-size:clamp(22px,4.6vw,34px)}
+ .opts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+ .game{width:180px;height:70px;border:1px dashed var(--line2);border-radius:12px;position:relative;overflow:hidden}
+ .catcher{position:absolute;bottom:6px;width:34px;height:8px;border-radius:4px;background:var(--cyan);left:50%;transform:translateX(-50%)}
+ .drop{position:absolute;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--ice)}
+ .dots{display:flex;gap:8px;justify-content:center;margin-top:14px}
+ .dots i{width:8px;height:8px;border-radius:50%;background:var(--line2);transition:all .3s}
+ .dots i.a{background:var(--cyan);box-shadow:var(--glow);width:22px;border-radius:4px}
+</style></head>
+<body class="demo"><div class="demo-name">f · playful-proposal-page</div>
+<div class="stage">
+ <div class="screens frost" id="scr">
+  <div class="screen"><div class="eyebrow">SCREEN 01 · ASK</div><h1 class="big glow">Got a minute<br>for something fun?</h1><button class="btn">Yes →</button></div>
+  <div class="screen"><div class="eyebrow">SCREEN 02 · MINI-GAME</div><h1 class="big">Catch three ✦</h1><div class="game"><div class="catcher"></div><div class="drop" id="drop"></div></div></div>
+  <div class="screen"><div class="eyebrow">SCREEN 03 · PICK</div><h1 class="big glow">Pick your favorite</h1><div class="opts"><span class="chip">◇ Ocean</span><span class="chip">◇ Forest</span><span class="chip">◇ City</span></div></div>
+  <div class="screen"><div class="eyebrow">SCREEN 04 · QUIZ</div><h1 class="big">One last question…</h1><div class="opts"><button class="btn ghost">True</button><button class="btn ghost">Also true</button></div></div>
+  <div class="screen"><div class="eyebrow">SCREEN 05 · CONFIRM</div><h1 class="big glow">You made it. 🎉</h1><p class="sub">State persisted across every step.</p></div>
+ </div>
+ <div class="dots" id="dots"></div>
+</div>
+<script>
+const screens=[...document.querySelectorAll('.screen')],dots=document.getElementById('dots'),drop=document.getElementById('drop');
+screens.forEach(()=>dots.appendChild(document.createElement('i')));
+const dl=[...dots.children];let i=0;
+function show(n){screens.forEach((s,k)=>s.classList.toggle('on',k===n));dl.forEach((d,k)=>d.classList.toggle('a',k===n));}
+show(0);setInterval(()=>{i=(i+1)%screens.length;show(i);},2600);
+// mini-game drop animation loop
+let dx=10;setInterval(()=>{dx+=6;if(dx>170)dx=8;drop.style.left=dx+'px';drop.style.top=(6+((dx*7)%54))+'px';},60);
+</script></body></html>
